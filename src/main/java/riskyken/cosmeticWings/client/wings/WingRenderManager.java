@@ -1,6 +1,7 @@
 package riskyken.cosmeticWings.client.wings;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.RenderPlayerEvent;
@@ -19,7 +20,7 @@ import cpw.mods.fml.relauncher.Side;
 
 public final class WingRenderManager {
 
-    private static HashMap<String, WingData> playerWingData;
+    private static HashMap<UUID, WingData> playerWingData;
     
     private static ModelBigWings bigWings = new ModelBigWings();
     private static ModelExtraBigWings extraBigWings = new ModelExtraBigWings();
@@ -28,16 +29,16 @@ public final class WingRenderManager {
     public WingRenderManager() {
         MinecraftForge.EVENT_BUS.register(this);
         FMLCommonHandler.instance().bus().register(this);
-        playerWingData = new HashMap<String, WingData>();
+        playerWingData = new HashMap<UUID, WingData>();
     }
     
-    public void setWingData(String playerName, WingData wingData) {
-        if (playerWingData.containsKey(playerName)) {
-            playerWingData.remove(playerName);
+    public void setWingData(UUID playerId, WingData wingData) {
+        if (playerWingData.containsKey(playerId)) {
+            playerWingData.remove(playerId);
         }
         
         if (wingData.wingType != WingType.NONE) {
-            playerWingData.put(playerName, wingData);
+            playerWingData.put(playerId, wingData);
         }
     }
     
@@ -46,10 +47,10 @@ public final class WingRenderManager {
         EntityPlayer player = ev.entityPlayer;
         if (player.isInvisible()) { return; }
         
-        if (!playerWingData.containsKey(player.getDisplayName())) {
+        if (!playerWingData.containsKey(player.getUniqueID())) {
             return;
         }
-        WingData wingData = playerWingData.get(player.getDisplayName());
+        WingData wingData = playerWingData.get(player.getUniqueID());
         
         switch (wingData.wingType) {
         case BLACK:
@@ -82,10 +83,10 @@ public final class WingRenderManager {
     public void onPlayerTick(EntityPlayer player) {
         if (player.isInvisible()) { return; }
         
-        if (!playerWingData.containsKey(player.getDisplayName())) {
+        if (!playerWingData.containsKey(player.getUniqueID())) {
             return;
         }
-        WingData wingData = playerWingData.get(player.getDisplayName());
+        WingData wingData = playerWingData.get(player.getUniqueID());
         
         switch (wingData.wingType) {
         case BLACK:

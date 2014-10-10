@@ -1,5 +1,7 @@
 package riskyken.cosmeticWings.proxies;
 
+import java.util.UUID;
+
 import riskyken.cosmeticWings.client.handler.KeyboardHandler;
 import riskyken.cosmeticWings.client.settings.Keybindings;
 import riskyken.cosmeticWings.client.wings.WingRenderManager;
@@ -33,7 +35,7 @@ public class ClientProxy extends CommonProxy {
     }
     
     @Override
-    public void receivedWingData(String playerName, WingData wingData) {
-        wingRenderManager.setWingData(playerName, wingData);
+    public void receivedWingData(UUID playerId, WingData wingData) {
+        wingRenderManager.setWingData(playerId, wingData);
     }
 }

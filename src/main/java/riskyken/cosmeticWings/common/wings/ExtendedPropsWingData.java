@@ -48,12 +48,12 @@ public class ExtendedPropsWingData implements IExtendedEntityProperties {
     public void init(Entity entity, World world) {}
     
     public void sendWingDataToPlayer(EntityPlayerMP targetPlayer) {
-        PacketHandler.networkWrapper.sendTo(new MessageServerWingData(player.getDisplayName(), wingData), targetPlayer);
+        PacketHandler.networkWrapper.sendTo(new MessageServerWingData(player.getUniqueID(), wingData), targetPlayer);
     }
     
     public void sendWingDataToAllAround() {
         TargetPoint p = new TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 512);
-        PacketHandler.networkWrapper.sendToAllAround(new MessageServerWingData(player.getDisplayName(), wingData), p);
+        PacketHandler.networkWrapper.sendToAllAround(new MessageServerWingData(player.getUniqueID(), wingData), p);
     }
     
     public void updateWingData(WingData wingData) {
