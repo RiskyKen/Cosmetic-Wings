@@ -2,10 +2,10 @@ package riskyken.cosmeticWings.common.wings;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
@@ -45,11 +45,12 @@ public final class WingDataManager {
     }
     
     @SubscribeEvent
-    public void onLivingDeathEvent (LivingDeathEvent  event) {
-        if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayerMP) {
-            //PlayerCustomEquipmentData playerData = PlayerCustomEquipmentData.get((EntityPlayer) event.entity);
-            //playerData.dropItems();
-        }
+    public void onPlayerCloneEvent (PlayerEvent.Clone  event) {
+        NBTTagCompound compound = new NBTTagCompound();
+        ExtendedPropsWingData oldProps = ExtendedPropsWingData.get(event.original);
+        ExtendedPropsWingData newProps = ExtendedPropsWingData.get(event.entityPlayer);
+        oldProps.saveNBTData(compound);
+        newProps.loadNBTData(compound);
     }
 
     public static void gotWingDataFromPlayer(EntityPlayerMP player, WingData wingData) {
