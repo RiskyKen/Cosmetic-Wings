@@ -63,7 +63,7 @@ public class UtilColour {
         
         return new Color(r, g, b);
     }
-    
+
     public static int getMinecraftColor(int meta) {
         if (meta == 0) {
             return 16777215;

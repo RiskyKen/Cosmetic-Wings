@@ -16,25 +16,26 @@ public class MessageServerWingData implements IMessage, IMessageHandler<MessageS
     UUID playerId;
     WingData wingData;
 
-    public MessageServerWingData() {}
-    
+    public MessageServerWingData() {
+    }
+
     public MessageServerWingData(UUID playerId, WingData wingData) {
         this.playerId = playerId;
         this.wingData = wingData;
     }
-    
+
     @Override
     public void toBytes(ByteBuf buf) {
         ByteBufHelper.writeUUID(buf, this.playerId);
         this.wingData.toBytes(buf);
     }
-    
+
     @Override
     public void fromBytes(ByteBuf buf) {
         this.playerId = ByteBufHelper.readUUID(buf);
         this.wingData = new WingData(buf);
     }
-    
+
     @Override
     public IMessage onMessage(MessageServerWingData message, MessageContext ctx) {
         CosmeticWings.proxy.receivedWingData(message.playerId, message.wingData);

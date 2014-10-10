@@ -9,11 +9,11 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
 
 public class KeyboardHandler {
-    
+
     public KeyboardHandler() {
         FMLCommonHandler.instance().bus().register(this);
     }
-    
+
     @SubscribeEvent
     public void onKeyInputEvent(InputEvent.KeyInputEvent event) {
         if (Keybindings.openWingGui.isPressed()) {

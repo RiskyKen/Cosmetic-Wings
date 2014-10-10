@@ -21,37 +21,39 @@ import cpw.mods.fml.relauncher.Side;
 public final class WingRenderManager {
 
     private static HashMap<UUID, WingData> playerWingData;
-    
+
     private static ModelBigWings bigWings = new ModelBigWings();
     private static ModelExtraBigWings extraBigWings = new ModelExtraBigWings();
     private static ModelMetalWings metalWings = new ModelMetalWings();
-    
+
     public WingRenderManager() {
         MinecraftForge.EVENT_BUS.register(this);
         FMLCommonHandler.instance().bus().register(this);
         playerWingData = new HashMap<UUID, WingData>();
     }
-    
+
     public void setWingData(UUID playerId, WingData wingData) {
         if (playerWingData.containsKey(playerId)) {
             playerWingData.remove(playerId);
         }
-        
+
         if (wingData.wingType != WingType.NONE) {
             playerWingData.put(playerId, wingData);
         }
     }
-    
+
     @SubscribeEvent
-    public void onRender(RenderPlayerEvent.SetArmorModel ev){
+    public void onRender(RenderPlayerEvent.SetArmorModel ev) {
         EntityPlayer player = ev.entityPlayer;
-        if (player.isInvisible()) { return; }
-        
+        if (player.isInvisible()) {
+            return;
+        }
+
         if (!playerWingData.containsKey(player.getUniqueID())) {
             return;
         }
         WingData wingData = playerWingData.get(player.getUniqueID());
-        
+
         switch (wingData.wingType) {
         case BLACK:
             bigWings.render(ev.entityPlayer, ev.renderer, 0);
@@ -72,22 +74,25 @@ public final class WingRenderManager {
             break;
         }
     }
-    
+
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.side == Side.CLIENT & event.type == Type.PLAYER & event.phase == Phase.END) {
+        if (event.side == Side.CLIENT & event.type == Type.PLAYER
+                & event.phase == Phase.END) {
             onPlayerTick(event.player);
         }
     }
-    
+
     public void onPlayerTick(EntityPlayer player) {
-        if (player.isInvisible()) { return; }
-        
+        if (player.isInvisible()) {
+            return;
+        }
+
         if (!playerWingData.containsKey(player.getUniqueID())) {
             return;
         }
         WingData wingData = playerWingData.get(player.getUniqueID());
-        
+
         switch (wingData.wingType) {
         case BLACK:
             bigWings.onTick(player, 0);

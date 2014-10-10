@@ -13,7 +13,7 @@ public class GuiHandler implements IGuiHandler {
     public GuiHandler() {
         NetworkRegistry.INSTANCE.registerGuiHandler(CosmeticWings.instance, this);
     }
-    
+
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         TileEntity te = world.getTileEntity(x, y, z);
@@ -22,10 +22,9 @@ public class GuiHandler implements IGuiHandler {
 
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        switch (ID)
-        {
-            case 0:
-                return new GuiWings(player);
+        switch (ID) {
+        case 0:
+            return new GuiWings(player);
         }
         return null;
     }

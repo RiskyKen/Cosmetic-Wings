@@ -1,7 +1,5 @@
 package riskyken.cosmeticWings;
 
-import net.minecraftforge.common.MinecraftForge;
-import riskyken.cosmeticWings.common.handler.ModForgeEventHandler;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 import riskyken.cosmeticWings.common.network.GuiHandler;
 import riskyken.cosmeticWings.common.network.PacketHandler;
@@ -27,9 +25,6 @@ public class CosmeticWings {
     @Mod.EventHandler
     public void perInit(FMLPreInitializationEvent event) {
         ModLogger.log("Loading " + LibModInfo.NAME + " " + LibModInfo.VERSION);
-
-        //UpdateCheck.checkForUpdates();
-        
         proxy.init();
         proxy.initRenderers();
     }
@@ -39,13 +34,10 @@ public class CosmeticWings {
         PacketHandler.init();
         proxy.postInit();
         proxy.registerKeyBindings();
-        
+
         new GuiHandler();
-        
-        MinecraftForge.EVENT_BUS.register(new ModForgeEventHandler());
-        //FMLCommonHandler.instance().bus().register(new ModFMLEventHandler());
     }
-    
+
     @Mod.EventHandler
     public void serverStart(FMLServerStartingEvent event) {
         new WingDataManager();
