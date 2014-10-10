@@ -24,13 +24,6 @@ public final class WingDataManager {
     }
     
     @SubscribeEvent
-    public void onStopTracking(PlayerEvent.StopTracking event) {
-        if (event.target instanceof EntityPlayerMP) {
-            //EntityPlayerMP player = (EntityPlayerMP) event.entity;
-        }
-    }
-    
-    @SubscribeEvent
     public void onEntityConstructing(EntityConstructing event) {
         if (event.entity instanceof EntityPlayer && ExtendedPropsWingData.get((EntityPlayer) event.entity) == null) {
             ExtendedPropsWingData.register((EntityPlayer) event.entity);
