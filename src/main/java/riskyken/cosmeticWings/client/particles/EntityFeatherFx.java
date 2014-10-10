@@ -17,10 +17,14 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class EntityFeatherFx extends EntityFX {
-	
+    
+    private static final ResourceLocation particleTextures;
 	private static final ResourceLocation whiteFeather = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/armor/tiny-white-feather.png");
 	private static final ResourceLocation blackFeather = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/armor/tiny-black-feather.png");
 	private static final ResourceLocation redFeather = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/armor/tiny-red-feather.png");
+	static {
+	    particleTextures = ReflectionHelper.getPrivateValue(EffectRenderer.class, null, "particleTextures", "field_110737_b", "b");
+	}
 	
 	private final int type;
 	private final boolean isUnlit;
@@ -77,7 +81,6 @@ public class EntityFeatherFx extends EntityFX {
 		tessellator.draw();
 		
 		GL11.glPushMatrix();
-		GL11.glDisable(GL11.GL_LIGHTING);
 		
 		switch (type) {
 		case 0:
@@ -106,11 +109,8 @@ public class EntityFeatherFx extends EntityFX {
         
         tessellator.draw();
 
-		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
 		
-		ResourceLocation particleTextures;
-		particleTextures = ReflectionHelper.getPrivateValue(EffectRenderer.class, null, "particleTextures", "field_110737_b", "b");
 		Minecraft.getMinecraft().renderEngine.bindTexture(particleTextures);
 		tessellator.startDrawingQuads();
 	}
