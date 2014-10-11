@@ -13,8 +13,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy {
 
-    private WingRenderManager wingRenderManager;
-
     @Override
     public void init() {
     }
@@ -25,7 +23,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void postInit() {
-        wingRenderManager = new WingRenderManager();
+        WingRenderManager.init();
         new KeyboardHandler();
     }
 
@@ -36,6 +34,6 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void receivedWingData(UUID playerId, WingData wingData) {
-        wingRenderManager.setWingData(playerId, wingData);
+        WingRenderManager.INSTANCE.setWingData(playerId, wingData);
     }
 }

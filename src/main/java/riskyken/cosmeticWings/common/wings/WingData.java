@@ -15,7 +15,7 @@ public class WingData {
 
     public WingData() {
         this.wingType = WingType.NONE;
-        this.wingScale = 1.0F;
+        this.wingScale = 0.75F;
         this.spawnParticles = true;
     }
 

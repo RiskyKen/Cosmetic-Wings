@@ -102,25 +102,26 @@ public class ModelBigWings extends ModelBiped {
         GL11.glPopMatrix();
     }
 
-    public void onTick(EntityPlayer player, int wingId) {
-        spawnParticales(player, wingId);
+    public void onTick(EntityPlayer player, int wingId, float wingScale) {
+        spawnParticales(player, wingId, wingScale);
     }
 
-    private void spawnParticales(EntityPlayer player, int type) {
+    private void spawnParticales(EntityPlayer player, int type, float wingScale) {
+        float scale = (1F - wingScale) * 0.2F;
         Random rnd = new Random();
         if (rnd.nextFloat() * 1000 > 960) {
             PointD offset;
 
             if (rnd.nextFloat() >= 0.5f) {
-                offset = Trig.moveTo(new PointD(player.posX, player.posZ), 0.3f + rnd.nextFloat() * 1.5f, player.renderYawOffset + 56);
+                offset = Trig.moveTo(new PointD(player.posX, player.posZ), 0.3f + rnd.nextFloat() * 1.4f * wingScale, player.renderYawOffset + 60);
             } else {
-                offset = Trig.moveTo(new PointD(player.posX, player.posZ), 0.3f + rnd.nextFloat() * 1.5f, player.renderYawOffset + 121);
+                offset = Trig.moveTo(new PointD(player.posX, player.posZ), 0.3f + rnd.nextFloat() * 1.4f * wingScale, player.renderYawOffset + 127);
             }
 
             float yOffset = 0f;
 
             double parX = offset.x;
-            double parY = player.posY - 0.4D;
+            double parY = player.posY - 0.4D + scale;
             double parZ = offset.y;
 
             EntityClientPlayerMP localPlayer = Minecraft.getMinecraft().thePlayer;
@@ -129,7 +130,7 @@ public class ModelBigWings extends ModelBiped {
                 parY += 1.6D;
             }
 
-            EntityFeatherFx particle = new EntityFeatherFx(player.worldObj, parX, parY, parZ, type);
+            EntityFeatherFx particle = new EntityFeatherFx(player.worldObj, parX, parY, parZ, type, wingScale);
             ParticleManager.INSTANCE.spawnParticle(player.worldObj, particle);
         }
     }

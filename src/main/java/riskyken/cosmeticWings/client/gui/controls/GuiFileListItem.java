@@ -19,7 +19,7 @@ public class GuiFileListItem extends Gui implements IGuiListItem {
     public void drawListItem(FontRenderer fontRenderer, int x, int y, int mouseX, int mouseY, boolean selected) {
         int fontColour = UtilColour.getMinecraftColor(8);
         if (selected) {
-            //fontColour = UtilColour.getMinecraftColor(4);
+            fontColour = UtilColour.getMinecraftColor(4);
         }
         if (isHovering(fontRenderer, x, y, mouseX, mouseY)) {
             fontColour = UtilColour.getMinecraftColor(0);

@@ -34,7 +34,7 @@ public class EntityFeatherFx extends EntityFX {
     private final boolean isUnlit;
     private float rotationSpeed;
 
-    public EntityFeatherFx(World world, double x, double y, double z, int type) {
+    public EntityFeatherFx(World world, double x, double y, double z, int type, float wingScale) {
         super(world, x, y, z);
 
         this.posX = x;
@@ -47,8 +47,8 @@ public class EntityFeatherFx extends EntityFX {
 
         this.type = type;
         this.isUnlit = type != 0;
+        this.particleScale = wingScale;
 
-        particleScale = 0.5F;
         particleMaxAge = 400;
 
         this.motionX = (rand.nextFloat() - 0.5F) * 0.01F;
@@ -76,7 +76,9 @@ public class EntityFeatherFx extends EntityFX {
         if (this.rotationPitch > 360F) {
             this.rotationPitch -= 360F;
         }
-        particleAlpha = 1 + -((float) particleAge / particleMaxAge);
+        if (particleMaxAge - particleAge < 50) {
+            particleAlpha = 1 + -((float) (particleAge - particleMaxAge + 50) / 50);
+        }
     }
 
     @Override
@@ -138,6 +140,7 @@ public class EntityFeatherFx extends EntityFX {
         GL11.glRotatef(rotation, 0, 0, 1);
         GL11.glTranslatef((float) 0.1F, (float) 0.1F, (float) 0.1F);
         GL11.glScalef(scale, scale, scale);
+        GL11.glScalef(particleScale, particleScale, particleScale);
 
         tessellator.setColorRGBA_F(this.particleRed, this.particleGreen,
                 this.particleBlue, this.particleAlpha);

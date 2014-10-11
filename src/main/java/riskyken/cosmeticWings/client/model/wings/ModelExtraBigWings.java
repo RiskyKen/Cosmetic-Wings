@@ -1,9 +1,6 @@
 package riskyken.cosmeticWings.client.model.wings;
 
-import java.util.Random;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -15,11 +12,7 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import riskyken.cosmeticWings.client.particles.EntityFeatherFx;
-import riskyken.cosmeticWings.client.particles.ParticleManager;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
-import riskyken.cosmeticWings.utils.PointD;
-import riskyken.cosmeticWings.utils.Trig;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -102,7 +95,7 @@ public class ModelExtraBigWings extends ModelBiped {
 
         GL11.glPopMatrix();
     }
-
+    /*
     public void onTick(EntityPlayer player, int wingId) {
         spawnParticales(player, wingId);
     }
@@ -134,4 +127,5 @@ public class ModelExtraBigWings extends ModelBiped {
             ParticleManager.INSTANCE.spawnParticle(player.worldObj, particle);
         }
     }
+    */
 }

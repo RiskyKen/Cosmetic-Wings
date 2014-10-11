@@ -6,6 +6,9 @@ import java.util.UUID;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.common.MinecraftForge;
+
+import org.lwjgl.opengl.GL11;
+
 import riskyken.cosmeticWings.client.model.wings.ModelBigWings;
 import riskyken.cosmeticWings.client.model.wings.ModelExtraBigWings;
 import riskyken.cosmeticWings.client.model.wings.ModelMetalWings;
@@ -20,12 +23,18 @@ import cpw.mods.fml.relauncher.Side;
 
 public final class WingRenderManager {
 
-    private static HashMap<UUID, WingData> playerWingData;
+    public static WingRenderManager INSTANCE;
+    
+    private final  HashMap<UUID, WingData> playerWingData;
 
-    private static ModelBigWings bigWings = new ModelBigWings();
-    private static ModelExtraBigWings extraBigWings = new ModelExtraBigWings();
-    private static ModelMetalWings metalWings = new ModelMetalWings();
+    private final ModelBigWings bigWings = new ModelBigWings();
+    private final ModelExtraBigWings extraBigWings = new ModelExtraBigWings();
+    private final ModelMetalWings metalWings = new ModelMetalWings();
 
+    public static void init() {
+        INSTANCE = new WingRenderManager();
+    }
+    
     public WingRenderManager() {
         MinecraftForge.EVENT_BUS.register(this);
         FMLCommonHandler.instance().bus().register(this);
@@ -41,6 +50,13 @@ public final class WingRenderManager {
             playerWingData.put(playerId, wingData);
         }
     }
+    
+    public WingData getPlayerWingData(UUID playerId) {
+        if (!playerWingData.containsKey(playerId)) {
+            return null;
+        }
+        return playerWingData.get(playerId);
+    }
 
     @SubscribeEvent
     public void onRender(RenderPlayerEvent.SetArmorModel ev) {
@@ -48,12 +64,14 @@ public final class WingRenderManager {
         if (player.isInvisible()) {
             return;
         }
-
-        if (!playerWingData.containsKey(player.getUniqueID())) {
+        
+        WingData wingData = getPlayerWingData(player.getUniqueID());
+        if (wingData==null) {
             return;
         }
-        WingData wingData = playerWingData.get(player.getUniqueID());
-
+        GL11.glPushMatrix();
+        GL11.glTranslatef(0, (1F - wingData.wingScale) * 0.1F, (1F - wingData.wingScale) * 0.1F);
+        GL11.glScalef(wingData.wingScale, wingData.wingScale, wingData.wingScale);
         switch (wingData.wingType) {
         case BLACK:
             bigWings.render(ev.entityPlayer, ev.renderer, 0);
@@ -73,6 +91,7 @@ public final class WingRenderManager {
         default:
             break;
         }
+        GL11.glPopMatrix();
     }
 
     @SubscribeEvent
@@ -88,20 +107,24 @@ public final class WingRenderManager {
             return;
         }
 
-        if (!playerWingData.containsKey(player.getUniqueID())) {
+        WingData wingData = getPlayerWingData(player.getUniqueID());
+        if (wingData==null) {
             return;
         }
-        WingData wingData = playerWingData.get(player.getUniqueID());
+        
+        if (!wingData.spawnParticles) {
+            return;
+        }
 
         switch (wingData.wingType) {
         case BLACK:
-            bigWings.onTick(player, 0);
+            bigWings.onTick(player, 0, wingData.wingScale);
             break;
         case WHITE:
-            bigWings.onTick(player, 1);
+            bigWings.onTick(player, 1, wingData.wingScale);
             break;
         case SHANA:
-            bigWings.onTick(player, 2);
+            bigWings.onTick(player, 2, wingData.wingScale);
             break;
         default:
             break;
