@@ -66,7 +66,7 @@ public class GuiList extends Gui {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         mc.renderEngine.bindTexture(texture);
         
-        GuiUtils.drawContinuousTexturedBox(texture, this.x, this.y, 0, 0, width, height, 10, 10, 1, this.zLevel);
+        GuiUtils.drawContinuousTexturedBox(texture, this.x, this.y, 0, 0, width, height, 11, 11, 1, this.zLevel);
         //this.drawTexturedModalRect(x, y, 0, 0, width, height);
         
         ScaledResolution reso = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);

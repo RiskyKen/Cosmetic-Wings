@@ -2,8 +2,12 @@ package riskyken.cosmeticWings.client.gui;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
+
 import riskyken.cosmeticWings.client.gui.controls.GuiCheckBox;
 import riskyken.cosmeticWings.client.gui.controls.GuiFileListItem;
 import riskyken.cosmeticWings.client.gui.controls.GuiHelper;
@@ -61,7 +65,7 @@ public class GuiWings extends GuiScreen implements ISlider {
         scrollbar = new GuiScrollbar(0, this.guiLeft + 87, this.guiTop + 33, 10, 126, "", false);
         buttonList.add(scrollbar);
         
-        checkSpawnParticles = new GuiCheckBox(1, this.guiLeft + 107, this.guiTop + 63, 14, 14, "Spawn particles?", false, false);
+        checkSpawnParticles = new GuiCheckBox(1, this.guiLeft + 107, this.guiTop + 59, 14, 14, "Spawn particles?", false, false);
         buttonList.add(checkSpawnParticles);
         
         sliderScale = new GuiSlider(2, this.guiLeft + 107, this.guiTop + 33, 138, 20, "", "", 0.4D, 1D, 1D, true, true, this);
@@ -92,6 +96,20 @@ public class GuiWings extends GuiScreen implements ISlider {
         String scaleLabel = GuiHelper.getLocalizedControlName("wings", "label.scale");
         this.fontRendererObj.drawString(listLabel, this.guiLeft + 7, this.guiTop + 23, 4210752);
         this.fontRendererObj.drawString(scaleLabel, this.guiLeft + 107, this.guiTop + 23, 4210752);
+        
+        int boxX = this.guiLeft + 175;
+        int boxY = this.guiTop + 150;
+        
+        float lookX = -boxX + mouseX;
+        float lookY = boxY - 50 - mouseY;
+        GL11.glPushMatrix();
+        GL11.glTranslatef(0, boxY, boxX);
+        GL11.glRotatef(180, 0, 1, 0);
+        
+        GL11.glPushMatrix();
+        GuiInventory.func_147046_a(-boxX, 0, 29, lookX, lookY, this.mc.thePlayer);
+        GL11.glPopMatrix();
+        GL11.glPopMatrix();
     }
 
     @Override
