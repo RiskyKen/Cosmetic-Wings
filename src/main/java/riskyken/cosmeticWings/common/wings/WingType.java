@@ -4,8 +4,13 @@ import net.minecraft.util.StatCollector;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 
 public enum WingType {
-    NONE(false), BLACK(false), WHITE(true), SHANA(false), FLANDRE(false), METAL(
-            false);
+    NONE(false),
+    BLACK(false),
+    WHITE(true),
+    SHANA(false),
+    FLANDRE(false),
+    METAL(false),
+    KUROYUKIHIME(false);
 
     public final boolean canRecolour;
 
