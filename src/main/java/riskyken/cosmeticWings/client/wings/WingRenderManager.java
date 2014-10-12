@@ -13,7 +13,6 @@ import riskyken.cosmeticWings.client.model.wings.ModelBigWings;
 import riskyken.cosmeticWings.client.model.wings.ModelExtraBigWings;
 import riskyken.cosmeticWings.client.model.wings.ModelMetalWings;
 import riskyken.cosmeticWings.common.wings.WingData;
-import riskyken.cosmeticWings.common.wings.WingType;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -45,10 +44,7 @@ public final class WingRenderManager {
         if (playerWingData.containsKey(playerId)) {
             playerWingData.remove(playerId);
         }
-
-        if (wingData.wingType != WingType.NONE) {
-            playerWingData.put(playerId, wingData);
-        }
+        playerWingData.put(playerId, wingData);
     }
     
     public WingData getPlayerWingData(UUID playerId) {

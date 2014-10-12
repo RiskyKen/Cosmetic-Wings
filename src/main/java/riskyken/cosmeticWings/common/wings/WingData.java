@@ -30,9 +30,15 @@ public class WingData {
     }
 
     public void loadNBTData(NBTTagCompound compound) {
-        this.wingType = WingType.values()[compound.getByte(TAG_WING_TYPE)];
-        this.wingScale = compound.getFloat(TAG_WING_SCALE);
-        this.spawnParticles = compound.getBoolean(TAG_SPAWN_PARTICLES);
+        if (compound.hasKey(TAG_WING_TYPE)) {
+            this.wingType = WingType.values()[compound.getByte(TAG_WING_TYPE)];
+        }
+        if (compound.hasKey(TAG_WING_SCALE)) {
+            this.wingScale = compound.getFloat(TAG_WING_SCALE);
+        }
+        if (compound.hasKey(TAG_SPAWN_PARTICLES)) {
+            this.spawnParticles = compound.getBoolean(TAG_SPAWN_PARTICLES);
+        }
     }
 
     public void toBytes(ByteBuf buf) {
