@@ -51,9 +51,9 @@ public class ModelBigWings extends ModelBiped {
         setRotation(leftWing, 2.094395F, 0F, 1.396263F);
 
         wingsImage = new ResourceLocation[3];
-        wingsImage[0] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/armor/big-black-wings.png");
-        wingsImage[1] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/armor/big-white-wings.png");
-        wingsImage[2] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/armor/shana-wings.png");
+        wingsImage[0] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/wings/big-black-wings.png");
+        wingsImage[1] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/wings/big-white-wings.png");
+        wingsImage[2] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/wings/shana-wings.png");
     }
 
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {

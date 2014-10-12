@@ -1,12 +1,11 @@
 package riskyken.cosmeticWings.client.model.wings;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderPlayer;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
@@ -17,7 +16,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ModelExtraBigWings extends ModelBiped {
+public class ModelExtraBigWings extends ModelBase {
     
     ModelRenderer rightWing;
     ModelRenderer leftWing;
@@ -44,13 +43,8 @@ public class ModelExtraBigWings extends ModelBiped {
         setRotation(leftWing, 2.094395F, 0F, 1.396263F);
 
         wingsImage = new ResourceLocation[2];
-        wingsImage[0] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/armor/flandre-wings.png");
-        wingsImage[1] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/armor/flandre-wings-glow.png");
-    }
-
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        rightWing.render(f5);
-        leftWing.render(f5);
+        wingsImage[0] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/wings/flandre-wings.png");
+        wingsImage[1] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/wings/flandre-wings-glow.png");
     }
 
     private void setRotation(ModelRenderer model, float x, float y, float z) {
@@ -95,37 +89,4 @@ public class ModelExtraBigWings extends ModelBiped {
 
         GL11.glPopMatrix();
     }
-    /*
-    public void onTick(EntityPlayer player, int wingId) {
-        spawnParticales(player, wingId);
-    }
-
-    private void spawnParticales(EntityPlayer player, int type) {
-        Random rnd = new Random();
-        if (rnd.nextFloat() * 100 > 85) {
-            PointD offset;
-
-            if (rnd.nextFloat() > 0.5f) {
-                offset = Trig.moveTo(new PointD(player.posX, player.posZ), 0.3f + rnd.nextFloat() * 1.5f, player.renderYawOffset + 56);
-            } else {
-                offset = Trig.moveTo(new PointD(player.posX, player.posZ), 0.3f + rnd.nextFloat() * 1.5f, player.renderYawOffset + 121);
-            }
-
-            float yOffset = 0f;
-
-            double parX = offset.x;
-            double parY = player.posY - 0.4D;
-            double parZ = offset.y;
-
-            EntityClientPlayerMP localPlayer = Minecraft.getMinecraft().thePlayer;
-
-            if (!localPlayer.getDisplayName().equals(player.getDisplayName())) {
-                parY += 1.6D;
-            }
-
-            EntityFeatherFx particle = new EntityFeatherFx(player.worldObj, parX, parY, parZ, type);
-            ParticleManager.INSTANCE.spawnParticle(player.worldObj, particle);
-        }
-    }
-    */
 }

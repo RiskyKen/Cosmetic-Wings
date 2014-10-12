@@ -25,9 +25,9 @@ public class EntityFeatherFx extends EntityFX {
     
     static {
         particleTextures = ReflectionHelper.getPrivateValue(EffectRenderer.class, null, "particleTextures", "field_110737_b", "b");
-        whiteFeather = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/armor/tiny-white-feather.png");
-        blackFeather = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/armor/tiny-black-feather.png");
-        redFeather = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/armor/tiny-red-feather.png");
+        whiteFeather = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/particles/tiny-white-feather.png");
+        blackFeather = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/particles/tiny-black-feather.png");
+        redFeather = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/particles/tiny-red-feather.png");
     }
 
     private final int type;
@@ -142,8 +142,7 @@ public class EntityFeatherFx extends EntityFX {
         GL11.glScalef(scale, scale, scale);
         GL11.glScalef(particleScale, particleScale, particleScale);
 
-        tessellator.setColorRGBA_F(this.particleRed, this.particleGreen,
-                this.particleBlue, this.particleAlpha);
+        tessellator.setColorRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
         tessellator.addVertexWithUV(-1, -1, 0, 0, 0);
         tessellator.addVertexWithUV(-1, 1, 0, 0, 1);
         tessellator.addVertexWithUV(1, 1, 0, 1, 1);

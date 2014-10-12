@@ -38,7 +38,7 @@ public class ModelMetalWings extends ModelBiped {
         setRotation(leftWing, 2.094395F, 0F, 1.396263F);
 
         wingsImage = new ResourceLocation[1];
-        wingsImage[0] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/armor/metal-wings.png");
+        wingsImage[0] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/wings/metal-wings.png");
     }
 
     private void setRotation(ModelRenderer model, float x, float y, float z) {
