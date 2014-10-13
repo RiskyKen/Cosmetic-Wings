@@ -27,7 +27,7 @@ public class ModelKuroyukihimeWings extends ModelWingBase {
         textureHeight = 64;
 
         wing = new ModelRenderer(this, 0, 0);
-        wing.addBox(0F, 0F, 0F, 125, 59, 1);
+        wing.addBox(0F, 0F, 0.5F, 125, 59, 1);
         wing.setRotationPoint(0F, 0F, 0F);
         wing.setTextureSize(256, 64);
         wing.mirror = true;
@@ -42,24 +42,34 @@ public class ModelKuroyukihimeWings extends ModelWingBase {
     }
     
     private void RenderWing(boolean isFlying) {
-        float mult = 0.0625F;
         GL11.glPushMatrix();
         
-        GL11.glTranslatef(0F, -1.0F, 0.12F);
+        float scale = 0.32F;
+        
+        GL11.glTranslatef(0F * SCALE * scale, -50.0F * SCALE * scale, 6F * SCALE * scale);
         
         GL11.glRotatef(90, 0, 1, 0);
         GL11.glRotatef(90, 0, 0, 1);
         
-        float scale = 0.32F;
+        
         GL11.glScalef(scale, scale, scale);
         
         float angle = getWingAngle(isFlying, 40, 8000, 250);
+        //angle = 0;
         
-        GL11.glRotatef(55 - angle, 1, 0, 0);
-        wing.render(mult);
+        GL11.glPushMatrix();
+        //GL11.glTranslatef(0, 0, 1F * SCALE * scale);
+        GL11.glRotatef(55F - angle, 1, 0, 0);
+        GL11.glTranslatef(0F, 0F, -3.0F * SCALE * scale);
+        wing.render(SCALE);
         
-        GL11.glRotatef(-105 + angle * 2, 1, 0, 0);
-        wing.render(mult);
+        GL11.glPopMatrix();
+        
+        GL11.glPushMatrix();
+        GL11.glRotatef(-55F + angle, 1, 0, 0);
+        GL11.glTranslatef(0F, 0F, -3.0F * SCALE * scale);
+        wing.render(SCALE);
+        GL11.glPopMatrix();
         
         GL11.glPopMatrix();
     }

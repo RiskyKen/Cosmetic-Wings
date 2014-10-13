@@ -4,6 +4,8 @@ import net.minecraft.client.model.ModelBase;
 
 public class ModelWingBase extends ModelBase {
     
+    protected static float SCALE = 0.0625F;
+    
     protected float getWingAngle(boolean isFlying, float maxAngle, int totalTime, int flyingTime) {
         float angle = 0F;
         
@@ -12,7 +14,7 @@ public class ModelWingBase extends ModelBase {
             flapTime = flyingTime;
         }
         
-        float deltaTime = getAnimationTime(totalTime);
+        float deltaTime = getAnimationTime(flapTime);
         
         if (deltaTime <= 0.5F) {
             angle = Sigmoid(-4 + ((deltaTime * 2) * 8));
