@@ -1,7 +1,6 @@
 package riskyken.cosmeticWings.client.model.wings;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -16,7 +15,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ModelExtraBigWings extends ModelBase {
+public class ModelExtraBigWings extends ModelWingBase {
     
     ModelRenderer rightWing;
     ModelRenderer leftWing;

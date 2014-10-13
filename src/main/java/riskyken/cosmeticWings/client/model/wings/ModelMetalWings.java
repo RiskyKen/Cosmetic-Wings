@@ -1,7 +1,6 @@
 package riskyken.cosmeticWings.client.model.wings;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,7 +10,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ModelMetalWings extends ModelBiped {
+public class ModelMetalWings extends ModelWingBase {
 
     ModelRenderer rightWing;
     ModelRenderer leftWing;
