@@ -53,7 +53,7 @@ public class EntityFeatherFx extends EntityFX {
 
         this.motionX = (rand.nextFloat() - 0.5F) * 0.01F;
         this.motionZ = (rand.nextFloat() - 0.5F) * 0.01F;
-        ;
+        
         this.motionY = -0.03F;
         this.rotationSpeed = 2.0F + rand.nextFloat();
         this.rotationPitch = rand.nextFloat() * 20 - 10;
@@ -112,6 +112,8 @@ public class EntityFeatherFx extends EntityFX {
         tessellator.startDrawingQuads();
         if (isUnlit) {
             tessellator.setBrightness(15728880);
+        } else {
+            tessellator.setBrightness(getBrightnessForRender(0));
         }
 
         drawBillboard(f11 - par3 * f10 - par6 * f10, f12 - par4 * f10, f13
@@ -124,7 +126,7 @@ public class EntityFeatherFx extends EntityFX {
         Minecraft.getMinecraft().renderEngine.bindTexture(particleTextures);
         tessellator.startDrawingQuads();
     }
-
+    
     private void drawBillboard(double x, double y, double z, float rotation) {
         RenderManager renderManager = RenderManager.instance;
         Tessellator tessellator = Tessellator.instance;
@@ -136,9 +138,9 @@ public class EntityFeatherFx extends EntityFX {
         GL11.glRotatef(RenderManager.instance.playerViewX, 1.0F, 0.0F, 0.0F);
         GL11.glRotatef(180, 0, 0, 1);
 
-        GL11.glTranslatef((float) -0.1F, (float) -0.1F, (float) -0.1F);
+        GL11.glTranslatef((float) -0.01F, (float) -0.01F, (float) -0.01F);
         GL11.glRotatef(rotation, 0, 0, 1);
-        GL11.glTranslatef((float) 0.1F, (float) 0.1F, (float) 0.1F);
+        GL11.glTranslatef((float) 0.05F, (float) 0.05F, (float) 0.05F);
         GL11.glScalef(scale, scale, scale);
         GL11.glScalef(particleScale, particleScale, particleScale);
 
@@ -147,5 +149,10 @@ public class EntityFeatherFx extends EntityFX {
         tessellator.addVertexWithUV(-1, 1, 0, 0, 1);
         tessellator.addVertexWithUV(1, 1, 0, 1, 1);
         tessellator.addVertexWithUV(1, -1, 0, 1, 0);
+    }
+    
+    @Override
+    public int getFXLayer() {
+        return 2;
     }
 }
