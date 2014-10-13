@@ -68,7 +68,9 @@ public final class WingRenderManager {
             return;
         }
         GL11.glPushMatrix();
-        
+        if (player.isSneaking()) {
+            GL11.glRotatef(28.6F, 1, 0, 0);
+        }
         GL11.glTranslatef(0, (1F - wingData.wingScale) * 0.20F, (1F - wingData.wingScale) * 0.12F);
         GL11.glScalef(wingData.wingScale, wingData.wingScale, wingData.wingScale);
         
@@ -100,8 +102,7 @@ public final class WingRenderManager {
 
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.side == Side.CLIENT & event.type == Type.PLAYER
-                & event.phase == Phase.END) {
+        if (event.side == Side.CLIENT & event.type == Type.PLAYER & event.phase == Phase.END) {
             onPlayerTick(event.player);
         }
     }
@@ -130,6 +131,8 @@ public final class WingRenderManager {
         case SHANA:
             bigWings.onTick(player, 2, wingData.wingScale);
             break;
+        case KUROYUKIHIME:
+            //kuroyukihimeWings.onTick(player, wingData.wingScale);
         default:
             break;
         }
