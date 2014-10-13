@@ -2,6 +2,7 @@
 inventory.cosmeticwings:wings.name=Wings
 inventory.cosmeticwings:wings.label.list=Select Wings
 inventory.cosmeticwings:wings.label.scale=Wing Scale
+inventory.cosmeticwings:wings.spawnParticles.name=Spawn particles?
 
 # Wings
 wings.cosmeticwings:none.name=None

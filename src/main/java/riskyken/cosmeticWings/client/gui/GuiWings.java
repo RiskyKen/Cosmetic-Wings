@@ -65,7 +65,7 @@ public class GuiWings extends GuiScreen implements ISlider {
         scrollbar = new GuiScrollbar(0, this.guiLeft + 87, this.guiTop + 33, 10, 126, "", false);
         buttonList.add(scrollbar);
         
-        checkSpawnParticles = new GuiCheckBox(1, this.guiLeft + 107, this.guiTop + 59, 14, 14, "Spawn particles?", false, false);
+        checkSpawnParticles = new GuiCheckBox(1, this.guiLeft + 107, this.guiTop + 59, 14, 14, GuiHelper.getLocalizedControlName("wings", "spawnParticles.name"), false, false);
         buttonList.add(checkSpawnParticles);
         
         sliderScale = new GuiSlider(2, this.guiLeft + 107, this.guiTop + 33, 138, 20, "", "", 0.4D, 1D, 1D, true, true, this);
