@@ -5,6 +5,9 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
+
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -12,44 +15,57 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ModelMetalWings extends ModelWingBase {
 
-    ModelRenderer rightWing;
-    ModelRenderer leftWing;
-    private final ResourceLocation[] wingsImage;
+    ModelRenderer wing;
+    private final ResourceLocation wingsImage;
 
     public ModelMetalWings() {
         textureWidth = 64;
         textureHeight = 32;
-
-        rightWing = new ModelRenderer(this, 0, 0);
-        // rightWing.addBox(-13F, 2F, 0F, 20, 29, 1);
-        rightWing.addBox(-7F, 2F, -1F, 20, 29, 1);
-        rightWing.setRotationPoint(0F, 0F, 0F);
-        rightWing.setTextureSize(32, 32);
-        rightWing.mirror = false;
-        setRotation(rightWing, 1.047198F, 0F, 1.745329F);
-        // setRotation(rightWing, 2.094395F, 0F, -1.396263F);
-
-        leftWing = new ModelRenderer(this, 0, 0);
-        leftWing.addBox(-7F, 2F, 0F, 20, 29, 1);
-        leftWing.setRotationPoint(0F, 0F, 0F);
-        leftWing.setTextureSize(32, 32);
-        leftWing.mirror = true;
-        setRotation(leftWing, 2.094395F, 0F, 1.396263F);
-
-        wingsImage = new ResourceLocation[1];
-        wingsImage[0] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/wings/metal-wings.png");
-    }
-
-    private void setRotation(ModelRenderer model, float x, float y, float z) {
-        model.rotateAngleX = x;
-        model.rotateAngleY = y;
-        model.rotateAngleZ = z;
+        
+        wing = new ModelRenderer(this, 0, 0);
+        wing.addBox(0F, 0F, 0.5F, 20, 29, 1);
+        wing.setTextureSize(32, 32);
+        wing.mirror = true;
+        
+        wingsImage = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/wings/metal-wings.png");
     }
 
     public void render(EntityPlayer player, RenderPlayer renderer) {
-        Minecraft.getMinecraft().getTextureManager().bindTexture(wingsImage[0]);
-        float mult = 0.0625F;
-        rightWing.render(mult);
-        leftWing.render(mult);
+        GL11.glColor3f(1F, 1F, 1F);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(wingsImage);
+        RenderWing(player.capabilities.isFlying & player.isAirBorne);
+    }
+    
+    private void RenderWing(boolean isFlying) {
+        GL11.glPushMatrix();
+        
+        GL11.glTranslatef(0, -7F * SCALE, 1F * SCALE * 2);
+        
+        GL11.glRotatef(90, 0, 1, 0);
+        GL11.glRotatef(90, 0, 0, 1);
+        
+        float scale = 1.00F;
+        GL11.glScalef(scale, scale, scale);
+        
+        float angle = getWingAngle(isFlying, 40, 4000, 250);
+        
+        GL11.glTranslatef(0F, -0.5F * SCALE, 0F);
+        
+        GL11.glPushMatrix();
+        GL11.glTranslatef(0F, 0F, 2F * SCALE);
+        GL11.glRotatef(50F - angle, 1F, 0F, 0F);
+        GL11.glTranslatef(0F, 0F, -1F * SCALE);
+        wing.render(SCALE);
+        GL11.glPopMatrix();
+        
+        GL11.glPushMatrix();
+        GL11.glTranslatef(0F, 0F, -2F * SCALE);
+        GL11.glRotatef(-50F + angle, 1F, 0F, 0F);
+        GL11.glTranslatef(0F, 0F, -1F * SCALE);
+        wing.render(SCALE);
+        GL11.glTranslatef(0F, 0F, 1F * SCALE);
+        GL11.glPopMatrix();
+        
+        GL11.glPopMatrix();
     }
 }
