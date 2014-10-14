@@ -33,10 +33,10 @@ public class ModelMetalWings extends ModelWingBase {
     public void render(EntityPlayer player, RenderPlayer renderer) {
         GL11.glColor3f(1F, 1F, 1F);
         Minecraft.getMinecraft().getTextureManager().bindTexture(wingsImage);
-        RenderWing(player.capabilities.isFlying & player.isAirBorne);
+        RenderWing(player, player.capabilities.isFlying & player.isAirBorne);
     }
     
-    private void RenderWing(boolean isFlying) {
+    private void RenderWing(EntityPlayer player, boolean isFlying) {
         GL11.glPushMatrix();
         
         GL11.glTranslatef(0, -7F * SCALE, 1F * SCALE * 2);
@@ -47,7 +47,7 @@ public class ModelMetalWings extends ModelWingBase {
         float scale = 1.00F;
         GL11.glScalef(scale, scale, scale);
         
-        float angle = getWingAngle(isFlying, 40, 4000, 250);
+        float angle = getWingAngle(isFlying, 40, 4000, 250, player.getEntityId());
         
         GL11.glTranslatef(0F, -0.5F * SCALE, 0F);
         

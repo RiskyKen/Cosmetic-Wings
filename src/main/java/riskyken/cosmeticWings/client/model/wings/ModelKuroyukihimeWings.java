@@ -38,10 +38,10 @@ public class ModelKuroyukihimeWings extends ModelWingBase {
     public void render(EntityPlayer player, RenderPlayer renderer) {
         GL11.glColor3f(1F, 1F, 1F);
         Minecraft.getMinecraft().getTextureManager().bindTexture(wingsImage);
-        RenderWing(player.capabilities.isFlying & player.isAirBorne);
+        RenderWing(player, player.capabilities.isFlying & player.isAirBorne);
     }
     
-    private void RenderWing(boolean isFlying) {
+    private void RenderWing(EntityPlayer player, boolean isFlying) {
         GL11.glPushMatrix();
         
         float scale = 0.32F;
@@ -54,7 +54,7 @@ public class ModelKuroyukihimeWings extends ModelWingBase {
         
         GL11.glScalef(scale, scale, scale);
         
-        float angle = getWingAngle(isFlying, 40, 8000, 250);
+        float angle = getWingAngle(isFlying, 40, 8000, 250, player.getEntityId());
         //angle = 0;
         
         GL11.glPushMatrix();

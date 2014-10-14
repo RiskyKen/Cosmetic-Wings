@@ -6,7 +6,7 @@ public class ModelWingBase extends ModelBase {
     
     protected static float SCALE = 0.0625F;
     
-    protected float getWingAngle(boolean isFlying, float maxAngle, int totalTime, int flyingTime) {
+    protected float getWingAngle(boolean isFlying, float maxAngle, int totalTime, int flyingTime, int offset) {
         float angle = 0F;
         
         int flapTime = totalTime;
@@ -14,7 +14,7 @@ public class ModelWingBase extends ModelBase {
             flapTime = flyingTime;
         }
         
-        float deltaTime = getAnimationTime(flapTime);
+        float deltaTime = getAnimationTime(flapTime, offset);
         
         if (deltaTime <= 0.5F) {
             angle = Sigmoid(-4 + ((deltaTime * 2) * 8));
@@ -30,8 +30,8 @@ public class ModelWingBase extends ModelBase {
         return 1.0f / (1.0f + (float) Math.exp(-value));
     }
     
-    private float getAnimationTime(int totalTime) {
-        float time = System.currentTimeMillis() % totalTime;
+    private float getAnimationTime(int totalTime, int offset) {
+        float time = (System.currentTimeMillis() + offset) % totalTime;
         return time / totalTime;
     }
 }
