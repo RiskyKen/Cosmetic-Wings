@@ -1,7 +1,8 @@
 # Inventory names
 inventory.cosmeticwings:wings.name=翅膀
 inventory.cosmeticwings:wings.label.list=选择翅膀
-inventory.cosmeticwings:wings.label.scale=翅膀大小
+inventory.cosmeticwings:wings.label.scale=翅膀尺寸
+inventory.cosmeticwings:wings.spawnParticles.name=启用粒子效果
 
 # Wings
 wings.cosmeticwings:none.name=无
