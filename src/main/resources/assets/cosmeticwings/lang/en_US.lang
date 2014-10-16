@@ -15,4 +15,4 @@ wings.cosmeticwings:kuroyukihime.name=Kuroyukihime
 
 # Keybindings
 keys.cosmeticwings:category=Cosmetic Wings
-keys.cosmeticwings:wings=Open Wing GUI
+keys.cosmeticwings.wingGui=Open Wing GUI
