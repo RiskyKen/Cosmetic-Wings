@@ -24,7 +24,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ModelBigWings extends ModelWingBase {
-	
+
     ModelRenderer rightWing;
     ModelRenderer leftWing;
     private final ResourceLocation[] wingsImage;
@@ -36,7 +36,7 @@ public class ModelBigWings extends ModelWingBase {
         leftWing = new ModelRenderer(this, 0, 0);
         leftWing.setTextureSize(64, 32);
         leftWing.addBox(-8.5F, 0F, -0.5F, 17, 30, 1);
-        
+
         rightWing = new ModelRenderer(this, 0, 0);
         rightWing.setTextureSize(64, 32);
         rightWing.addBox(-8.5F, 0F, -0.5F, 17, 30, 1);
@@ -63,17 +63,17 @@ public class ModelBigWings extends ModelWingBase {
         if (wingId >= 0 & wingId < wingsImage.length) {
             Minecraft.getMinecraft().getTextureManager().bindTexture(wingsImage[wingId]);
         }
-        
+
         float angle = getWingAngle(player.capabilities.isFlying & player.isAirBorne, 30, 5000, 400, player.getEntityId());
-        
-    	setRotation(leftWing, (float) Math.toRadians(angle + 20), (float) Math.toRadians(-4), (float) Math.toRadians(6));
-    	setRotation(rightWing, (float) Math.toRadians(-angle - 20), (float) Math.toRadians(4), (float) Math.toRadians(6));
-    	
+
+        setRotation(leftWing, (float) Math.toRadians(angle + 20), (float) Math.toRadians(-4), (float) Math.toRadians(6));
+        setRotation(rightWing, (float) Math.toRadians(-angle - 20), (float) Math.toRadians(4), (float) Math.toRadians(6));
+
         GL11.glPushMatrix();
         GL11.glTranslatef(0, 4 * SCALE, 1.5F * SCALE);
         GL11.glRotatef(90, 0, 1, 0);
         GL11.glRotatef(90, 0, 0, 1);
-        
+
         GL11.glColor3f(1F, 1F, 1F);
 
         float lastBrightnessX = OpenGlHelper.lastBrightnessX;
@@ -88,7 +88,7 @@ public class ModelBigWings extends ModelWingBase {
 
         float scale = 1.0F;
         GL11.glScalef(scale, scale, scale);
-        
+
         leftWing.render(SCALE);
         rightWing.render(SCALE);
 
@@ -105,11 +105,11 @@ public class ModelBigWings extends ModelWingBase {
     }
 
     private void spawnParticales(EntityPlayer player, int type, float wingScale) {
-    	float angle = getWingAngle(player.capabilities.isFlying & player.isAirBorne, 30, 5000, 400, player.getEntityId());
+        float angle = getWingAngle(player.capabilities.isFlying & player.isAirBorne, 30, 5000, 400, player.getEntityId());
         float scale = (1F - wingScale) * 0.2F;
         float spawnChance = 960;
         if (player.capabilities.isFlying & player.isAirBorne) {
-        	spawnChance = 900;
+            spawnChance = 900;
         }
         Random rnd = new Random();
         if (rnd.nextFloat() * 1000 > spawnChance) {
