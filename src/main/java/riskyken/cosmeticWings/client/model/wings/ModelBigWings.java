@@ -24,7 +24,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ModelBigWings extends ModelWingBase {
-    
+	
     ModelRenderer rightWing;
     ModelRenderer leftWing;
     private final ResourceLocation[] wingsImage;
@@ -33,21 +33,14 @@ public class ModelBigWings extends ModelWingBase {
         textureWidth = 64;
         textureHeight = 32;
 
-        rightWing = new ModelRenderer(this, 0, 0);
-        // rightWing = new ModelRenderer(this, 0, 31);
-        rightWing.addBox(-6F, 2F, -1F, 17, 30, 1);
-        rightWing.setRotationPoint(0F, 0F, 0F);
-        rightWing.setTextureSize(64, 32);
-        rightWing.mirror = true;
-        setRotation(rightWing, 1.047198F, 0F, 1.745329F);
-        // setRotation(rightWing, 2.094395F, 0F, -1.396263F);
-
         leftWing = new ModelRenderer(this, 0, 0);
-        leftWing.addBox(-6F, 2F, 0F, 17, 30, 1);
-        leftWing.setRotationPoint(0F, 0F, 0F);
         leftWing.setTextureSize(64, 32);
-        leftWing.mirror = true;
-        setRotation(leftWing, 2.094395F, 0F, 1.396263F);
+        leftWing.addBox(-8.5F, 0F, -0.5F, 17, 30, 1);
+        
+        rightWing = new ModelRenderer(this, 0, 0);
+        rightWing.setTextureSize(64, 32);
+        rightWing.addBox(-8.5F, 0F, -0.5F, 17, 30, 1);
+        rightWing.mirror = true;
 
         wingsImage = new ResourceLocation[3];
         wingsImage[0] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/wings/big-black-wings.png");
@@ -67,14 +60,20 @@ public class ModelBigWings extends ModelWingBase {
     }
 
     public void render(EntityPlayer player, RenderPlayer renderer, int wingId) {
-
         if (wingId >= 0 & wingId < wingsImage.length) {
             Minecraft.getMinecraft().getTextureManager().bindTexture(wingsImage[wingId]);
         }
-        float mult = 0.0625F;
-
+        
+        float angle = getWingAngle(player.capabilities.isFlying & player.isAirBorne, 30, 5000, 400, player.getEntityId());
+        
+    	setRotation(leftWing, (float) Math.toRadians(angle + 20), (float) Math.toRadians(-4), (float) Math.toRadians(6));
+    	setRotation(rightWing, (float) Math.toRadians(-angle - 20), (float) Math.toRadians(4), (float) Math.toRadians(6));
+    	
         GL11.glPushMatrix();
-
+        GL11.glTranslatef(0, 4 * SCALE, 1.5F * SCALE);
+        GL11.glRotatef(90, 0, 1, 0);
+        GL11.glRotatef(90, 0, 0, 1);
+        
         GL11.glColor3f(1F, 1F, 1F);
 
         float lastBrightnessX = OpenGlHelper.lastBrightnessX;
@@ -89,9 +88,9 @@ public class ModelBigWings extends ModelWingBase {
 
         float scale = 1.0F;
         GL11.glScalef(scale, scale, scale);
-
-        rightWing.render(mult);
-        leftWing.render(mult);
+        
+        leftWing.render(SCALE);
+        rightWing.render(SCALE);
 
         if (wingId != 0) {
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lastBrightnessX, lastBrightnessY);
@@ -106,15 +105,20 @@ public class ModelBigWings extends ModelWingBase {
     }
 
     private void spawnParticales(EntityPlayer player, int type, float wingScale) {
+    	float angle = getWingAngle(player.capabilities.isFlying & player.isAirBorne, 30, 5000, 400, player.getEntityId());
         float scale = (1F - wingScale) * 0.2F;
+        float spawnChance = 960;
+        if (player.capabilities.isFlying & player.isAirBorne) {
+        	spawnChance = 900;
+        }
         Random rnd = new Random();
-        if (rnd.nextFloat() * 1000 > 960) {
+        if (rnd.nextFloat() * 1000 > spawnChance) {
             PointD offset;
 
             if (rnd.nextFloat() >= 0.5f) {
-                offset = Trig.moveTo(new PointD(player.posX, player.posZ), 0.3f + rnd.nextFloat() * 1.4f * wingScale, player.renderYawOffset + 60);
+                offset = Trig.moveTo(new PointD(player.posX, player.posZ), 0.3f + rnd.nextFloat() * 1.4f * wingScale, player.renderYawOffset + 90 - 22 - angle + 10);
             } else {
-                offset = Trig.moveTo(new PointD(player.posX, player.posZ), 0.3f + rnd.nextFloat() * 1.4f * wingScale, player.renderYawOffset + 127);
+                offset = Trig.moveTo(new PointD(player.posX, player.posZ), 0.3f + rnd.nextFloat() * 1.4f * wingScale, player.renderYawOffset + 90 + 32 + angle - 10);
             }
 
             float yOffset = 0f;
