@@ -84,6 +84,7 @@ public class GuiWings extends GuiScreen implements ISlider {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float tickTime) {
+        GL11.glColor4f(1F, 1F, 1F, 1F);
         mc.renderEngine.bindTexture(wingsGuiTexture);
         drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.guiWidth, this.guiHeight);
         super.drawScreen(mouseX, mouseY, tickTime);
