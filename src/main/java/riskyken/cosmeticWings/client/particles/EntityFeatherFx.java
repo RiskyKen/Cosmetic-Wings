@@ -140,7 +140,7 @@ public class EntityFeatherFx extends EntityFX {
 
         GL11.glTranslatef((float) -0.01F, (float) -0.01F, (float) -0.01F);
         GL11.glRotatef(rotation, 0, 0, 1);
-        GL11.glTranslatef((float) 0.05F, (float) 0.05F, (float) 0.05F);
+        GL11.glTranslatef((float) 0.01F, (float) 0.01F, (float) 0.01F);
         GL11.glScalef(scale, scale, scale);
         GL11.glScalef(particleScale, particleScale, particleScale);
 
