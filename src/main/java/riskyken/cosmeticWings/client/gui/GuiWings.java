@@ -9,6 +9,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import riskyken.cosmeticWings.client.gui.controls.GuiCheckBox;
+import riskyken.cosmeticWings.client.gui.controls.GuiCustomSlider;
 import riskyken.cosmeticWings.client.gui.controls.GuiFileListItem;
 import riskyken.cosmeticWings.client.gui.controls.GuiHelper;
 import riskyken.cosmeticWings.client.gui.controls.GuiList;
@@ -39,14 +40,15 @@ public class GuiWings extends GuiScreen implements ISlider {
     private GuiList fileList;
     private GuiScrollbar scrollbar;
     private GuiCheckBox checkSpawnParticles;
-    private GuiSlider sliderScale;
+    private GuiCustomSlider sliderScale;
+    private GuiCustomSlider sliderOffset;
     
     WingData wingData;
     
     public GuiWings(EntityPlayer player) {
         this.player = player;
         guiWidth = 256;
-        guiHeight = 167;
+        guiHeight = 182;
     }
 
     @Override
@@ -57,19 +59,22 @@ public class GuiWings extends GuiScreen implements ISlider {
         guiTop = height / 2 - guiHeight / 2;
 
         buttonList.clear();
-        fileList = new GuiList(this.guiLeft + 7, this.guiTop + 33, 80, 126, 12);
+        fileList = new GuiList(this.guiLeft + 7, this.guiTop + 33, 80, 141, 12);
         for (int i = 0; i < WingType.values().length; i++) {
             fileList.addListItem(new GuiFileListItem(WingType.getOrdinal(i).getLocalizedName()));
         }
         
-        scrollbar = new GuiScrollbar(0, this.guiLeft + 87, this.guiTop + 33, 10, 126, "", false);
+        scrollbar = new GuiScrollbar(0, this.guiLeft + 87, this.guiTop + 33, 10, 141, "", false);
         buttonList.add(scrollbar);
         
-        checkSpawnParticles = new GuiCheckBox(1, this.guiLeft + 107, this.guiTop + 59, 14, 14, GuiHelper.getLocalizedControlName("wings", "spawnParticles.name"), false, false);
+        checkSpawnParticles = new GuiCheckBox(1, this.guiLeft + 107, this.guiTop + 74, 14, 14, GuiHelper.getLocalizedControlName("wings", "spawnParticles.name"), false, false);
         buttonList.add(checkSpawnParticles);
         
-        sliderScale = new GuiSlider(2, this.guiLeft + 107, this.guiTop + 33, 138, 20, "", "", 0.4D, 1D, 1D, true, true, this);
+        sliderScale = new GuiCustomSlider(2, this.guiLeft + 107, this.guiTop + 33, 138, 10, "", "", 0.4D, 1D, 1D, true, true, this);
         buttonList.add(sliderScale);
+        
+        sliderOffset = new GuiCustomSlider(3, this.guiLeft + 107, this.guiTop + 60, 138, 10, "", "", 0D, 1D, 1D, true, true, this);
+        buttonList.add(sliderOffset);
         
         if (wingData != null) {
             fileList.setSelectedIndex(wingData.wingType.ordinal());
@@ -77,6 +82,9 @@ public class GuiWings extends GuiScreen implements ISlider {
             sliderScale.setValue(wingData.wingScale);
             sliderScale.precision = 2;
             sliderScale.updateSlider();
+            sliderOffset.setValue(wingData.centreOffset);
+            sliderOffset.precision = 2;
+            sliderOffset.updateSlider();
         } else {
             wingData = new WingData();
         }
@@ -95,11 +103,13 @@ public class GuiWings extends GuiScreen implements ISlider {
         
         String listLabel = GuiHelper.getLocalizedControlName("wings", "label.list");
         String scaleLabel = GuiHelper.getLocalizedControlName("wings", "label.scale");
+        String centreLabel = GuiHelper.getLocalizedControlName("wings", "label.centre");
         this.fontRendererObj.drawString(listLabel, this.guiLeft + 7, this.guiTop + 23, 4210752);
         this.fontRendererObj.drawString(scaleLabel, this.guiLeft + 107, this.guiTop + 23, 4210752);
+        this.fontRendererObj.drawString(centreLabel, this.guiLeft + 107, this.guiTop + 50, 4210752);
         
         int boxX = this.guiLeft + 175;
-        int boxY = this.guiTop + 150;
+        int boxY = this.guiTop + 165;
         
         float lookX = -boxX + mouseX;
         float lookY = boxY - 50 - mouseY;
@@ -131,7 +141,6 @@ public class GuiWings extends GuiScreen implements ISlider {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int button) {
         super.mouseClicked(mouseX, mouseY, button);
-
         if (fileList.mouseClicked(mouseX, mouseY, button)) {
             if (fileList.getSelectedIndex() >= 0 & fileList.getSelectedIndex() < WingType.values().length) {
                 sendWingDataToServer();
@@ -144,6 +153,7 @@ public class GuiWings extends GuiScreen implements ISlider {
         wingData.wingType = WingType.getOrdinal(fileList.getSelectedIndex());
         wingData.wingScale = (float) sliderScale.getValue();
         wingData.spawnParticles = checkSpawnParticles.isChecked();
+        wingData.centreOffset = (float) sliderOffset.getValue();
         PacketHandler.networkWrapper.sendToServer(new MessageClientUpdateWingData(wingData));
     }
 
@@ -153,9 +163,16 @@ public class GuiWings extends GuiScreen implements ISlider {
     }
 
     @Override
-    public void onChangeSliderValue(GuiSlider slider) {
-        if (slider.getValue() != wingData.wingScale) {
-            sendWingDataToServer();
+    public void onChangeSliderValue(GuiSlider slider) { 
+        if (slider.id == sliderScale.id) {
+            if (slider.getValue() != wingData.wingScale) {
+                sendWingDataToServer();
+            }
+        }
+        if (slider.id == sliderOffset.id) {
+            if (slider.getValue() != wingData.centreOffset) {
+                sendWingDataToServer();
+            }
         }
     }
 }

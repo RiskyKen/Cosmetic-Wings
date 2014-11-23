@@ -72,17 +72,16 @@ public final class WingRenderManager {
             GL11.glRotatef(28.6F, 1, 0, 0);
         }
         GL11.glTranslatef(0, (1F - wingData.wingScale) * 0.20F, (1F - wingData.wingScale) * 0.12F);
-        GL11.glScalef(wingData.wingScale, wingData.wingScale, wingData.wingScale);
         
         switch (wingData.wingType) {
         case BLACK:
-            bigWings.render(ev.entityPlayer, ev.renderer, 0);
+            bigWings.render(ev.entityPlayer, ev.renderer, 0, wingData);
             break;
         case WHITE:
-            bigWings.render(ev.entityPlayer, ev.renderer, 1);
+            bigWings.render(ev.entityPlayer, ev.renderer, 1, wingData);
             break;
         case SHANA:
-            bigWings.render(ev.entityPlayer, ev.renderer, 2);
+            bigWings.render(ev.entityPlayer, ev.renderer, 2, wingData);
             break;
         case FLANDRE:
             extraBigWings.render(ev.entityPlayer, ev.renderer);

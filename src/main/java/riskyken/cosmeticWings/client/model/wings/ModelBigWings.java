@@ -17,6 +17,7 @@ import org.lwjgl.opengl.GL11;
 import riskyken.cosmeticWings.client.particles.EntityFeatherFx;
 import riskyken.cosmeticWings.client.particles.ParticleManager;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
+import riskyken.cosmeticWings.common.wings.WingData;
 import riskyken.cosmeticWings.utils.PointD;
 import riskyken.cosmeticWings.utils.Trig;
 import cpw.mods.fml.relauncher.Side;
@@ -59,7 +60,7 @@ public class ModelBigWings extends ModelWingBase {
         model.rotateAngleZ = z;
     }
 
-    public void render(EntityPlayer player, RenderPlayer renderer, int wingId) {
+    public void render(EntityPlayer player, RenderPlayer renderer, int wingId, WingData wingData) {
         if (wingId >= 0 & wingId < wingsImage.length) {
             Minecraft.getMinecraft().getTextureManager().bindTexture(wingsImage[wingId]);
         }
@@ -89,8 +90,17 @@ public class ModelBigWings extends ModelWingBase {
         float scale = 1.0F;
         GL11.glScalef(scale, scale, scale);
 
+        GL11.glPushMatrix();
+        GL11.glTranslatef(0, 0, wingData.centreOffset * 3 * SCALE);
+        GL11.glScalef(wingData.wingScale, wingData.wingScale, wingData.wingScale);
         leftWing.render(SCALE);
+        GL11.glPopMatrix();
+        
+        GL11.glPushMatrix();
+        GL11.glTranslatef(0, 0, -wingData.centreOffset * 3 * SCALE);
+        GL11.glScalef(wingData.wingScale, wingData.wingScale, wingData.wingScale);
         rightWing.render(SCALE);
+        GL11.glPopMatrix();
 
         if (wingId != 0) {
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lastBrightnessX, lastBrightnessY);
