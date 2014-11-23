@@ -10,7 +10,8 @@ public enum WingType {
     SHANA(false),
     FLANDRE(false),
     METAL(false),
-    KUROYUKIHIME(false);
+    KUROYUKIHIME(false),
+    SMALL_MECH(false);
 
     public final boolean canRecolour;
 

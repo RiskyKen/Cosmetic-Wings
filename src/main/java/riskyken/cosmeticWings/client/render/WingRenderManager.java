@@ -13,6 +13,7 @@ import riskyken.cosmeticWings.client.model.wings.ModelBigWings;
 import riskyken.cosmeticWings.client.model.wings.ModelExtraBigWings;
 import riskyken.cosmeticWings.client.model.wings.ModelKuroyukihimeWings;
 import riskyken.cosmeticWings.client.model.wings.ModelMetalWings;
+import riskyken.cosmeticWings.client.model.wings.ModelSmallMechWings;
 import riskyken.cosmeticWings.common.wings.WingData;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -31,6 +32,7 @@ public final class WingRenderManager {
     private final ModelExtraBigWings extraBigWings = new ModelExtraBigWings();
     private final ModelMetalWings metalWings = new ModelMetalWings();
     private final ModelKuroyukihimeWings kuroyukihimeWings = new ModelKuroyukihimeWings();
+    private final ModelSmallMechWings smallMechWings  = new ModelSmallMechWings();
 
     public static void init() {
         INSTANCE = new WingRenderManager();
@@ -74,6 +76,8 @@ public final class WingRenderManager {
         GL11.glTranslatef(0, (1F - wingData.wingScale) * 0.20F, (1F - wingData.wingScale) * 0.0625F);
         
         switch (wingData.wingType) {
+        case NONE:
+            break;
         case BLACK:
             bigWings.render(ev.entityPlayer, ev.renderer, 0, wingData);
             break;
@@ -92,8 +96,9 @@ public final class WingRenderManager {
         case KUROYUKIHIME:
             kuroyukihimeWings.render(ev.entityPlayer, ev.renderer, wingData);
             break;
-        default:
-            break;
+        case SMALL_MECH:
+            smallMechWings.render(ev.entityPlayer, ev.renderer, wingData);
+            break; 
         }
         GL11.glPopMatrix();
     }
