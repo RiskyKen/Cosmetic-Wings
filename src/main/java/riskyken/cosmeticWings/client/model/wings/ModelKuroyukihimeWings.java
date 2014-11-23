@@ -51,8 +51,8 @@ public class ModelKuroyukihimeWings extends ModelWingBase {
     private void RenderWing(EntityPlayer player, boolean isFlying, WingData wingData) {
         float angle = getWingAngle(isFlying, 40, 8000, 250, player.getEntityId());
         
-        setRotation(leftWing, (float) Math.toRadians(angle + 20), (float) Math.toRadians(-4), (float) Math.toRadians(6));
-        setRotation(rightWing, (float) Math.toRadians(-angle - 20), (float) Math.toRadians(4), (float) Math.toRadians(6));
+        setRotation(leftWing, (float) Math.toRadians(angle + 20), (float) Math.toRadians(0), (float) Math.toRadians(0));
+        setRotation(rightWing, (float) Math.toRadians(-angle - 20), (float) Math.toRadians(0), (float) Math.toRadians(0));
 
         GL11.glPushMatrix();
         GL11.glTranslatef(0, 4 * SCALE, 1.9F * SCALE);
