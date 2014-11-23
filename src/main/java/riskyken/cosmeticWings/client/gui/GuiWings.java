@@ -13,7 +13,7 @@ import riskyken.cosmeticWings.client.gui.controls.GuiFileListItem;
 import riskyken.cosmeticWings.client.gui.controls.GuiHelper;
 import riskyken.cosmeticWings.client.gui.controls.GuiList;
 import riskyken.cosmeticWings.client.gui.controls.GuiScrollbar;
-import riskyken.cosmeticWings.client.wings.WingRenderManager;
+import riskyken.cosmeticWings.client.render.WingRenderManager;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 import riskyken.cosmeticWings.common.network.PacketHandler;
 import riskyken.cosmeticWings.common.network.message.MessageClientUpdateWingData;

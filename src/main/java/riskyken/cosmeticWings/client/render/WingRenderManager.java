@@ -1,4 +1,4 @@
-package riskyken.cosmeticWings.client.wings;
+package riskyken.cosmeticWings.client.render;
 
 import java.util.HashMap;
 import java.util.UUID;

@@ -3,8 +3,8 @@ package riskyken.cosmeticWings.proxies;
 import java.util.UUID;
 
 import riskyken.cosmeticWings.client.handler.KeyboardHandler;
+import riskyken.cosmeticWings.client.render.WingRenderManager;
 import riskyken.cosmeticWings.client.settings.Keybindings;
-import riskyken.cosmeticWings.client.wings.WingRenderManager;
 import riskyken.cosmeticWings.common.wings.WingData;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.relauncher.Side;
