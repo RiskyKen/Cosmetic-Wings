@@ -11,5 +11,7 @@ public interface IGuiListItem {
     
     public void mouseReleased(FontRenderer fontRenderer, int x, int y, int mouseX, int mouseY, int button);
 
+    public boolean isHovering(FontRenderer fontRenderer, int x, int y, int mouseX, int mouseY);
+    
     public String getDisplayName();
 }

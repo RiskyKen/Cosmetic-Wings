@@ -61,8 +61,9 @@ public class GuiList extends Gui {
         listItems.add(item);
     }
     
-    public void drawList(int mouseX, int mouseY, float tickTime) {
-        if (!this.visible) { return; }
+    public int drawList(int mouseX, int mouseY, float tickTime) {
+        if (!this.visible) { return -1; }
+        int hoverNumber = -1;
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         mc.renderEngine.bindTexture(texture);
         
@@ -80,9 +81,13 @@ public class GuiList extends Gui {
             int yLocation = y - scrollAmount + 2 + i * slotHeight;
             if (yLocation + 6 >= y & yLocation <= y + height + 1) {
                 listItems.get(i).drawListItem(fontRenderer, x + 2, yLocation, mouseX, mouseY, i == selectedIndex);
+                if (listItems.get(i).isHovering(fontRenderer, x + 2, yLocation, mouseX, mouseY)) {
+                    hoverNumber = i;
+                }
             }
         }
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
+        return hoverNumber;
     }
     
     public boolean mouseClicked(int mouseX, int mouseY, int button) {

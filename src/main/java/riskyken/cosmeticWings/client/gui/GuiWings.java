@@ -1,5 +1,7 @@
 package riskyken.cosmeticWings.client.gui;
 
+import java.util.ArrayList;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiInventory;
@@ -97,8 +99,7 @@ public class GuiWings extends GuiScreen implements ISlider {
         drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.guiWidth, this.guiHeight);
         super.drawScreen(mouseX, mouseY, tickTime);
         fileList.setScrollPercentage(scrollbar.getPercentageValue());
-        fileList.drawList(mouseX, mouseY, tickTime);
-
+        
         GuiHelper.renderLocalizedGuiName(this.fontRendererObj, this.guiLeft, this.guiTop, this.guiWidth, "wings");
         
         String listLabel = GuiHelper.getLocalizedControlName("wings", "label.list");
@@ -107,6 +108,17 @@ public class GuiWings extends GuiScreen implements ISlider {
         this.fontRendererObj.drawString(listLabel, this.guiLeft + 7, this.guiTop + 23, 4210752);
         this.fontRendererObj.drawString(scaleLabel, this.guiLeft + 107, this.guiTop + 23, 4210752);
         this.fontRendererObj.drawString(centreLabel, this.guiLeft + 107, this.guiTop + 50, 4210752);
+        
+        int hoverNumber = fileList.drawList(mouseX, mouseY, tickTime);
+        if (hoverNumber != -1 & hoverNumber < WingType.values().length) {
+            WingType wingType = WingType.getOrdinal(hoverNumber);
+            String flavourText = wingType.getFlavourText();
+            if (!flavourText.equals("")) {
+                ArrayList<String> hoverText = new ArrayList<String>();
+                hoverText.add(flavourText);
+                drawHoveringText(hoverText, mouseX, mouseY, fontRendererObj);
+            }
+        }
         
         int boxX = this.guiLeft + 175;
         int boxY = this.guiTop + 165;

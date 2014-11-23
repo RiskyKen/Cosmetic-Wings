@@ -38,7 +38,8 @@ public class GuiFileListItem extends Gui implements IGuiListItem {
         
     }
     
-    private boolean isHovering(FontRenderer fontRenderer, int x, int y, int mouseX, int mouseY) {
+    @Override
+    public boolean isHovering(FontRenderer fontRenderer, int x, int y, int mouseX, int mouseY) {
         return mouseX >= x & mouseY >= y & mouseX <= x + fontRenderer.getStringWidth(displayText) & mouseY <= y + 8;
     }
 

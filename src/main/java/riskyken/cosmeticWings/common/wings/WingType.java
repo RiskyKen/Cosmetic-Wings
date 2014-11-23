@@ -27,7 +27,16 @@ public enum WingType {
         }
         return unlocalizedName;
     }
-
+    
+    public String getFlavourText() {
+        String unlocalizedName = "wings." + LibModInfo.ID.toLowerCase() + ":" + this.name().toLowerCase() + ".flavour";
+        String localizedName = StatCollector.translateToLocal(unlocalizedName);
+        if (!unlocalizedName.equals(localizedName)) {
+            return localizedName;
+        }
+        return "";
+    }
+    
     public static WingType getOrdinal(int id) {
         return WingType.values()[id];
     }
