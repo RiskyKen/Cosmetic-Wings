@@ -54,12 +54,6 @@ public class ModelBigWings extends ModelWingBase {
         leftWing.render(f5);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z) {
-        model.rotateAngleX = x;
-        model.rotateAngleY = y;
-        model.rotateAngleZ = z;
-    }
-
     public void render(EntityPlayer player, RenderPlayer renderer, int wingId, WingData wingData) {
         if (wingId >= 0 & wingId < wingsImage.length) {
             Minecraft.getMinecraft().getTextureManager().bindTexture(wingsImage[wingId]);

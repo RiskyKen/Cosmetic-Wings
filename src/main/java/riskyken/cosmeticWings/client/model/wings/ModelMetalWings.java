@@ -9,61 +9,65 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import riskyken.cosmeticWings.common.lib.LibModInfo;
+import riskyken.cosmeticWings.common.wings.WingData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ModelMetalWings extends ModelWingBase {
-
-    ModelRenderer wing;
+    
+    ModelRenderer leftWing;
+    ModelRenderer rightWing;
+    
     private final ResourceLocation wingsImage;
 
     public ModelMetalWings() {
         textureWidth = 64;
         textureHeight = 32;
         
-        wing = new ModelRenderer(this, 0, 0);
-        wing.addBox(0F, 0F, 0.5F, 20, 29, 1);
-        wing.setTextureSize(32, 32);
-        wing.mirror = true;
+        leftWing = new ModelRenderer(this, 0, 0);
+        leftWing.addBox(-10F, 0F, -0.5F, 20, 29, 1);
+        leftWing.setTextureSize(64, 32);
+        
+        rightWing = new ModelRenderer(this, 0, 0);
+        rightWing.addBox(-10F, 0F, -0.5F, 20, 29, 1);
+        rightWing.setTextureSize(64, 32);
+        rightWing.mirror = true;
         
         wingsImage = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/wings/metal-wings.png");
     }
 
-    public void render(EntityPlayer player, RenderPlayer renderer) {
+    public void render(EntityPlayer player, RenderPlayer renderer, WingData wingData) {
         GL11.glColor3f(1F, 1F, 1F);
         Minecraft.getMinecraft().getTextureManager().bindTexture(wingsImage);
-        RenderWing(player, player.capabilities.isFlying & player.isAirBorne);
+        RenderWing(player, player.capabilities.isFlying & player.isAirBorne, wingData);
     }
     
-    private void RenderWing(EntityPlayer player, boolean isFlying) {
-        GL11.glPushMatrix();
-        
-        GL11.glTranslatef(0, -7F * SCALE, 1F * SCALE * 2);
-        
-        GL11.glRotatef(90, 0, 1, 0);
-        GL11.glRotatef(90, 0, 0, 1);
-        
-        float scale = 1.00F;
-        GL11.glScalef(scale, scale, scale);
-        
+    private void RenderWing(EntityPlayer player, boolean isFlying, WingData wingData) {
         float angle = getWingAngle(isFlying, 40, 4000, 250, player.getEntityId());
         
-        GL11.glTranslatef(0F, -0.5F * SCALE, 0F);
+        setRotation(leftWing, (float) Math.toRadians(angle + 20), (float) Math.toRadians(-4), (float) Math.toRadians(6));
+        setRotation(rightWing, (float) Math.toRadians(-angle - 20), (float) Math.toRadians(4), (float) Math.toRadians(6));
         
         GL11.glPushMatrix();
-        GL11.glTranslatef(0F, 0F, 2F * SCALE);
-        GL11.glRotatef(50F - angle, 1F, 0F, 0F);
-        GL11.glTranslatef(0F, 0F, -1F * SCALE);
-        wing.render(SCALE);
+        GL11.glTranslatef(0, 4 * SCALE, 1.5F * SCALE);
+        GL11.glRotatef(90, 0, 1, 0);
+        GL11.glRotatef(90, 0, 0, 1);
+
+        GL11.glColor3f(1F, 1F, 1F);
+        
+        
+
+        GL11.glPushMatrix();
+        GL11.glTranslatef(0, 0, wingData.centreOffset * 3 * SCALE);
+        GL11.glScalef(wingData.wingScale, wingData.wingScale, wingData.wingScale);
+        leftWing.render(SCALE);
         GL11.glPopMatrix();
         
         GL11.glPushMatrix();
-        GL11.glTranslatef(0F, 0F, -2F * SCALE);
-        GL11.glRotatef(-50F + angle, 1F, 0F, 0F);
-        GL11.glTranslatef(0F, 0F, -1F * SCALE);
-        wing.render(SCALE);
-        GL11.glTranslatef(0F, 0F, 1F * SCALE);
+        GL11.glTranslatef(0, 0, -wingData.centreOffset * 3 * SCALE);
+        GL11.glScalef(wingData.wingScale, wingData.wingScale, wingData.wingScale);
+        rightWing.render(SCALE);
         GL11.glPopMatrix();
         
         GL11.glPopMatrix();

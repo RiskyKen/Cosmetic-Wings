@@ -1,6 +1,7 @@
 package riskyken.cosmeticWings.client.model.wings;
 
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
 
 public class ModelWingBase extends ModelBase {
     
@@ -24,6 +25,12 @@ public class ModelWingBase extends ModelBase {
         angle *= maxAngle;
         
         return angle;
+    }
+    
+    protected void setRotation(ModelRenderer model, float x, float y, float z) {
+        model.rotateAngleX = x;
+        model.rotateAngleY = y;
+        model.rotateAngleZ = z;
     }
     
     private static float Sigmoid(double value) {

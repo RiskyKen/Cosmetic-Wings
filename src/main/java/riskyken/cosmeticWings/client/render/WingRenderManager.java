@@ -71,7 +71,7 @@ public final class WingRenderManager {
         if (player.isSneaking()) {
             GL11.glRotatef(28.6F, 1, 0, 0);
         }
-        GL11.glTranslatef(0, (1F - wingData.wingScale) * 0.20F, (1F - wingData.wingScale) * 0.12F);
+        GL11.glTranslatef(0, (1F - wingData.wingScale) * 0.20F, (1F - wingData.wingScale) * 0.0625F);
         
         switch (wingData.wingType) {
         case BLACK:
@@ -84,14 +84,13 @@ public final class WingRenderManager {
             bigWings.render(ev.entityPlayer, ev.renderer, 2, wingData);
             break;
         case FLANDRE:
-            extraBigWings.render(ev.entityPlayer, ev.renderer);
+            extraBigWings.render(ev.entityPlayer, ev.renderer, wingData);
             break;
         case METAL:
-            metalWings.render(ev.entityPlayer, ev.renderer);
+            metalWings.render(ev.entityPlayer, ev.renderer, wingData);
             break;
         case KUROYUKIHIME:
-            GL11.glTranslatef(0, (1F - wingData.wingScale) * 0.60F, 0);
-            kuroyukihimeWings.render(ev.entityPlayer, ev.renderer);
+            kuroyukihimeWings.render(ev.entityPlayer, ev.renderer, wingData);
             break;
         default:
             break;
