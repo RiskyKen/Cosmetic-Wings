@@ -17,18 +17,16 @@ buildscript {
 
 apply plugin: 'forge'
 
-def modVersion = "0.3.0"
-def minecraftVersion = "1.7.10"
-
 version = minecraftVersion + "-" + modVersion
 group= "riskyken.cosmeticWings"
 archivesBaseName = "Cosmetic-Wings"
 
 minecraft {
-    version = "1.7.10-10.13.0.1208"
+    version = "$minecraftVersion-$forgeVersion"
+    runDir = "eclipse"
+    
     replaceIn "common/lib/LibModInfo.java"
     replace "@VERSION@", modVersion
-    assetDir = "eclipse/assets"
 }
 
 processResources {
@@ -37,11 +35,27 @@ processResources {
 
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-		
+        
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
     
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    from sourceSets.main.output
+    classifier = 'sources'
+}
+
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'deobf'
+}
+
+artifacts {
+    archives sourcesJar
+    archives deobfJar
 }
