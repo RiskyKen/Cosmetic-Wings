@@ -73,7 +73,10 @@ public final class WingRenderManager {
         if (player.isSneaking()) {
             GL11.glRotatef(28.6F, 1, 0, 0);
         }
-        GL11.glTranslatef(0, (1F - wingData.wingScale) * 0.20F, (1F - wingData.wingScale) * 0.0625F);
+        GL11.glTranslatef(0, (wingData.wingScale - 1F) * 0.10F, (1F - wingData.wingScale) * 0.0625F);
+        
+        GL11.glTranslatef(0, 6 * 0.0625F, 0F);
+        GL11.glTranslatef(0, -wingData.heightOffset * 8 * 0.0625F, 0F);
         
         switch (wingData.wingType) {
         case NONE:
@@ -126,13 +129,13 @@ public final class WingRenderManager {
 
         switch (wingData.wingType) {
         case BLACK:
-            bigWings.onTick(player, 0, wingData.wingScale);
+            bigWings.onTick(player, 0, wingData);
             break;
         case WHITE:
-            bigWings.onTick(player, 1, wingData.wingScale);
+            bigWings.onTick(player, 1, wingData);
             break;
         case SHANA:
-            bigWings.onTick(player, 2, wingData.wingScale);
+            bigWings.onTick(player, 2, wingData);
             break;
         case KUROYUKIHIME:
             //kuroyukihimeWings.onTick(player, wingData.wingScale);

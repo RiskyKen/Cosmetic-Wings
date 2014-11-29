@@ -1,5 +1,7 @@
-package riskyken.cosmeticWings.common.wings;
+package riskyken.cosmeticWings.common.handler;
 
+import riskyken.cosmeticWings.common.wings.ExtendedPropsWingData;
+import riskyken.cosmeticWings.common.wings.WingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -9,9 +11,9 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-public final class WingDataManager {
+public final class WingDataHandler {
 
-    public WingDataManager() {
+    public WingDataHandler() {
         MinecraftForge.EVENT_BUS.register(this);
     }
 

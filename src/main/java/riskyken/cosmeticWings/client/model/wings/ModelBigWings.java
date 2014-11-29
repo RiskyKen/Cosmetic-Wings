@@ -104,13 +104,13 @@ public class ModelBigWings extends ModelWingBase {
         GL11.glPopMatrix();
     }
 
-    public void onTick(EntityPlayer player, int wingId, float wingScale) {
-        spawnParticales(player, wingId, wingScale);
+    public void onTick(EntityPlayer player, int wingId, WingData wingData) {
+        spawnParticales(player, wingId, wingData);
     }
 
-    private void spawnParticales(EntityPlayer player, int type, float wingScale) {
+    private void spawnParticales(EntityPlayer player, int type, WingData wingData) {
         float angle = getWingAngle(player.capabilities.isFlying & player.isAirBorne, 30, 5000, 400, player.getEntityId());
-        float scale = (1F - wingScale) * 0.2F;
+        float scale = (1F - wingData.wingScale) * 0.2F;
         float spawnChance = 960;
         if (player.capabilities.isFlying & player.isAirBorne) {
             spawnChance = 900;
@@ -120,15 +120,15 @@ public class ModelBigWings extends ModelWingBase {
             PointD offset;
 
             if (rnd.nextFloat() >= 0.5f) {
-                offset = Trig.moveTo(new PointD(player.posX, player.posZ), 0.3f + rnd.nextFloat() * 1.4f * wingScale, player.renderYawOffset + 90 - 22 - angle + 10);
+                offset = Trig.moveTo(new PointD(player.posX, player.posZ), 0.3f + rnd.nextFloat() * 1.4f * wingData.wingScale, player.renderYawOffset + 90 - 22 - angle + 10);
             } else {
-                offset = Trig.moveTo(new PointD(player.posX, player.posZ), 0.3f + rnd.nextFloat() * 1.4f * wingScale, player.renderYawOffset + 90 + 32 + angle - 10);
+                offset = Trig.moveTo(new PointD(player.posX, player.posZ), 0.3f + rnd.nextFloat() * 1.4f * wingData.wingScale, player.renderYawOffset + 90 + 32 + angle - 10);
             }
 
             float yOffset = 0f;
 
             double parX = offset.x;
-            double parY = player.posY - 0.4D + scale;
+            double parY = player.posY - 0.4D + scale - (6 * SCALE) + (wingData.heightOffset * 6 * SCALE);
             double parZ = offset.y;
 
             EntityClientPlayerMP localPlayer = Minecraft.getMinecraft().thePlayer;
@@ -137,7 +137,7 @@ public class ModelBigWings extends ModelWingBase {
                 parY += 1.6D;
             }
 
-            EntityFeatherFx particle = new EntityFeatherFx(player.worldObj, parX, parY, parZ, type, wingScale);
+            EntityFeatherFx particle = new EntityFeatherFx(player.worldObj, parX, parY, parZ, type, wingData.wingScale);
             ParticleManager.INSTANCE.spawnParticle(player.worldObj, particle);
         }
     }

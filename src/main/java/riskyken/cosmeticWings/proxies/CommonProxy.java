@@ -6,23 +6,21 @@ import riskyken.cosmeticWings.common.wings.WingData;
 
 public class CommonProxy {
 
+    public void preInit() {
+    }
+    
     public void init() {
-
     }
 
     public void initRenderers() {
-
     }
 
     public void postInit() {
-
     }
 
     public void registerKeyBindings() {
-
     }
 
     public void receivedWingData(UUID playerId, WingData wingData) {
-
     }
 }

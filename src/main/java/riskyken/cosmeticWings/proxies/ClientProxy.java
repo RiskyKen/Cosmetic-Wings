@@ -14,17 +14,21 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ClientProxy extends CommonProxy {
 
     @Override
+    public void preInit() {
+    }
+    
+    @Override
     public void init() {
+        new KeyboardHandler();
     }
 
     @Override
     public void initRenderers() {
+        WingRenderManager.init();
     }
 
     @Override
     public void postInit() {
-        WingRenderManager.init();
-        new KeyboardHandler();
     }
 
     @Override

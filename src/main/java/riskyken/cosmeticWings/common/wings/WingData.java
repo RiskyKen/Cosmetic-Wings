@@ -9,17 +9,20 @@ public class WingData {
     private static final String TAG_WING_SCALE = "wingScale";
     private static final String TAG_SPAWN_PARTICLES = "spawnParticles";
     private static final String TAG_CENTRE_OFFSET = "centreOffset";
+    private static final String TAG_HEIGHT_OFFSET = "heightOffset";
 
     public WingType wingType;
     public float wingScale;
     public boolean spawnParticles;
     public float centreOffset;
-
+    public float heightOffset;
+    
     public WingData() {
         this.wingType = WingType.NONE;
         this.wingScale = 0.75F;
         this.spawnParticles = true;
         centreOffset = 0F;
+        heightOffset = 0.7F;
     }
 
     public WingData(ByteBuf buf) {
@@ -31,6 +34,7 @@ public class WingData {
         compound.setFloat(TAG_WING_SCALE, this.wingScale);
         compound.setBoolean(TAG_SPAWN_PARTICLES, this.spawnParticles);
         compound.setFloat(TAG_CENTRE_OFFSET, this.centreOffset);
+        compound.setFloat(TAG_HEIGHT_OFFSET, this.heightOffset);
     }
 
     public void loadNBTData(NBTTagCompound compound) {
@@ -46,6 +50,9 @@ public class WingData {
         if (compound.hasKey(TAG_CENTRE_OFFSET)) {
             this.centreOffset = compound.getFloat(TAG_CENTRE_OFFSET);
         }
+        if (compound.hasKey(TAG_HEIGHT_OFFSET)) {
+            this.heightOffset = compound.getFloat(TAG_HEIGHT_OFFSET);
+        }
     }
 
     public void toBytes(ByteBuf buf) {
@@ -53,6 +60,7 @@ public class WingData {
         buf.writeFloat(this.wingScale);
         buf.writeBoolean(this.spawnParticles);
         buf.writeFloat(this.centreOffset);
+        buf.writeFloat(this.heightOffset);
     }
 
     private void fromBytes(ByteBuf buf) {
@@ -60,5 +68,6 @@ public class WingData {
         this.wingScale = buf.readFloat();
         this.spawnParticles = buf.readBoolean();
         this.centreOffset = buf.readFloat();
+        this.heightOffset = buf.readFloat();
     }
 }

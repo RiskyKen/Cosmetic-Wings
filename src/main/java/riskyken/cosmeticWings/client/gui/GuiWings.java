@@ -2,7 +2,6 @@ package riskyken.cosmeticWings.client.gui;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,12 +9,7 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import riskyken.cosmeticWings.client.gui.controls.GuiCheckBox;
-import riskyken.cosmeticWings.client.gui.controls.GuiCustomSlider;
-import riskyken.cosmeticWings.client.gui.controls.GuiFileListItem;
 import riskyken.cosmeticWings.client.gui.controls.GuiHelper;
-import riskyken.cosmeticWings.client.gui.controls.GuiList;
-import riskyken.cosmeticWings.client.gui.controls.GuiScrollbar;
 import riskyken.cosmeticWings.client.render.WingRenderManager;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 import riskyken.cosmeticWings.common.network.PacketHandler;
@@ -39,18 +33,21 @@ public class GuiWings extends GuiScreen implements ISlider {
     private int guiLeft;
     private int guiTop;
 
-    private GuiList fileList;
-    private GuiScrollbar scrollbar;
-    private GuiCheckBox checkSpawnParticles;
-    private GuiCustomSlider sliderScale;
-    private GuiCustomSlider sliderOffset;
+    private ArrayList<GuiTabPage> tabs;
+    private GuiTabWingSelect tab1;
+    private GuiTabWingLocation tab2;
+    private GuiTabWingColour tab3;
+    private int activeTab;
     
     WingData wingData;
     
     public GuiWings(EntityPlayer player) {
         this.player = player;
         guiWidth = 256;
-        guiHeight = 182;
+        guiHeight = 116;
+        tabs = new ArrayList<GuiTabPage>();
+
+        activeTab = 0;
     }
 
     @Override
@@ -61,32 +58,34 @@ public class GuiWings extends GuiScreen implements ISlider {
         guiTop = height / 2 - guiHeight / 2;
 
         buttonList.clear();
-        fileList = new GuiList(this.guiLeft + 7, this.guiTop + 33, 80, 141, 12);
-        for (int i = 0; i < WingType.values().length; i++) {
-            fileList.addListItem(new GuiFileListItem(WingType.getOrdinal(i).getLocalizedName()));
+        tabs.clear();
+        
+        tab1 = new GuiTabWingSelect(this, this.guiLeft + 5, this.guiTop + 5);
+        tab2 = new GuiTabWingLocation(this, this.guiLeft + 5, this.guiTop + 5);
+        //tab3 = new GuiTabWingColour(this, this.guiLeft + 5, this.guiTop + 5);
+        tabs.add(tab1);
+        tabs.add(tab2);
+        //tabs.add(tab3);
+        
+        for (int i = 0; i < tabs.size(); i++) {
+            tabs.get(i).initGui();
         }
-        
-        scrollbar = new GuiScrollbar(0, this.guiLeft + 87, this.guiTop + 33, 10, 141, "", false);
-        buttonList.add(scrollbar);
-        
-        checkSpawnParticles = new GuiCheckBox(1, this.guiLeft + 107, this.guiTop + 74, 14, 14, GuiHelper.getLocalizedControlName("wings", "spawnParticles.name"), false, false);
-        buttonList.add(checkSpawnParticles);
-        
-        sliderScale = new GuiCustomSlider(2, this.guiLeft + 107, this.guiTop + 33, 138, 10, "", "", 0.4D, 1D, 1D, true, true, this);
-        buttonList.add(sliderScale);
-        
-        sliderOffset = new GuiCustomSlider(3, this.guiLeft + 107, this.guiTop + 60, 138, 10, "", "", 0D, 1D, 1D, true, true, this);
-        buttonList.add(sliderOffset);
-        
+
         if (wingData != null) {
-            fileList.setSelectedIndex(wingData.wingType.ordinal());
-            checkSpawnParticles.setChecked(wingData.spawnParticles);
-            sliderScale.setValue(wingData.wingScale);
-            sliderScale.precision = 2;
-            sliderScale.updateSlider();
-            sliderOffset.setValue(wingData.centreOffset);
-            sliderOffset.precision = 2;
-            sliderOffset.updateSlider();
+            tab1.fileList.setSelectedIndex(wingData.wingType.ordinal());
+            
+            tab2.checkSpawnParticles.setChecked(wingData.spawnParticles);
+            tab2.sliderScale.setValue(wingData.wingScale);
+            tab2.sliderScale.precision = 2;
+            tab2.sliderScale.updateSlider();
+            
+            tab2.sliderOffset.setValue(wingData.centreOffset);
+            tab2.sliderOffset.precision = 2;
+            tab2.sliderOffset.updateSlider();
+            
+            tab2.sliderHightOffset.setValue(wingData.heightOffset);
+            tab2.sliderHightOffset.precision = 2;
+            tab2.sliderHightOffset.updateSlider();
         } else {
             wingData = new WingData();
         }
@@ -97,31 +96,28 @@ public class GuiWings extends GuiScreen implements ISlider {
         GL11.glColor4f(1F, 1F, 1F, 1F);
         mc.renderEngine.bindTexture(wingsGuiTexture);
         drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.guiWidth, this.guiHeight);
-        super.drawScreen(mouseX, mouseY, tickTime);
-        fileList.setScrollPercentage(scrollbar.getPercentageValue());
         
+        //Draw the tabs
+        for (int i = 0; i < tabs.size(); i++) {
+            if (i == activeTab) {
+                drawTexturedModalRect(this.guiLeft - 20, this.guiTop + 5 + i * 22, 20, 136, 23, 20);
+            } else {
+                drawTexturedModalRect(this.guiLeft - 20, this.guiTop + 5 + i * 22, 0, 136, 20, 20);
+            }
+            
+        }
+        
+        super.drawScreen(mouseX, mouseY, tickTime);
         GuiHelper.renderLocalizedGuiName(this.fontRendererObj, this.guiLeft, this.guiTop, this.guiWidth, "wings");
         
-        String listLabel = GuiHelper.getLocalizedControlName("wings", "label.list");
-        String scaleLabel = GuiHelper.getLocalizedControlName("wings", "label.scale");
-        String centreLabel = GuiHelper.getLocalizedControlName("wings", "label.centre");
-        this.fontRendererObj.drawString(listLabel, this.guiLeft + 7, this.guiTop + 23, 4210752);
-        this.fontRendererObj.drawString(scaleLabel, this.guiLeft + 107, this.guiTop + 23, 4210752);
-        this.fontRendererObj.drawString(centreLabel, this.guiLeft + 107, this.guiTop + 50, 4210752);
-        
-        int hoverNumber = fileList.drawList(mouseX, mouseY, tickTime);
-        if (hoverNumber != -1 & hoverNumber < WingType.values().length) {
-            WingType wingType = WingType.getOrdinal(hoverNumber);
-            String flavourText = wingType.getFlavourText();
-            if (!flavourText.equals("")) {
-                ArrayList<String> hoverText = new ArrayList<String>();
-                hoverText.add(flavourText);
-                drawHoveringText(hoverText, mouseX, mouseY, fontRendererObj);
+        for (int i = 0; i < tabs.size(); i++) {
+            if (i == activeTab) {
+                tabs.get(i).drawScreen(mouseX, mouseY, tickTime);
             }
         }
         
-        int boxX = this.guiLeft + 175;
-        int boxY = this.guiTop + 165;
+        int boxX = this.guiLeft + 195;
+        int boxY = this.guiTop + 100;
         
         float lookX = -boxX + mouseX;
         float lookY = boxY - 50 - mouseY;
@@ -130,42 +126,50 @@ public class GuiWings extends GuiScreen implements ISlider {
         GL11.glRotatef(180, 0, 1, 0);
         
         GL11.glPushMatrix();
-        GuiInventory.func_147046_a(-boxX, 0, 29, lookX, lookY, this.mc.thePlayer);
+        GuiInventory.func_147046_a(-boxX, 0, 28, lookX, lookY, this.mc.thePlayer);
         GL11.glPopMatrix();
         GL11.glPopMatrix();
     }
 
     @Override
     protected void mouseMovedOrUp(int mouseX, int mouseY, int button) {
-        super.mouseMovedOrUp(mouseX, mouseY, button);
-        fileList.mouseMovedOrUp(mouseX, mouseY, button);
-        scrollbar.mouseReleased(mouseX, mouseY);
-    }
-    
-    @Override
-    protected void actionPerformed(GuiButton button) {
-        if (button.id == 1) {
-            checkSpawnParticles.setChecked(!checkSpawnParticles.isChecked());
-            sendWingDataToServer();
+        if (button == 0) {
+            for (int i = 0; i < tabs.size(); i++) {
+                if (mouseX >= (this.guiLeft - 20) & mouseX <= this.guiLeft) {
+                    int top = i * 22;
+                    if (mouseY >= this.guiTop + 5 + top & mouseY <= (this.guiTop + 24 + top)) {
+                        activeTab = i;
+                    }
+                }
+            }
         }
+        
+        for (int i = 0; i < tabs.size(); i++) {
+            if (i == activeTab) {
+                tabs.get(i).mouseMovedOrUp(mouseX, mouseY, button);
+            }
+        }
+        
+        super.mouseMovedOrUp(mouseX, mouseY, button);
     }
     
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int button) {
         super.mouseClicked(mouseX, mouseY, button);
-        if (fileList.mouseClicked(mouseX, mouseY, button)) {
-            if (fileList.getSelectedIndex() >= 0 & fileList.getSelectedIndex() < WingType.values().length) {
-                sendWingDataToServer();
+        
+        for (int i = 0; i < tabs.size(); i++) {
+            if (i == activeTab) {
+                tabs.get(i).mouseClicked(mouseX, mouseY, button);
             }
         }
-        scrollbar.mousePressed(mc, mouseX, mouseY);
     }
     
-    private void sendWingDataToServer() {
-        wingData.wingType = WingType.getOrdinal(fileList.getSelectedIndex());
-        wingData.wingScale = (float) sliderScale.getValue();
-        wingData.spawnParticles = checkSpawnParticles.isChecked();
-        wingData.centreOffset = (float) sliderOffset.getValue();
+    public void sendWingDataToServer() {
+        wingData.wingType = WingType.getOrdinal(tab1.fileList.getSelectedIndex());
+        wingData.wingScale = (float) tab2.sliderScale.getValue();
+        wingData.spawnParticles = tab2.checkSpawnParticles.isChecked();
+        wingData.centreOffset = (float) tab2.sliderOffset.getValue();
+        wingData.heightOffset = (float) tab2.sliderHightOffset.getValue();
         PacketHandler.networkWrapper.sendToServer(new MessageClientUpdateWingData(wingData));
     }
 
@@ -176,13 +180,18 @@ public class GuiWings extends GuiScreen implements ISlider {
 
     @Override
     public void onChangeSliderValue(GuiSlider slider) { 
-        if (slider.id == sliderScale.id) {
+        if (slider.id == tab2.sliderScale.id) {
             if (slider.getValue() != wingData.wingScale) {
                 sendWingDataToServer();
             }
         }
-        if (slider.id == sliderOffset.id) {
+        if (slider.id == tab2.sliderOffset.id) {
             if (slider.getValue() != wingData.centreOffset) {
+                sendWingDataToServer();
+            }
+        }
+        if (slider.id == tab2.sliderHightOffset.id) {
+            if (slider.getValue() != wingData.heightOffset) {
                 sendWingDataToServer();
             }
         }

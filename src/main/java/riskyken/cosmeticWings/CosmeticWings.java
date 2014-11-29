@@ -1,9 +1,9 @@
 package riskyken.cosmeticWings;
 
+import riskyken.cosmeticWings.common.handler.WingDataHandler;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 import riskyken.cosmeticWings.common.network.GuiHandler;
 import riskyken.cosmeticWings.common.network.PacketHandler;
-import riskyken.cosmeticWings.common.wings.WingDataManager;
 import riskyken.cosmeticWings.proxies.CommonProxy;
 import riskyken.cosmeticWings.utils.ModLogger;
 import cpw.mods.fml.common.Mod;
@@ -25,25 +25,25 @@ public class CosmeticWings {
     @Mod.EventHandler
     public void perInit(FMLPreInitializationEvent event) {
         ModLogger.log("Loading " + LibModInfo.NAME + " " + LibModInfo.VERSION);
-        proxy.init();
+        proxy.preInit();
         proxy.initRenderers();
     }
 
     @Mod.EventHandler
     public void load(FMLInitializationEvent event) {
         PacketHandler.init();
-        proxy.postInit();
+        proxy.init();
         proxy.registerKeyBindings();
-
         new GuiHandler();
     }
-
-    @Mod.EventHandler
-    public void serverStart(FMLServerStartingEvent event) {
-        new WingDataManager();
-    }
-
+    
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+        proxy.postInit();
+    }
+    
+    @Mod.EventHandler
+    public void serverStart(FMLServerStartingEvent event) {
+        new WingDataHandler();
     }
 }
