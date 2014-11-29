@@ -1,7 +1,6 @@
 package riskyken.cosmeticWings.client.particles;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -11,7 +10,6 @@ import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 import riskyken.cosmeticWings.common.lib.LibModInfo;
-import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -24,7 +22,7 @@ public class EntityFeatherFx extends EntityFX {
     private static final ResourceLocation redFeather;
     
     static {
-        particleTextures = ReflectionHelper.getPrivateValue(EffectRenderer.class, null, "particleTextures", "field_110737_b", "b");
+        particleTextures = new ResourceLocation("textures/particle/particles.png");
         whiteFeather = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/particles/tiny-white-feather.png");
         blackFeather = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/particles/tiny-black-feather.png");
         redFeather = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/particles/tiny-red-feather.png");
@@ -118,9 +116,8 @@ public class EntityFeatherFx extends EntityFX {
 
         drawBillboard(f11 - par3 * f10 - par6 * f10, f12 - par4 * f10, f13
                 - par5 * f10 - par7 * f10, rotationPitch);
-
+        
         tessellator.draw();
-
         GL11.glPopMatrix();
 
         Minecraft.getMinecraft().renderEngine.bindTexture(particleTextures);
@@ -149,10 +146,5 @@ public class EntityFeatherFx extends EntityFX {
         tessellator.addVertexWithUV(-1, 1, 0, 0, 1);
         tessellator.addVertexWithUV(1, 1, 0, 1, 1);
         tessellator.addVertexWithUV(1, -1, 0, 1, 0);
-    }
-    
-    @Override
-    public int getFXLayer() {
-        return 2;
     }
 }
