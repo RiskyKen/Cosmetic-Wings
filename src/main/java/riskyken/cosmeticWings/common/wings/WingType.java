@@ -6,7 +6,7 @@ import riskyken.cosmeticWings.common.lib.LibModInfo;
 public enum WingType {
     NONE(false),
     BLACK(false),
-    WHITE(true),
+    ANGEL(true),
     SHANA(false),
     FLANDRE(false),
     METAL(false),

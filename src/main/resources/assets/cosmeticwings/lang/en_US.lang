@@ -5,11 +5,14 @@ inventory.cosmeticwings:wings.label.scale=Wing Scale
 inventory.cosmeticwings:wings.spawnParticles.name=Spawn particles?
 inventory.cosmeticwings:wings.label.centre=Centre Offset
 inventory.cosmeticwings:wings.label.height=Height Offset
+inventory.cosmeticwings:wings.label.hue=Hue
+inventory.cosmeticwings:wings.label.saturation=Saturation
+inventory.cosmeticwings:wings.label.brightness=Brightness
 
 # Wings
 wings.cosmeticwings:none.name=None
 wings.cosmeticwings:black.name=Black
-wings.cosmeticwings:white.name=White
+wings.cosmeticwings:angel.name=Angel
 wings.cosmeticwings:shana.name=Shana
 wings.cosmeticwings:flandre.name=Flandre
 wings.cosmeticwings:metal.name=Metal

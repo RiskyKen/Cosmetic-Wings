@@ -1,5 +1,7 @@
 package riskyken.cosmeticWings.client.particles;
 
+import java.awt.Color;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
@@ -32,7 +34,7 @@ public class EntityFeatherFx extends EntityFX {
     private final boolean isUnlit;
     private float rotationSpeed;
 
-    public EntityFeatherFx(World world, double x, double y, double z, int type, float wingScale) {
+    public EntityFeatherFx(World world, double x, double y, double z, int type, float wingScale, int colour) {
         super(world, x, y, z);
 
         this.posX = x;
@@ -46,7 +48,15 @@ public class EntityFeatherFx extends EntityFX {
         this.type = type;
         this.isUnlit = type != 0;
         this.particleScale = wingScale;
-
+        
+        Color c = new Color(colour);
+        float red = (float) c.getRed() / 255;
+        float green = (float) c.getGreen() / 255;
+        float blue = (float) c.getBlue() / 255;
+        this.particleRed = red;
+        this.particleGreen = green;
+        this.particleBlue = blue;
+        
         particleMaxAge = 400;
 
         this.motionX = (rand.nextFloat() - 0.5F) * 0.01F;

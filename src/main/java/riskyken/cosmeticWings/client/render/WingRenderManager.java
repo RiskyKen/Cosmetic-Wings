@@ -88,7 +88,7 @@ public final class WingRenderManager {
         case BLACK:
             bigWings.render(ev.entityPlayer, ev.renderer, 0, wingData);
             break;
-        case WHITE:
+        case ANGEL:
             bigWings.render(ev.entityPlayer, ev.renderer, 1, wingData);
             break;
         case SHANA:
@@ -135,7 +135,7 @@ public final class WingRenderManager {
         case BLACK:
             bigWings.onTick(player, 0, wingData);
             break;
-        case WHITE:
+        case ANGEL:
             bigWings.onTick(player, 1, wingData);
             break;
         case SHANA:

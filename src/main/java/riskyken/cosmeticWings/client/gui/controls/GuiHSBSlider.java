@@ -9,13 +9,12 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import riskyken.cosmeticWings.common.lib.LibModInfo;
 import cpw.mods.fml.client.config.GuiSlider;
 import cpw.mods.fml.client.config.GuiUtils;
 
 public class GuiHSBSlider extends GuiSlider {
 
-    private static final ResourceLocation sliderTexture = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/gui/controls/sliderHue.png");
+    private static final ResourceLocation sliderTexture = new ResourceLocation(riskyken.cosmeticWings.common.lib.LibModInfo.ID.toLowerCase(), "textures/gui/controls/sliderHue.png");
     
     private HSBSliderType type;
     private IHSBSliderCallback callback = null;

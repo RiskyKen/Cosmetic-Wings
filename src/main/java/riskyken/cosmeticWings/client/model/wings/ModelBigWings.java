@@ -1,5 +1,6 @@
 package riskyken.cosmeticWings.client.model.wings;
 
+import java.awt.Color;
 import java.util.Random;
 
 import net.minecraft.client.Minecraft;
@@ -69,7 +70,15 @@ public class ModelBigWings extends ModelWingBase {
         GL11.glRotatef(90, 0, 1, 0);
         GL11.glRotatef(90, 0, 0, 1);
 
-        GL11.glColor3f(1F, 1F, 1F);
+        if (wingData.wingType.canRecolour) {
+            Color c = new Color(wingData.colour);
+            float red = (float) c.getRed() / 255;
+            float green = (float) c.getGreen() / 255;
+            float blue = (float) c.getBlue() / 255;
+            GL11.glColor3f(red, green, blue);
+        } else {
+            GL11.glColor3f(1F, 1F, 1F);
+        }
 
         float lastBrightnessX = OpenGlHelper.lastBrightnessX;
         float lastBrightnessY = OpenGlHelper.lastBrightnessY;
@@ -137,7 +146,7 @@ public class ModelBigWings extends ModelWingBase {
                 parY += 1.6D;
             }
 
-            EntityFeatherFx particle = new EntityFeatherFx(player.worldObj, parX, parY, parZ, type, wingData.wingScale);
+            EntityFeatherFx particle = new EntityFeatherFx(player.worldObj, parX, parY, parZ, type, wingData.wingScale, wingData.colour);
             ParticleManager.INSTANCE.spawnParticle(player.worldObj, particle);
         }
     }

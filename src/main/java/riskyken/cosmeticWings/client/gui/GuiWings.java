@@ -1,5 +1,6 @@
 package riskyken.cosmeticWings.client.gui;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 import net.minecraft.client.gui.GuiScreen;
@@ -9,6 +10,8 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+import riskyken.cosmeticWings.client.gui.controls.GuiHSBSlider;
+import riskyken.cosmeticWings.client.gui.controls.GuiHSBSlider.IHSBSliderCallback;
 import riskyken.cosmeticWings.client.gui.controls.GuiHelper;
 import riskyken.cosmeticWings.client.render.WingRenderManager;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
@@ -16,13 +19,14 @@ import riskyken.cosmeticWings.common.network.PacketHandler;
 import riskyken.cosmeticWings.common.network.message.MessageClientUpdateWingData;
 import riskyken.cosmeticWings.common.wings.WingData;
 import riskyken.cosmeticWings.common.wings.WingType;
+import riskyken.cosmeticWings.utils.UtilColour;
 import cpw.mods.fml.client.config.GuiSlider;
 import cpw.mods.fml.client.config.GuiSlider.ISlider;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiWings extends GuiScreen implements ISlider {
+public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback {
 
     private static final ResourceLocation wingsGuiTexture = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/gui/wings.png");
 
@@ -62,10 +66,16 @@ public class GuiWings extends GuiScreen implements ISlider {
         
         tab1 = new GuiTabWingSelect(this, this.guiLeft + 5, this.guiTop + 5);
         tab2 = new GuiTabWingLocation(this, this.guiLeft + 5, this.guiTop + 5);
-        //tab3 = new GuiTabWingColour(this, this.guiLeft + 5, this.guiTop + 5);
+        tab3 = new GuiTabWingColour(this, this.guiLeft + 5, this.guiTop + 5);
         tabs.add(tab1);
         tabs.add(tab2);
-        //tabs.add(tab3);
+        tabs.add(tab3);
+        
+        if (wingData != null) {
+            tab3.colour = new Color(wingData.colour);
+        } else {
+            tab3.colour = new Color(UtilColour.getMinecraftColor(0));
+        }
         
         for (int i = 0; i < tabs.size(); i++) {
             tabs.get(i).initGui();
@@ -100,11 +110,11 @@ public class GuiWings extends GuiScreen implements ISlider {
         //Draw the tabs
         for (int i = 0; i < tabs.size(); i++) {
             if (i == activeTab) {
-                drawTexturedModalRect(this.guiLeft - 20, this.guiTop + 5 + i * 22, 20, 136, 23, 20);
+                drawTexturedModalRect(this.guiLeft - 20, this.guiTop + 5 + i * 22, 20, 136, 23, 23);
             } else {
                 drawTexturedModalRect(this.guiLeft - 20, this.guiTop + 5 + i * 22, 0, 136, 20, 20);
             }
-            
+            drawTexturedModalRect(this.guiLeft - 16, this.guiTop + 8 + i * 22, 1, 165 + 15 * i, 14, 14);
         }
         
         super.drawScreen(mouseX, mouseY, tickTime);
@@ -170,6 +180,7 @@ public class GuiWings extends GuiScreen implements ISlider {
         wingData.spawnParticles = tab2.checkSpawnParticles.isChecked();
         wingData.centreOffset = (float) tab2.sliderOffset.getValue();
         wingData.heightOffset = (float) tab2.sliderHightOffset.getValue();
+        wingData.colour = tab3.colour.getRGB();
         PacketHandler.networkWrapper.sendToServer(new MessageClientUpdateWingData(wingData));
     }
 
@@ -195,5 +206,10 @@ public class GuiWings extends GuiScreen implements ISlider {
                 sendWingDataToServer();
             }
         }
+    }
+
+    @Override
+    public void valueUpdated(GuiHSBSlider source, double sliderValue) {
+        sendWingDataToServer();
     }
 }

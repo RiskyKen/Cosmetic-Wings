@@ -2,6 +2,7 @@ package riskyken.cosmeticWings.common.wings;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
+import riskyken.cosmeticWings.utils.UtilColour;
 /**
  * Holds all the options a player can select for their wings.
  * All the information in this class is send to players when they
@@ -16,20 +17,23 @@ public class WingData {
     private static final String TAG_SPAWN_PARTICLES = "spawnParticles";
     private static final String TAG_CENTRE_OFFSET = "centreOffset";
     private static final String TAG_HEIGHT_OFFSET = "heightOffset";
+    private static final String TAG_COLOUR = "colour";
 
     public WingType wingType;
     public float wingScale;
     public boolean spawnParticles;
     public float centreOffset;
     public float heightOffset;
+    public int colour;
     
     public WingData() {
         //Default options that will be used for new players.
         this.wingType = WingType.NONE;
         this.wingScale = 0.75F;
         this.spawnParticles = true;
-        centreOffset = 0F;
-        heightOffset = 0.7F;
+        this.centreOffset = 0F;
+        this.heightOffset = 0.7F;
+        this.colour = UtilColour.getMinecraftColor(0);
     }
 
     public WingData(ByteBuf buf) {
@@ -46,6 +50,7 @@ public class WingData {
         compound.setBoolean(TAG_SPAWN_PARTICLES, this.spawnParticles);
         compound.setFloat(TAG_CENTRE_OFFSET, this.centreOffset);
         compound.setFloat(TAG_HEIGHT_OFFSET, this.heightOffset);
+        compound.setInteger(TAG_COLOUR, this.colour);
     }
 
     /**
@@ -68,6 +73,9 @@ public class WingData {
         if (compound.hasKey(TAG_HEIGHT_OFFSET)) {
             this.heightOffset = compound.getFloat(TAG_HEIGHT_OFFSET);
         }
+        if (compound.hasKey(TAG_COLOUR)) {
+            this.colour = compound.getInteger(TAG_COLOUR);
+        }
     }
 
     /**
@@ -80,6 +88,7 @@ public class WingData {
         buf.writeBoolean(this.spawnParticles);
         buf.writeFloat(this.centreOffset);
         buf.writeFloat(this.heightOffset);
+        buf.writeInt(this.colour);
     }
 
     /**
@@ -92,5 +101,6 @@ public class WingData {
         this.spawnParticles = buf.readBoolean();
         this.centreOffset = buf.readFloat();
         this.heightOffset = buf.readFloat();
+        this.colour = buf.readInt();
     }
 }
