@@ -53,10 +53,18 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback {
 
         activeTab = 0;
     }
+    
+    @Override
+    public void onGuiClosed() {
+        super.onGuiClosed();
+        WingRenderManager.INSTANCE.wingGuiOpen = false;
+    }
+    
 
     @Override
     public void initGui() {
         super.initGui();
+        WingRenderManager.INSTANCE.wingGuiOpen = true;
         wingData = WingRenderManager.INSTANCE.getPlayerWingData(player.getUniqueID());
         guiLeft = width / 2 - guiWidth / 2;
         guiTop = height / 2 - guiHeight / 2;

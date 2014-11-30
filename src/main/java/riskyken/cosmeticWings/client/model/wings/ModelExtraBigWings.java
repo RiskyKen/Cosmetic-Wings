@@ -2,14 +2,13 @@ package riskyken.cosmeticWings.client.model.wings;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+import riskyken.cosmeticWings.client.render.LightingHelper;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 import riskyken.cosmeticWings.common.wings.WingData;
 import cpw.mods.fml.relauncher.Side;
@@ -54,29 +53,22 @@ public class ModelExtraBigWings extends ModelWingBase {
         }
         
         float angle = getWingAngle(player.capabilities.isFlying & player.isAirBorne, 30, 8000, 400, player.getEntityId());
-
+        
         setRotation(leftWing, (float) Math.toRadians(angle + 20), (float) Math.toRadians(-4), (float) Math.toRadians(6));
         setRotation(rightWing, (float) Math.toRadians(-angle - 20), (float) Math.toRadians(4), (float) Math.toRadians(6));
-
+        
         GL11.glPushMatrix();
         GL11.glTranslatef(0, 4 * SCALE, 1.5F * SCALE);
         GL11.glRotatef(90, 0, 1, 0);
         GL11.glRotatef(90, 0, 0, 1);
-
+        
         GL11.glColor3f(1F, 1F, 1F);
         
-        float lastBrightnessX = OpenGlHelper.lastBrightnessX;
-        float lastBrightnessY = OpenGlHelper.lastBrightnessY;
+
         if (layerId != 0) {
-            GL11.glDisable(GL11.GL_LIGHTING);
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
+            LightingHelper.disableLighting();
         }
-
-        Tessellator tessellator = Tessellator.instance;
-        // tessellator.setBrightness(15728880);
-        float scale = 1.0F;
-        GL11.glScalef(scale, scale, scale);
-
+        
         GL11.glPushMatrix();
         GL11.glTranslatef(0, 0, wingData.centreOffset * 3 * SCALE);
         GL11.glScalef(wingData.wingScale, wingData.wingScale, wingData.wingScale);
@@ -88,12 +80,11 @@ public class ModelExtraBigWings extends ModelWingBase {
         GL11.glScalef(wingData.wingScale, wingData.wingScale, wingData.wingScale);
         rightWing.render(SCALE);
         GL11.glPopMatrix();
-
+        
         if (layerId != 0) {
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lastBrightnessX, lastBrightnessY);
-            GL11.glEnable(GL11.GL_LIGHTING);
+            LightingHelper.enableLighting();
         }
-
+        
         GL11.glPopMatrix();
     }
 }

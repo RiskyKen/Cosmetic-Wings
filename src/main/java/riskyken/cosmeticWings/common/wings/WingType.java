@@ -4,19 +4,22 @@ import net.minecraft.util.StatCollector;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 
 public enum WingType {
-    NONE(false),
-    BLACK(false),
-    ANGEL(true),
-    SHANA(false),
-    FLANDRE(false),
-    METAL(false),
-    KUROYUKIHIME(false),
-    SMALL_MECH(false);
+    NONE(false, false),
+    BLACK(false, false),
+    ANGEL(true, false),
+    SHANA(false, false),
+    FLANDRE(false, false),
+    METAL(false, false),
+    KUROYUKIHIME(false, false),
+    SMALL_MECH(false, false),
+    MECH(true, true);
 
     public final boolean canRecolour;
+    public final boolean postRender;
 
-    private WingType(boolean canRecolour) {
+    private WingType(boolean canRecolour, boolean postRender) {
         this.canRecolour = canRecolour;
+        this.postRender = postRender;
     }
 
     public String getLocalizedName() {
@@ -38,6 +41,9 @@ public enum WingType {
     }
     
     public static WingType getOrdinal(int id) {
-        return WingType.values()[id];
+        if (id >= 0 & id < values().length) {
+            return WingType.values()[id];
+        }
+        return NONE;
     }
 }

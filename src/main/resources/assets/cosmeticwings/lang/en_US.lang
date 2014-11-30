@@ -3,8 +3,8 @@ inventory.cosmeticwings:wings.name=Wings
 inventory.cosmeticwings:wings.label.list=Select Wings
 inventory.cosmeticwings:wings.label.scale=Wing Scale
 inventory.cosmeticwings:wings.spawnParticles.name=Spawn particles?
-inventory.cosmeticwings:wings.label.centre=Centre Offset
-inventory.cosmeticwings:wings.label.height=Height Offset
+inventory.cosmeticwings:wings.label.centre=Horizontal Offset
+inventory.cosmeticwings:wings.label.height=Vertical Offset
 inventory.cosmeticwings:wings.label.hue=Hue
 inventory.cosmeticwings:wings.label.saturation=Saturation
 inventory.cosmeticwings:wings.label.brightness=Brightness
@@ -18,6 +18,7 @@ wings.cosmeticwings:flandre.name=Flandre
 wings.cosmeticwings:metal.name=Metal
 wings.cosmeticwings:kuroyukihime.name=Kuroyukihime
 wings.cosmeticwings:small_mech.name=Small Mech
+wings.cosmeticwings:mech.name=Mech
 
 # Flavour
 #wings.cosmeticwings:none.flavour=Test flavour text

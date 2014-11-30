@@ -17,7 +17,8 @@ wings.cosmeticwings:shana.name=Shana
 wings.cosmeticwings:flandre.name=Flandre
 wings.cosmeticwings:metal.name=Metall
 wings.cosmeticwings:kuroyukihime.name=Kuroyukihime
-wings.cosmeticwings:small_mech.name=Mech
+wings.cosmeticwings:small_mech.name=Mech, klein
+wings.cosmeticwings:mech.name=Mech
 
 # Flavour
 #wings.cosmeticwings:none.flavour=Test flavour text
