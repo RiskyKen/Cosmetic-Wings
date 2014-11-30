@@ -26,8 +26,11 @@ public final class WingRenderManager {
 
     public static WingRenderManager INSTANCE;
     
+    /** Holds UUID's of players as a key and their wing data. */
+    //TODO Removed players when they go offline/leave tracking range.
     private final  HashMap<UUID, WingData> playerWingData;
 
+    /** Wing models. */
     private final ModelBigWings bigWings = new ModelBigWings();
     private final ModelExtraBigWings extraBigWings = new ModelExtraBigWings();
     private final ModelMetalWings metalWings = new ModelMetalWings();
@@ -69,6 +72,7 @@ public final class WingRenderManager {
         if (wingData==null) {
             return;
         }
+        
         GL11.glPushMatrix();
         if (player.isSneaking()) {
             GL11.glRotatef(28.6F, 1, 0, 0);

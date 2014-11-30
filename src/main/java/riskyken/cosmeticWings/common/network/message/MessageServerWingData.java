@@ -10,7 +10,11 @@ import riskyken.cosmeticWings.common.wings.WingData;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-
+/**
+ * Send from the server to a client. Contains a players UUID and their wing data.
+ * @author RiskyKen
+ *
+ */
 public class MessageServerWingData implements IMessage, IMessageHandler<MessageServerWingData, IMessage> {
 
     UUID playerId;

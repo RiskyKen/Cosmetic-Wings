@@ -2,7 +2,13 @@ package riskyken.cosmeticWings.common.wings;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
-
+/**
+ * Holds all the options a player can select for their wings.
+ * All the information in this class is send to players when they
+ * enter tracking range.
+ * @author RiskyKen
+ *
+ */
 public class WingData {
 
     private static final String TAG_WING_TYPE = "wingType";
@@ -18,6 +24,7 @@ public class WingData {
     public float heightOffset;
     
     public WingData() {
+        //Default options that will be used for new players.
         this.wingType = WingType.NONE;
         this.wingScale = 0.75F;
         this.spawnParticles = true;
@@ -29,6 +36,10 @@ public class WingData {
         fromBytes(buf);
     }
 
+    /**
+     * Saves the wings data to an NBTTagCompound.
+     * @param compound NBTTagCompound to save to.
+     */
     public void saveNBTData(NBTTagCompound compound) {
         compound.setByte(TAG_WING_TYPE, (byte) this.wingType.ordinal());
         compound.setFloat(TAG_WING_SCALE, this.wingScale);
@@ -37,6 +48,10 @@ public class WingData {
         compound.setFloat(TAG_HEIGHT_OFFSET, this.heightOffset);
     }
 
+    /**
+     * Loads the wing data from an NBTTagCompound.
+     * @param compound NBTTagCompound to load from.
+     */
     public void loadNBTData(NBTTagCompound compound) {
         if (compound.hasKey(TAG_WING_TYPE)) {
             this.wingType = WingType.values()[compound.getByte(TAG_WING_TYPE)];
@@ -55,6 +70,10 @@ public class WingData {
         }
     }
 
+    /**
+     * Writes the wing data to a ByteBuf.
+     * @param buf ByteBuf to write to.
+     */
     public void toBytes(ByteBuf buf) {
         buf.writeByte(this.wingType.ordinal());
         buf.writeFloat(this.wingScale);
@@ -63,6 +82,10 @@ public class WingData {
         buf.writeFloat(this.heightOffset);
     }
 
+    /**
+     * Reads the wing data from a ByteBuf.
+     * @param buf ByteBuf to read from.
+     */
     private void fromBytes(ByteBuf buf) {
         this.wingType = WingType.values()[buf.readByte()];
         this.wingScale = buf.readFloat();
