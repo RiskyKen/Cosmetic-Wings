@@ -6,6 +6,7 @@ import java.util.Queue;
 import java.util.UUID;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -76,7 +77,9 @@ public final class WingRenderManager {
         GL11.glDepthMask(false);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+        Tessellator tessellator = Tessellator.instance;
+        tessellator.setBrightness(15728880);
         LightingHelper.disableLighting();
         for(WingRenderQueueItem wingRenderItem : wingRenderQueue) {
             wingRenderItem.Render(this, event.partialTicks);
@@ -150,7 +153,7 @@ public final class WingRenderManager {
                 GL11.glDepthMask(false);
                 GL11.glEnable(GL11.GL_BLEND);
                 GL11.glDisable(GL11.GL_CULL_FACE);
-                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
                 mechWings.render(ev.entityPlayer, true, wingData);
                 GL11.glEnable(GL11.GL_CULL_FACE);
                 GL11.glDisable(GL11.GL_BLEND);

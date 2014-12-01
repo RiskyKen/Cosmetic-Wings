@@ -59,7 +59,7 @@ public class ModelMechWings extends ModelWingBase {
         float red = (float) c.getRed() / 255;
         float green = (float) c.getGreen() / 255;
         float blue = (float) c.getBlue() / 255;
-        GL11.glColor4f(red, green, blue, 0.15F);
+        GL11.glColor4f(red, green, blue, 0.5F);
         Minecraft.getMinecraft().getTextureManager().bindTexture(wingsImages[1]);
 
         RenderWing(player, player.capabilities.isFlying & player.isAirBorne, wingData);
