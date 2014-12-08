@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.RenderPlayerEvent;
@@ -30,7 +31,6 @@ import cpw.mods.fml.relauncher.Side;
 public final class WingRenderManager {
 
     public static WingRenderManager INSTANCE;
-    public static boolean wingGuiOpen = false;
     
     private Queue<WingRenderQueueItem> wingRenderQueue;
 
@@ -84,11 +84,20 @@ public final class WingRenderManager {
             return;
         }
         
+        Minecraft mc = Minecraft.getMinecraft();
+        boolean renderingInGui = mc.currentScreen != null && mc.currentScreen.getClass() != GuiChat.class;
+        
+        if (renderingInGui) {
+            if (!player.equals(mc.thePlayer)) {
+                renderingInGui = false;
+            }
+        }
+        
         if (wingData.wingType.postRender) {
             if (player.getUniqueID() != Minecraft.getMinecraft().thePlayer.getUniqueID()) {
                 wingRenderQueue.add(new WingRenderQueueItem(ev.entityPlayer, wingData));
             } else {
-                if (!wingGuiOpen) {
+                if (!renderingInGui) {
                     wingRenderQueue.add(new WingRenderQueueItem(ev.entityPlayer, wingData));
                 }
             }
@@ -128,7 +137,7 @@ public final class WingRenderManager {
             break;
         case MECH:
             mechWings.render(ev.entityPlayer, false, wingData);
-            if (wingGuiOpen) {
+            if (renderingInGui) {
                 LightingHelper.disableLighting();
                 GL11.glDepthMask(false);
                 GL11.glEnable(GL11.GL_BLEND);

@@ -13,7 +13,6 @@ import org.lwjgl.opengl.GL11;
 import riskyken.cosmeticWings.client.gui.controls.GuiHSBSlider;
 import riskyken.cosmeticWings.client.gui.controls.GuiHSBSlider.IHSBSliderCallback;
 import riskyken.cosmeticWings.client.gui.controls.GuiHelper;
-import riskyken.cosmeticWings.client.render.WingRenderManager;
 import riskyken.cosmeticWings.client.wings.ClientWingCache;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 import riskyken.cosmeticWings.common.network.PacketHandler;
@@ -54,18 +53,10 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback {
 
         activeTab = 0;
     }
-    
-    @Override
-    public void onGuiClosed() {
-        super.onGuiClosed();
-        WingRenderManager.INSTANCE.wingGuiOpen = false;
-    }
-    
 
     @Override
     public void initGui() {
         super.initGui();
-        WingRenderManager.INSTANCE.wingGuiOpen = true;
         wingData = ClientWingCache.INSTANCE.getPlayerWingData(player.getUniqueID());
         guiLeft = width / 2 - guiWidth / 2;
         guiTop = height / 2 - guiHeight / 2;
