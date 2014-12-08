@@ -31,22 +31,44 @@ public class EntityButterflyFx extends EntityFX {
         this.particleRed = 1F;
         this.particleGreen = 1F;
         this.particleBlue = 1F;
-        this.particleAlpha = 1F;
+        this.particleAlpha = 0.75F;
         
         this.motionX = (rand.nextFloat() - 0.5) * 0.05;
+        this.motionY = (rand.nextFloat() - 0.5) * 0.02;
         this.motionZ = (rand.nextFloat() - 0.5) * 0.05;
+        this.particleScale = (rand.nextFloat() + 0.5F);
         
         this.target = target;
+    }
+    
+    @Override
+    public void onUpdate() {
+        this.prevPosX = this.posX;
+        this.prevPosY = this.posY;
+        this.prevPosZ = this.posZ;
+        
+        if (this.particleAge++ >= this.particleMaxAge) {
+            this.setDead();
+        }
+        
+        this.motionY -= 0.04D * (double)this.particleGravity;
+        this.moveEntity(this.motionX, this.motionY, this.motionZ);
+        this.motionX *= 0.990D;
+        this.motionY *= 0.990D;
+        this.motionZ *= 0.990D;
+        
+        if (this.onGround) {
+            this.motionX *= 0.699999988079071D;
+            this.motionZ *= 0.699999988079071D;
+        }
     }
 
     @Override
     public void renderParticle(Tessellator tessellator, float p_70539_2_, float p_70539_3_, float p_70539_4_, float p_70539_5_, float p_70539_6_, float p_70539_7_) {
-        
         tessellator.draw();
-        //ModLogger.log(this.particleAge % 10);
-        int textureNumber = this.particleAge % 6;
+        int textureNumber = this.particleAge % 3;
         
-        if (textureNumber < 3) {
+        if (textureNumber < 1) {
             Minecraft.getMinecraft().renderEngine.bindTexture(bufferflyTexture[0]);
         } else {
             Minecraft.getMinecraft().renderEngine.bindTexture(bufferflyTexture[1]);
@@ -74,10 +96,5 @@ public class EntityButterflyFx extends EntityFX {
         
         Minecraft.getMinecraft().renderEngine.bindTexture(particleTextures);
         tessellator.startDrawingQuads();
-    }
-    
-    @Override
-    public int getFXLayer() {
-        return 2;
     }
 }

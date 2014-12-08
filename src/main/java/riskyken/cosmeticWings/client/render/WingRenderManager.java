@@ -188,7 +188,7 @@ public final class WingRenderManager {
             bigWings.onTick(player, 2, wingData);
             break;
         case KUROYUKIHIME:
-            //kuroyukihimeWings.onTick(player, wingData.wingScale);
+            kuroyukihimeWings.onTick(player, wingData.wingScale);
         default:
             break;
         }
