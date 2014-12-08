@@ -1,9 +1,7 @@
 package riskyken.cosmeticWings.client.render;
 
 import java.util.ArrayDeque;
-import java.util.HashMap;
 import java.util.Queue;
-import java.util.UUID;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
@@ -20,6 +18,7 @@ import riskyken.cosmeticWings.client.model.wings.ModelKuroyukihimeWings;
 import riskyken.cosmeticWings.client.model.wings.ModelMechWings;
 import riskyken.cosmeticWings.client.model.wings.ModelMetalWings;
 import riskyken.cosmeticWings.client.model.wings.ModelSmallMechWings;
+import riskyken.cosmeticWings.client.wings.ClientWingCache;
 import riskyken.cosmeticWings.common.wings.WingData;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -32,10 +31,6 @@ public final class WingRenderManager {
 
     public static WingRenderManager INSTANCE;
     public static boolean wingGuiOpen = false;
-    
-    /** Holds UUID's of players as a key and their wing data. */
-    //TODO Removed players when they go offline/leave tracking range.
-    private final  HashMap<UUID, WingData> playerWingData;
     
     private Queue<WingRenderQueueItem> wingRenderQueue;
 
@@ -54,22 +49,7 @@ public final class WingRenderManager {
     public WingRenderManager() {
         MinecraftForge.EVENT_BUS.register(this);
         FMLCommonHandler.instance().bus().register(this);
-        playerWingData = new HashMap<UUID, WingData>();
         wingRenderQueue = new ArrayDeque();
-    }
-
-    public void setWingData(UUID playerId, WingData wingData) {
-        if (playerWingData.containsKey(playerId)) {
-            playerWingData.remove(playerId);
-        }
-        playerWingData.put(playerId, wingData);
-    }
-    
-    public WingData getPlayerWingData(UUID playerId) {
-        if (!playerWingData.containsKey(playerId)) {
-            return null;
-        }
-        return playerWingData.get(playerId);
     }
 
     @SubscribeEvent
@@ -99,7 +79,7 @@ public final class WingRenderManager {
             return;
         }
         
-        WingData wingData = getPlayerWingData(player.getUniqueID());
+        WingData wingData = ClientWingCache.INSTANCE.getPlayerWingData(player.getUniqueID());
         if (wingData==null) {
             return;
         }
@@ -179,7 +159,7 @@ public final class WingRenderManager {
             return;
         }
 
-        WingData wingData = getPlayerWingData(player.getUniqueID());
+        WingData wingData = ClientWingCache.INSTANCE.getPlayerWingData(player.getUniqueID());
         if (wingData==null) {
             return;
         }
