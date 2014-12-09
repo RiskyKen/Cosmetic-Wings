@@ -14,14 +14,14 @@ public class WingData {
 
     private static final String TAG_WING_TYPE = "wingType";
     private static final String TAG_WING_SCALE = "wingScale";
-    private static final String TAG_SPAWN_PARTICLES = "spawnParticles";
+    private static final String TAG_PARTICLE_SPAWN_RATE = "particleSpawnRate";
     private static final String TAG_CENTRE_OFFSET = "centreOffset";
     private static final String TAG_HEIGHT_OFFSET = "heightOffset";
     private static final String TAG_COLOUR = "colour";
 
     public WingType wingType;
     public float wingScale;
-    public boolean spawnParticles;
+    public float particleSpawnRate;
     public float centreOffset;
     public float heightOffset;
     public int colour;
@@ -30,7 +30,7 @@ public class WingData {
         //Default options that will be used for new players.
         this.wingType = WingType.NONE;
         this.wingScale = 0.75F;
-        this.spawnParticles = true;
+        this.particleSpawnRate = 1F;
         this.centreOffset = 0F;
         this.heightOffset = 0.7F;
         this.colour = UtilColour.getMinecraftColor(0);
@@ -47,7 +47,7 @@ public class WingData {
     public void saveNBTData(NBTTagCompound compound) {
         compound.setByte(TAG_WING_TYPE, (byte) this.wingType.ordinal());
         compound.setFloat(TAG_WING_SCALE, this.wingScale);
-        compound.setBoolean(TAG_SPAWN_PARTICLES, this.spawnParticles);
+        compound.setFloat(TAG_PARTICLE_SPAWN_RATE, this.particleSpawnRate);
         compound.setFloat(TAG_CENTRE_OFFSET, this.centreOffset);
         compound.setFloat(TAG_HEIGHT_OFFSET, this.heightOffset);
         compound.setInteger(TAG_COLOUR, this.colour);
@@ -64,8 +64,8 @@ public class WingData {
         if (compound.hasKey(TAG_WING_SCALE)) {
             this.wingScale = compound.getFloat(TAG_WING_SCALE);
         }
-        if (compound.hasKey(TAG_SPAWN_PARTICLES)) {
-            this.spawnParticles = compound.getBoolean(TAG_SPAWN_PARTICLES);
+        if (compound.hasKey(TAG_PARTICLE_SPAWN_RATE)) {
+            this.particleSpawnRate = compound.getFloat(TAG_PARTICLE_SPAWN_RATE);
         }
         if (compound.hasKey(TAG_CENTRE_OFFSET)) {
             this.centreOffset = compound.getFloat(TAG_CENTRE_OFFSET);
@@ -85,7 +85,7 @@ public class WingData {
     public void toBytes(ByteBuf buf) {
         buf.writeByte(this.wingType.ordinal());
         buf.writeFloat(this.wingScale);
-        buf.writeBoolean(this.spawnParticles);
+        buf.writeFloat(this.particleSpawnRate);
         buf.writeFloat(this.centreOffset);
         buf.writeFloat(this.heightOffset);
         buf.writeInt(this.colour);
@@ -98,7 +98,7 @@ public class WingData {
     private void fromBytes(ByteBuf buf) {
         this.wingType = WingType.values()[buf.readByte()];
         this.wingScale = buf.readFloat();
-        this.spawnParticles = buf.readBoolean();
+        this.particleSpawnRate = buf.readFloat();
         this.centreOffset = buf.readFloat();
         this.heightOffset = buf.readFloat();
         this.colour = buf.readInt();

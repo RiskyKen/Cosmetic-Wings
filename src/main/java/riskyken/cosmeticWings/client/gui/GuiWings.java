@@ -37,11 +37,12 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback {
     private int guiLeft;
     private int guiTop;
 
+    private boolean guiLoading;
     private ArrayList<GuiTabPage> tabs;
     private GuiTabWingSelect tab1;
     private GuiTabWingLocation tab2;
     private GuiTabWingColour tab3;
-    private int activeTab;
+    private static int activeTab = 0;
     
     WingData wingData;
     
@@ -50,12 +51,11 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback {
         guiWidth = 256;
         guiHeight = 116;
         tabs = new ArrayList<GuiTabPage>();
-
-        activeTab = 0;
     }
 
     @Override
     public void initGui() {
+        guiLoading = true;
         super.initGui();
         wingData = ClientWingCache.INSTANCE.getPlayerWingData(player.getUniqueID());
         guiLeft = width / 2 - guiWidth / 2;
@@ -84,9 +84,12 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback {
         if (wingData != null) {
             tab1.fileList.setSelectedIndex(wingData.wingType.ordinal());
             
-            tab2.checkSpawnParticles.setChecked(wingData.spawnParticles);
-            tab2.sliderScale.setValue(wingData.wingScale);
-            tab2.sliderScale.precision = 2;
+            tab2.sliderparticlesSpawnRate.setValue(wingData.particleSpawnRate * 100);
+            tab2.sliderparticlesSpawnRate.precision = 0;
+            tab2.sliderparticlesSpawnRate.updateSlider();
+            
+            tab2.sliderScale.setValue(wingData.wingScale * 100);
+            tab2.sliderScale.precision = 0;
             tab2.sliderScale.updateSlider();
             
             tab2.sliderOffset.setValue(wingData.centreOffset);
@@ -99,6 +102,7 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback {
         } else {
             wingData = new WingData();
         }
+        guiLoading = false;
     }
 
     @Override
@@ -175,9 +179,12 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback {
     }
     
     public void sendWingDataToServer() {
+        if (guiLoading) {
+            return;
+        }
         wingData.wingType = WingType.getOrdinal(tab1.fileList.getSelectedIndex());
-        wingData.wingScale = (float) tab2.sliderScale.getValue();
-        wingData.spawnParticles = tab2.checkSpawnParticles.isChecked();
+        wingData.wingScale = (float) tab2.sliderScale.getValue() / 100;
+        wingData.particleSpawnRate = (float) tab2.sliderparticlesSpawnRate.getValue() / 100;
         wingData.centreOffset = (float) tab2.sliderOffset.getValue();
         wingData.heightOffset = (float) tab2.sliderHightOffset.getValue();
         wingData.colour = tab3.colour.getRGB();
@@ -191,6 +198,11 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback {
 
     @Override
     public void onChangeSliderValue(GuiSlider slider) { 
+        if (slider.id == tab2.sliderparticlesSpawnRate.id) {
+            if (slider.getValue() != wingData.particleSpawnRate) {
+                sendWingDataToServer();
+            }
+        }
         if (slider.id == tab2.sliderScale.id) {
             if (slider.getValue() != wingData.wingScale) {
                 sendWingDataToServer();

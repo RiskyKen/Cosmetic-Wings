@@ -173,7 +173,7 @@ public final class WingRenderManager {
             return;
         }
         
-        if (!wingData.spawnParticles) {
+        if (wingData.particleSpawnRate == 0F) {
             return;
         }
 
@@ -188,7 +188,7 @@ public final class WingRenderManager {
             bigWings.onTick(player, 2, wingData);
             break;
         case KUROYUKIHIME:
-            kuroyukihimeWings.onTick(player, wingData.wingScale);
+            kuroyukihimeWings.onTick(player, wingData);
         default:
             break;
         }

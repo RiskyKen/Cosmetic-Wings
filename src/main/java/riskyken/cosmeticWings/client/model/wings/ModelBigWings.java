@@ -109,12 +109,20 @@ public class ModelBigWings extends ModelWingBase {
     private void spawnParticales(EntityPlayer player, int type, WingData wingData) {
         float angle = getWingAngle(player.capabilities.isFlying & player.isAirBorne, 30, 5000, 400, player.getEntityId());
         float scale = (1F - wingData.wingScale) * 0.2F;
-        float spawnChance = 960;
+        float spawnChance = 250;
         if (player.capabilities.isFlying & player.isAirBorne) {
-            spawnChance = 900;
+            spawnChance = 300;
         }
+        
+        //spawnChance *= wingData.particleSpawnRate;
+        
         Random rnd = new Random();
-        if (rnd.nextFloat() * 1000 > spawnChance) {
+        if (rnd.nextFloat() * 1000 < spawnChance) {
+            if (rnd.nextFloat() * 8 >= wingData.particleSpawnRate) {
+                return;
+            }
+            
+            
             PointD offset;
 
             if (rnd.nextFloat() >= 0.5f) {

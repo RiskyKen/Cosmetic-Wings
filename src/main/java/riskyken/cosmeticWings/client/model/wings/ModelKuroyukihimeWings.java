@@ -81,20 +81,24 @@ public class ModelKuroyukihimeWings extends ModelWingBase {
         GL11.glPopMatrix();
     }
     
-    public void onTick(EntityPlayer player, float wingScale) {
-        spawnParticales(player, wingScale);
+    public void onTick(EntityPlayer player, WingData wingData) {
+        spawnParticales(player, wingData);
     }
 
-    private void spawnParticales(EntityPlayer player, float wingScale) {
-        float scale = (1F - wingScale) * 0.2F;
+    private void spawnParticales(EntityPlayer player, WingData wingData) {
+        float scale = (1F - wingData.wingScale) * 0.2F;
+        float spawnChance = 250;
         Random rnd = new Random();
-        if (rnd.nextFloat() * 1000 > 980) {
+        if (rnd.nextFloat() * 1000 < spawnChance) {
+            if (rnd.nextFloat() * 8 >= wingData.particleSpawnRate) {
+                return;
+            }
             PointD offset;
 
             if (rnd.nextFloat() >= 0.5f) {
-                offset = Trig.moveTo(new PointD(player.posX, player.posZ), 0.3f + rnd.nextFloat() * 1.4f * wingScale, player.renderYawOffset + 60);
+                offset = Trig.moveTo(new PointD(player.posX, player.posZ), 0.3f + rnd.nextFloat() * 1.4f * wingData.wingScale, player.renderYawOffset + 60);
             } else {
-                offset = Trig.moveTo(new PointD(player.posX, player.posZ), 0.3f + rnd.nextFloat() * 1.4f * wingScale, player.renderYawOffset + 127);
+                offset = Trig.moveTo(new PointD(player.posX, player.posZ), 0.3f + rnd.nextFloat() * 1.4f * wingData.wingScale, player.renderYawOffset + 127);
             }
 
             float yOffset = 0f;
@@ -109,7 +113,7 @@ public class ModelKuroyukihimeWings extends ModelWingBase {
                 parY += 1.6D;
             }
 
-            EntityButterflyFx particle = new EntityButterflyFx(player.worldObj, parX, parY, parZ, wingScale, player);
+            EntityButterflyFx particle = new EntityButterflyFx(player.worldObj, parX, parY, parZ, wingData.wingScale, player);
             ParticleManager.INSTANCE.spawnParticle(player.worldObj, particle);
         }
     }

@@ -2,7 +2,7 @@
 inventory.cosmeticwings:wings.name=Wings
 inventory.cosmeticwings:wings.label.list=Select Wings
 inventory.cosmeticwings:wings.label.scale=Wing Scale
-inventory.cosmeticwings:wings.spawnParticles.name=Spawn particles?
+inventory.cosmeticwings:wings.label.particlesSpawnRate=Particles Spawn Rate
 inventory.cosmeticwings:wings.label.centre=Horizontal Offset
 inventory.cosmeticwings:wings.label.height=Vertical Offset
 inventory.cosmeticwings:wings.label.hue=Hue
