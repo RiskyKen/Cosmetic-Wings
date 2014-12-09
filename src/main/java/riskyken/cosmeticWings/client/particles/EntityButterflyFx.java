@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
@@ -36,12 +35,13 @@ public class EntityButterflyFx extends EntityFX {
         this.particleBlue = 1F;
         this.particleAlpha = 0.75F;
         
-        this.motionX = (rand.nextFloat() - 0.5) * 0.05;
-        this.motionY = (rand.nextFloat() - 0.5) * 0.02;
-        this.motionZ = (rand.nextFloat() - 0.5) * 0.05;
         this.particleScale = (rand.nextFloat() + 0.5F);
-        
+        //this.particleGravity = 0;
         this.target = target;
+        
+        //this.motionX = (rand.nextFloat() - 0.5) * 0.05;
+        //this.motionY = (rand.nextFloat() - 0.5) * 0.02;
+        //this.motionZ = (rand.nextFloat() - 0.5) * 0.05;
     }
     
     @Override
@@ -50,15 +50,64 @@ public class EntityButterflyFx extends EntityFX {
         this.prevPosY = this.posY;
         this.prevPosZ = this.posZ;
         
+        double maxSpeed = 0.2;
+        double minRange = 3;
+        
         if (this.particleAge++ >= this.particleMaxAge) {
             this.setDead();
         }
         
-        this.motionY -= 0.04D * (double)this.particleGravity;
+        if (posX + minRange < target.posX) {
+            this.motionX += 0.01F;
+            this.motionX += (rand.nextFloat() - 0.5) * 0.05;
+        } else if (posX - minRange > target.posX) {
+            this.motionX -= 0.01F;
+            this.motionX -= (rand.nextFloat() - 0.5) * 0.05;
+        } else {
+            motionX *= 0.9D;
+        }
+        
+        if (posY + 1 < target.posY) {
+            this.motionY += 0.01F;
+            this.motionY += (rand.nextFloat() - 0.5) * 0.05;
+        } else if (posY  - 1> target.posY) {
+            this.motionY -= 0.01F;
+            this.motionY -= (rand.nextFloat() - 0.5) * 0.05;
+        } else {
+            motionY *= 0.9D;
+        }
+        
+        if (posZ + minRange < target.posZ) {
+            this.motionZ += 0.01F;
+            this.motionZ += (rand.nextFloat() - 0.5) * 0.05;
+        } else if (posZ - minRange > target.posZ) {
+            this.motionZ -= 0.01F;
+            this.motionZ -= (rand.nextFloat() - 0.5) * 0.05;
+        } else {
+            motionZ *= 0.9D;
+        }
+        
+        this.motionX += (rand.nextFloat() - 0.5) * 0.02;
+        this.motionY += (rand.nextFloat() - 0.5) * 0.02;
+        this.motionZ += (rand.nextFloat() - 0.5) * 0.02;
+        
+        if (motionX > maxSpeed) {
+            motionX = maxSpeed; 
+        }
+        
+        if (motionX < -maxSpeed) {
+            motionX = -maxSpeed; 
+        }
+        
+        if (motionZ > maxSpeed) {
+            motionZ = maxSpeed; 
+        }
+        
+        if (motionZ < -maxSpeed) {
+            motionZ = -maxSpeed; 
+        }
+        
         this.moveEntity(this.motionX, this.motionY, this.motionZ);
-        this.motionX *= 0.990D;
-        this.motionY *= 0.990D;
-        this.motionZ *= 0.990D;
         
         if (this.onGround) {
             this.motionX *= 0.699999988079071D;
@@ -78,46 +127,26 @@ public class EntityButterflyFx extends EntityFX {
     }
     
     public void postRender(Tessellator tessellator) {
-        
-        int i = worldObj.getLightBrightnessForSkyBlocks(
-                MathHelper.floor_double(posX),
-                MathHelper.floor_double(posY),
-                MathHelper.floor_double(posZ),
-                0);
-        int j = i % 65536;
-        int k = i / 65536;
-        
         tessellator.startDrawingQuads();
-
         tessellator.setBrightness(getBrightnessForRender(0));
         
         int textureNumber = this.particleAge % 4;
-        
         if (textureNumber < 2) {
             Minecraft.getMinecraft().renderEngine.bindTexture(bufferflyTexture[0]);
         } else {
             Minecraft.getMinecraft().renderEngine.bindTexture(bufferflyTexture[1]);
         }
         
-        
+        float scale = 0.1F * this.particleScale;
 
-        
-        float f6 = 0;
-        float f7 = 1;
-        float f8 = 0;
-        float f9 = 1;
-        
-        float f10 = 0.1F * this.particleScale;
-
-        float f11 = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)f0 - interpPosX);
-        float f12 = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)f0 - interpPosY);
-        float f13 = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)f0 - interpPosZ);
+        float x = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)f0 - interpPosX);
+        float y = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)f0 - interpPosY);
+        float z = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)f0 - interpPosZ);
         tessellator.setColorRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
-        tessellator.addVertexWithUV((double)(f11 - f1 * f10 - f4 * f10), (double)(f12 - f2 * f10), (double)(f13 - f3 * f10 - f5 * f10), (double)f7, (double)f9);
-        tessellator.addVertexWithUV((double)(f11 - f1 * f10 + f4 * f10), (double)(f12 + f2 * f10), (double)(f13 - f3 * f10 + f5 * f10), (double)f7, (double)f8);
-        tessellator.addVertexWithUV((double)(f11 + f1 * f10 + f4 * f10), (double)(f12 + f2 * f10), (double)(f13 + f3 * f10 + f5 * f10), (double)f6, (double)f8);
-        tessellator.addVertexWithUV((double)(f11 + f1 * f10 - f4 * f10), (double)(f12 - f2 * f10), (double)(f13 + f3 * f10 - f5 * f10), (double)f6, (double)f9);
-        
+        tessellator.addVertexWithUV((double)(x - f1 * scale - f4 * scale), (double)(y - f2 * scale), (double)(z - f3 * scale - f5 * scale), 1D, 1D);
+        tessellator.addVertexWithUV((double)(x - f1 * scale + f4 * scale), (double)(y + f2 * scale), (double)(z - f3 * scale + f5 * scale), 1D, 0D);
+        tessellator.addVertexWithUV((double)(x + f1 * scale + f4 * scale), (double)(y + f2 * scale), (double)(z + f3 * scale + f5 * scale), 0D, 0D);
+        tessellator.addVertexWithUV((double)(x + f1 * scale - f4 * scale), (double)(y - f2 * scale), (double)(z + f3 * scale - f5 * scale), 0D, 1D);
         tessellator.draw();
     }
 }

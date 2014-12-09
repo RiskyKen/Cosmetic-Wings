@@ -59,7 +59,7 @@ public class ParticleManager {
 			}
 			
 			if (particle != null) {
-				Minecraft.getMinecraft().effectRenderer.addEffect(particle);
+				mc.effectRenderer.addEffect(particle);
 			}
 		}
 	}
