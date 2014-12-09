@@ -67,6 +67,9 @@ public class WingRenderQueueItem {
         GL11.glTranslatef(0, -wingData.heightOffset * 8 * 0.0625F, 0F);
         
         switch (wingData.wingType) {
+        case SMALL_MECH:
+            wingRenderManager.smallMechWings.render(player, true, wingData);
+            break;
         case MECH:
             wingRenderManager.mechWings.render(player, true, wingData);
             break;

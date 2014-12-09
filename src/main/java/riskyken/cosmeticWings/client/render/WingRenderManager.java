@@ -133,8 +133,20 @@ public final class WingRenderManager {
             kuroyukihimeWings.render(ev.entityPlayer, ev.renderer, wingData);
             break;
         case SMALL_MECH:
-            smallMechWings.render(ev.entityPlayer, ev.renderer, wingData);
-            break;
+            smallMechWings.render(ev.entityPlayer, false, wingData);
+            if (renderingInGui) {
+                LightingHelper.disableLighting();
+                GL11.glDepthMask(false);
+                GL11.glEnable(GL11.GL_BLEND);
+                GL11.glDisable(GL11.GL_CULL_FACE);
+                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+                smallMechWings.render(ev.entityPlayer, true, wingData);
+                GL11.glEnable(GL11.GL_CULL_FACE);
+                GL11.glDisable(GL11.GL_BLEND);
+                GL11.glDepthMask(true);
+                LightingHelper.enableLighting();
+            }
+            break;  
         case MECH:
             mechWings.render(ev.entityPlayer, false, wingData);
             if (renderingInGui) {
