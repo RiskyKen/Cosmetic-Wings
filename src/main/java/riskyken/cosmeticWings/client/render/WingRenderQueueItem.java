@@ -2,7 +2,6 @@ package riskyken.cosmeticWings.client.render;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.opengl.GL11;
@@ -69,7 +68,6 @@ public class WingRenderQueueItem {
         
         switch (wingData.wingType) {
         case MECH:
-            RenderHelper.enableStandardItemLighting();
             wingRenderManager.mechWings.render(player, true, wingData);
             break;
         default:
