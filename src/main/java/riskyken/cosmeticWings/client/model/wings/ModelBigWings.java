@@ -20,6 +20,7 @@ import riskyken.cosmeticWings.common.wings.WingsData;
 import riskyken.cosmeticWings.utils.PointD;
 import riskyken.cosmeticWings.utils.Trig;
 import riskyken.cosmeticWings.utils.UtilColour;
+import riskyken.cosmeticWings.utils.UtilPlayer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -121,7 +122,7 @@ public class ModelBigWings extends ModelWingBase {
 
             EntityClientPlayerMP localPlayer = Minecraft.getMinecraft().thePlayer;
 
-            if (!localPlayer.getDisplayName().equals(player.getDisplayName())) {
+            if (!UtilPlayer.isLocalPlayer(player)) {
                 parY += 1.6D;
             }
             

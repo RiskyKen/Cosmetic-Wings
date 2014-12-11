@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Queue;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.RenderPlayerEvent;
@@ -20,6 +19,7 @@ import riskyken.cosmeticWings.common.wings.IWings;
 import riskyken.cosmeticWings.common.wings.WingsData;
 import riskyken.cosmeticWings.common.wings.WingsRegistry;
 import riskyken.cosmeticWings.utils.ModLogger;
+import riskyken.cosmeticWings.utils.UtilPlayer;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -101,10 +101,9 @@ public final class WingRenderManager {
             return;
         }
         
-        Minecraft mc = Minecraft.getMinecraft();
-        boolean renderingInGui = mc.currentScreen != null && mc.currentScreen.getClass() != GuiChat.class;
+        boolean renderingInGui = UtilPlayer.localPlayerHasGuiOpen();
         if (renderingInGui) {
-            if (!player.equals(mc.thePlayer)) {
+            if (!UtilPlayer.isLocalPlayer(player)) {
                 renderingInGui = false;
             }
         }

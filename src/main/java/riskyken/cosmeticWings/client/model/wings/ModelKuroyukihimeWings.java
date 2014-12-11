@@ -3,7 +3,6 @@ package riskyken.cosmeticWings.client.model.wings;
 import java.util.Random;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -17,6 +16,7 @@ import riskyken.cosmeticWings.common.wings.IWings;
 import riskyken.cosmeticWings.common.wings.WingsData;
 import riskyken.cosmeticWings.utils.PointD;
 import riskyken.cosmeticWings.utils.Trig;
+import riskyken.cosmeticWings.utils.UtilPlayer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -107,9 +107,7 @@ public class ModelKuroyukihimeWings extends ModelWingBase {
             double parY = player.posY - 0.4D + scale + rnd.nextFloat() * 0.5F;
             double parZ = offset.y;
 
-            EntityClientPlayerMP localPlayer = Minecraft.getMinecraft().thePlayer;
-
-            if (!localPlayer.getDisplayName().equals(player.getDisplayName())) {
+            if (!UtilPlayer.isLocalPlayer(player)) {
                 parY += 1.6D;
             }
 

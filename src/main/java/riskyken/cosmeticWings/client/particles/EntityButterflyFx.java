@@ -3,10 +3,11 @@ package riskyken.cosmeticWings.client.particles;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
+import riskyken.cosmeticWings.utils.UtilPlayer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -21,7 +22,7 @@ public class EntityButterflyFx extends EntityFX {
         bufferflyTexture[1] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/particles/kuroyukihime-butterfly-flap.png");
     }
     
-    private Entity target;
+    private EntityPlayer target;
     float f0;
     float f1;
     float f2;
@@ -29,7 +30,7 @@ public class EntityButterflyFx extends EntityFX {
     float f4;
     float f5;
     
-    public EntityButterflyFx(World world, double x, double y, double z, float wingScale, Entity target) {
+    public EntityButterflyFx(World world, double x, double y, double z, float wingScale, EntityPlayer target) {
         super(world, x, y, z);
         this.particleMaxAge = 400;
         
@@ -53,6 +54,14 @@ public class EntityButterflyFx extends EntityFX {
         this.prevPosY = this.posY;
         this.prevPosZ = this.posZ;
         
+        double targetX = target.posX;
+        double targetY = target.posY;
+        double targetZ = target.posZ;
+        
+        if (!UtilPlayer.isLocalPlayer(target)) {
+            targetY += 1.6D;
+        }
+        
         double maxSpeed = 0.2;
         double minRange = 3;
         
@@ -60,30 +69,30 @@ public class EntityButterflyFx extends EntityFX {
             this.setDead();
         }
         
-        if (posX + minRange < target.posX) {
+        if (posX + minRange < targetX) {
             this.motionX += 0.01F;
             this.motionX += (rand.nextFloat() - 0.5) * 0.05;
-        } else if (posX - minRange > target.posX) {
+        } else if (posX - minRange > targetX) {
             this.motionX -= 0.01F;
             this.motionX -= (rand.nextFloat() - 0.5) * 0.05;
         } else {
             motionX *= 0.9D;
         }
         
-        if (posY + 1 < target.posY) {
+        if (posY + 1 < targetY) {
             this.motionY += 0.01F;
             this.motionY += (rand.nextFloat() - 0.5) * 0.05;
-        } else if (posY  - 1> target.posY) {
+        } else if (posY  - 1> targetY) {
             this.motionY -= 0.01F;
             this.motionY -= (rand.nextFloat() - 0.5) * 0.05;
         } else {
             motionY *= 0.9D;
         }
         
-        if (posZ + minRange < target.posZ) {
+        if (posZ + minRange < targetZ) {
             this.motionZ += 0.01F;
             this.motionZ += (rand.nextFloat() - 0.5) * 0.05;
-        } else if (posZ - minRange > target.posZ) {
+        } else if (posZ - minRange > targetZ) {
             this.motionZ -= 0.01F;
             this.motionZ -= (rand.nextFloat() - 0.5) * 0.05;
         } else {
