@@ -99,6 +99,14 @@ public class EntityButterflyFx extends EntityFX {
             motionX = -maxSpeed; 
         }
         
+        if (motionY > maxSpeed) {
+            motionY = maxSpeed; 
+        }
+        
+        if (motionY < -maxSpeed) {
+            motionY = -maxSpeed; 
+        }
+        
         if (motionZ > maxSpeed) {
             motionZ = maxSpeed; 
         }
