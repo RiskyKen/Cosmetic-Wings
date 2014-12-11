@@ -12,6 +12,7 @@ import riskyken.cosmeticWings.utils.UtilColour;
  */
 public class WingData {
 
+    private static final String TAG_WING_DATA = "wingData";
     private static final String TAG_WING_TYPE = "wingType";
     private static final String TAG_WING_SCALE = "wingScale";
     private static final String TAG_PARTICLE_SPAWN_RATE = "particleSpawnRate";
@@ -27,7 +28,11 @@ public class WingData {
     public int colour;
     
     public WingData() {
-        //Default options that will be used for new players.
+        setWingDefaultValues();
+    }
+    
+    private void setWingDefaultValues() {
+      //Default options that will be used for new players.
         this.wingType = WingType.NONE;
         this.wingScale = 0.75F;
         this.particleSpawnRate = 1F;
@@ -45,12 +50,14 @@ public class WingData {
      * @param compound NBTTagCompound to save to.
      */
     public void saveNBTData(NBTTagCompound compound) {
-        compound.setByte(TAG_WING_TYPE, (byte) this.wingType.ordinal());
-        compound.setFloat(TAG_WING_SCALE, this.wingScale);
-        compound.setFloat(TAG_PARTICLE_SPAWN_RATE, this.particleSpawnRate);
-        compound.setFloat(TAG_CENTRE_OFFSET, this.centreOffset);
-        compound.setFloat(TAG_HEIGHT_OFFSET, this.heightOffset);
-        compound.setInteger(TAG_COLOUR, this.colour);
+        NBTTagCompound wingCompound = new NBTTagCompound();
+        wingCompound.setByte(TAG_WING_TYPE, (byte) this.wingType.ordinal());
+        wingCompound.setFloat(TAG_WING_SCALE, this.wingScale);
+        wingCompound.setFloat(TAG_PARTICLE_SPAWN_RATE, this.particleSpawnRate);
+        wingCompound.setFloat(TAG_CENTRE_OFFSET, this.centreOffset);
+        wingCompound.setFloat(TAG_HEIGHT_OFFSET, this.heightOffset);
+        wingCompound.setInteger(TAG_COLOUR, this.colour);
+        compound.setTag(TAG_WING_DATA, wingCompound);
     }
 
     /**
@@ -58,23 +65,28 @@ public class WingData {
      * @param compound NBTTagCompound to load from.
      */
     public void loadNBTData(NBTTagCompound compound) {
-        if (compound.hasKey(TAG_WING_TYPE)) {
-            this.wingType = WingType.values()[compound.getByte(TAG_WING_TYPE)];
-        }
-        if (compound.hasKey(TAG_WING_SCALE)) {
-            this.wingScale = compound.getFloat(TAG_WING_SCALE);
-        }
-        if (compound.hasKey(TAG_PARTICLE_SPAWN_RATE)) {
-            this.particleSpawnRate = compound.getFloat(TAG_PARTICLE_SPAWN_RATE);
-        }
-        if (compound.hasKey(TAG_CENTRE_OFFSET)) {
-            this.centreOffset = compound.getFloat(TAG_CENTRE_OFFSET);
-        }
-        if (compound.hasKey(TAG_HEIGHT_OFFSET)) {
-            this.heightOffset = compound.getFloat(TAG_HEIGHT_OFFSET);
-        }
-        if (compound.hasKey(TAG_COLOUR)) {
-            this.colour = compound.getInteger(TAG_COLOUR);
+        if (compound.hasKey(TAG_WING_DATA)) {
+            NBTTagCompound wingCompound = compound.getCompoundTag(TAG_WING_DATA);
+            if (wingCompound.hasKey(TAG_WING_TYPE)) {
+                this.wingType = WingType.values()[wingCompound.getByte(TAG_WING_TYPE)];
+            }
+            if (wingCompound.hasKey(TAG_WING_SCALE)) {
+                this.wingScale = wingCompound.getFloat(TAG_WING_SCALE);
+            }
+            if (wingCompound.hasKey(TAG_PARTICLE_SPAWN_RATE)) {
+                this.particleSpawnRate = wingCompound.getFloat(TAG_PARTICLE_SPAWN_RATE);
+            }
+            if (wingCompound.hasKey(TAG_CENTRE_OFFSET)) {
+                this.centreOffset = wingCompound.getFloat(TAG_CENTRE_OFFSET);
+            }
+            if (wingCompound.hasKey(TAG_HEIGHT_OFFSET)) {
+                this.heightOffset = wingCompound.getFloat(TAG_HEIGHT_OFFSET);
+            }
+            if (wingCompound.hasKey(TAG_COLOUR)) {
+                this.colour = wingCompound.getInteger(TAG_COLOUR);
+            }
+        } else {
+            setWingDefaultValues();
         }
     }
 
