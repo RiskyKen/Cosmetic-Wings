@@ -71,7 +71,7 @@ public final class WingRenderManager {
     }
 
     @SubscribeEvent
-    public void onRender(RenderWorldLastEvent event) {
+    public void onRenderWorldLastEvent(RenderWorldLastEvent event) {
         GL11.glDepthMask(false);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_BLEND);
