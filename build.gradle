@@ -31,7 +31,7 @@ minecraft {
     runDir = "eclipse"
     
     replaceIn "common/lib/LibModInfo.java"
-    replace "@VERSION@", modVersion
+    replace "@VERSION@", project.version
 }
 
 processResources {
