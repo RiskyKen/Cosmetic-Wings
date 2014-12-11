@@ -131,7 +131,7 @@ public final class WingRenderManager {
         for (int layer = 0; layer < wings.getNumberOfRenderLayers(); layer++) {
             if (!wings.isNomalRender(layer)) {
                 if (player.getUniqueID() != Minecraft.getMinecraft().thePlayer.getUniqueID()) {
-                    //wingRenderQueue.add(new WingRenderQueueItem(ev.entityPlayer, wingsData, wingRenderer, wings));
+                    wingRenderQueue.add(new WingRenderQueueItem(ev.entityPlayer, wingsData, wingRenderer, wings));
                 } else {
                     if (!renderingInGui) {
                         wingRenderQueue.add(new WingRenderQueueItem(ev.entityPlayer, wingsData, wingRenderer, wings));
