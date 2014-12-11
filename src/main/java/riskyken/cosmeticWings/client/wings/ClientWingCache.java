@@ -4,11 +4,14 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import riskyken.cosmeticWings.common.wings.WingData;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 /**
  * Stores the wing data for all player near the local player.
  * @author RiskyKen
  *
  */
+@SideOnly(Side.CLIENT)
 public class ClientWingCache {
     
     public static ClientWingCache INSTANCE;

@@ -6,7 +6,6 @@ import java.util.Random;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -18,8 +17,10 @@ import riskyken.cosmeticWings.client.particles.ParticleManager;
 import riskyken.cosmeticWings.client.render.LightingHelper;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 import riskyken.cosmeticWings.common.wings.WingData;
+import riskyken.cosmeticWings.common.wings.WingType;
 import riskyken.cosmeticWings.utils.PointD;
 import riskyken.cosmeticWings.utils.Trig;
+import riskyken.cosmeticWings.utils.UtilColour;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -28,9 +29,9 @@ public class ModelBigWings extends ModelWingBase {
 
     ModelRenderer rightWing;
     ModelRenderer leftWing;
-    private final ResourceLocation[] wingsImage;
+    private final ResourceLocation wingsImage;
 
-    public ModelBigWings() {
+    public ModelBigWings(String imagePath) {
         textureWidth = 64;
         textureHeight = 32;
 
@@ -43,10 +44,7 @@ public class ModelBigWings extends ModelWingBase {
         rightWing.addBox(-8.5F, 0F, -0.5F, 17, 30, 1);
         rightWing.mirror = true;
 
-        wingsImage = new ResourceLocation[3];
-        wingsImage[0] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/wings/big-black-wings.png");
-        wingsImage[1] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/wings/big-white-wings.png");
-        wingsImage[2] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/wings/shana-wings.png");
+        wingsImage = new ResourceLocation(LibModInfo.ID.toLowerCase(), imagePath);
     }
 
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
@@ -54,10 +52,8 @@ public class ModelBigWings extends ModelWingBase {
         leftWing.render(f5);
     }
 
-    public void render(EntityPlayer player, RenderPlayer renderer, int wingId, WingData wingData) {
-        if (wingId >= 0 & wingId < wingsImage.length) {
-            Minecraft.getMinecraft().getTextureManager().bindTexture(wingsImage[wingId]);
-        }
+    public void render(EntityPlayer player, WingData wingData) {
+        Minecraft.getMinecraft().getTextureManager().bindTexture(wingsImage);
 
         float angle = getWingAngle(player.capabilities.isFlying & player.isAirBorne, 30, 5000, 400, player.getEntityId());
 
@@ -79,7 +75,7 @@ public class ModelBigWings extends ModelWingBase {
             GL11.glColor3f(1F, 1F, 1F);
         }
 
-        if (wingId != 0) {
+        if (wingData.wingType == WingType.SHANA | wingData.wingType == WingType.ANGEL) {
             LightingHelper.disableLighting();
         }
 
@@ -95,7 +91,7 @@ public class ModelBigWings extends ModelWingBase {
         rightWing.render(SCALE);
         GL11.glPopMatrix();
 
-        if (wingId != 0) {
+        if (wingData.wingType == WingType.SHANA | wingData.wingType == WingType.ANGEL) {
             LightingHelper.enableLighting();
         }
 
@@ -114,14 +110,11 @@ public class ModelBigWings extends ModelWingBase {
             spawnChance = 300;
         }
         
-        //spawnChance *= wingData.particleSpawnRate;
-        
         Random rnd = new Random();
         if (rnd.nextFloat() * 1000 < spawnChance) {
             if (rnd.nextFloat() * 8 >= wingData.particleSpawnRate) {
                 return;
             }
-            
             
             PointD offset;
 
@@ -142,8 +135,14 @@ public class ModelBigWings extends ModelWingBase {
             if (!localPlayer.getDisplayName().equals(player.getDisplayName())) {
                 parY += 1.6D;
             }
-
-            EntityFeatherFx particle = new EntityFeatherFx(player.worldObj, parX, parY, parZ, type, wingData.wingScale, wingData.colour);
+            
+            EntityFeatherFx particle;
+            if (wingData.wingType.canRecolour) {
+                particle = new EntityFeatherFx(player.worldObj, parX, parY, parZ, type, wingData.wingScale, wingData.colour);
+            } else {
+                particle = new EntityFeatherFx(player.worldObj, parX, parY, parZ, type, wingData.wingScale, UtilColour.getMinecraftColor(0));
+            }
+            
             ParticleManager.INSTANCE.spawnParticle(player.worldObj, particle);
         }
     }

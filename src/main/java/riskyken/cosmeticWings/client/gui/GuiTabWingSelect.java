@@ -8,7 +8,10 @@ import riskyken.cosmeticWings.client.gui.controls.GuiHelper;
 import riskyken.cosmeticWings.client.gui.controls.GuiList;
 import riskyken.cosmeticWings.client.gui.controls.GuiScrollbar;
 import riskyken.cosmeticWings.common.wings.WingType;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class GuiTabWingSelect extends GuiTabPage {
 
     public GuiList fileList;

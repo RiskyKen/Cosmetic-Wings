@@ -11,8 +11,10 @@ import org.lwjgl.opengl.GL11;
 
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 import riskyken.cosmeticWings.common.wings.WingData;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
-
+@SideOnly(Side.CLIENT)
 public class ModelSmallMechWings extends ModelWingBase {
     
     ModelRenderer rightWing;

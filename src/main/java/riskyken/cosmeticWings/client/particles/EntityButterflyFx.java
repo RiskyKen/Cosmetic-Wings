@@ -7,7 +7,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class EntityButterflyFx extends EntityFX {
 
     private static final ResourceLocation[] bufferflyTexture;

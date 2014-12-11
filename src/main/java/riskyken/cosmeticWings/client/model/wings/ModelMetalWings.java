@@ -2,7 +2,6 @@ package riskyken.cosmeticWings.client.model.wings;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
@@ -37,7 +36,7 @@ public class ModelMetalWings extends ModelWingBase {
         wingsImage = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/wings/metal-wings.png");
     }
 
-    public void render(EntityPlayer player, RenderPlayer renderer, WingData wingData) {
+    public void render(EntityPlayer player, WingData wingData) {
         GL11.glColor3f(1F, 1F, 1F);
         Minecraft.getMinecraft().getTextureManager().bindTexture(wingsImage);
         RenderWing(player, player.capabilities.isFlying & player.isAirBorne, wingData);
@@ -53,10 +52,6 @@ public class ModelMetalWings extends ModelWingBase {
         GL11.glTranslatef(0, 4 * SCALE, 1.5F * SCALE);
         GL11.glRotatef(90, 0, 1, 0);
         GL11.glRotatef(90, 0, 0, 1);
-
-        GL11.glColor3f(1F, 1F, 1F);
-        
-        
 
         GL11.glPushMatrix();
         GL11.glTranslatef(0, 0, wingData.centreOffset * 3 * SCALE);

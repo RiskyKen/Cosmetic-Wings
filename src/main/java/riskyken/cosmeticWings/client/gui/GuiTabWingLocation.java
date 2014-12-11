@@ -5,7 +5,10 @@ import riskyken.cosmeticWings.client.gui.controls.GuiCustomSlider;
 import riskyken.cosmeticWings.client.gui.controls.GuiHelper;
 import cpw.mods.fml.client.config.GuiSlider;
 import cpw.mods.fml.client.config.GuiSlider.ISlider;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class GuiTabWingLocation extends GuiTabPage implements ISlider {
 
     public GuiCustomSlider sliderparticlesSpawnRate;

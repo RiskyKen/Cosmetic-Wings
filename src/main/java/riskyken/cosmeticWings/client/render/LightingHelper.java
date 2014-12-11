@@ -4,12 +4,16 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 /**
  * Helps turn Minecraft's lighting on and off.
  * Yip that's all!
  * @author RiskyKen
  * 
  */
+@SideOnly(Side.CLIENT)
 public final class LightingHelper {
     
     private static float lightX;

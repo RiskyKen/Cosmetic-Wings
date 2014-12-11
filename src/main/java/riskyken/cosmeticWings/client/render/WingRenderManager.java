@@ -1,6 +1,7 @@
 package riskyken.cosmeticWings.client.render;
 
 import java.util.ArrayDeque;
+import java.util.HashMap;
 import java.util.Queue;
 
 import net.minecraft.client.Minecraft;
@@ -13,34 +14,34 @@ import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.opengl.GL11;
 
-import riskyken.cosmeticWings.client.model.wings.ModelBigWings;
-import riskyken.cosmeticWings.client.model.wings.ModelExtraBigWings;
-import riskyken.cosmeticWings.client.model.wings.ModelKuroyukihimeWings;
-import riskyken.cosmeticWings.client.model.wings.ModelMechWings;
-import riskyken.cosmeticWings.client.model.wings.ModelMetalWings;
-import riskyken.cosmeticWings.client.model.wings.ModelSmallMechWings;
+import riskyken.cosmeticWings.client.render.wings.IWingRenderer;
+import riskyken.cosmeticWings.client.render.wings.RenderWingsAngel;
+import riskyken.cosmeticWings.client.render.wings.RenderWingsBlack;
+import riskyken.cosmeticWings.client.render.wings.RenderWingsFlandre;
+import riskyken.cosmeticWings.client.render.wings.RenderWingsKuroyukihime;
+import riskyken.cosmeticWings.client.render.wings.RenderWingsMech;
+import riskyken.cosmeticWings.client.render.wings.RenderWingsMetal;
+import riskyken.cosmeticWings.client.render.wings.RenderWingsShana;
+import riskyken.cosmeticWings.client.render.wings.RenderWingsSmallMech;
 import riskyken.cosmeticWings.client.wings.ClientWingCache;
 import riskyken.cosmeticWings.common.wings.WingData;
+import riskyken.cosmeticWings.common.wings.WingType;
+import riskyken.cosmeticWings.utils.ModLogger;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.Type;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public final class WingRenderManager {
 
     public static WingRenderManager INSTANCE;
     
     private Queue<WingRenderQueueItem> wingRenderQueue;
-
-    /** Wing models. */
-    public final ModelBigWings bigWings = new ModelBigWings();
-    public final ModelExtraBigWings extraBigWings = new ModelExtraBigWings();
-    public final ModelMetalWings metalWings = new ModelMetalWings();
-    public final ModelKuroyukihimeWings kuroyukihimeWings = new ModelKuroyukihimeWings();
-    public final ModelSmallMechWings smallMechWings  = new ModelSmallMechWings();
-    public final ModelMechWings mechWings  = new ModelMechWings();
+    private final HashMap<WingType, IWingRenderer> wingRendererMap;
     
     public static void init() {
         INSTANCE = new WingRenderManager();
@@ -50,6 +51,30 @@ public final class WingRenderManager {
         MinecraftForge.EVENT_BUS.register(this);
         FMLCommonHandler.instance().bus().register(this);
         wingRenderQueue = new ArrayDeque();
+        wingRendererMap = new HashMap<WingType, IWingRenderer>();
+        loadWingRenderers();
+    }
+    
+    private void loadWingRenderers() {
+        registerRendererForWingType(WingType.BLACK, RenderWingsBlack.class);
+        registerRendererForWingType(WingType.ANGEL, RenderWingsAngel.class);
+        registerRendererForWingType(WingType.SHANA, RenderWingsShana.class);
+        registerRendererForWingType(WingType.FLANDRE, RenderWingsFlandre.class);
+        registerRendererForWingType(WingType.METAL, RenderWingsMetal.class);
+        registerRendererForWingType(WingType.KUROYUKIHIME, RenderWingsKuroyukihime.class);
+        registerRendererForWingType(WingType.SMALL_MECH, RenderWingsSmallMech.class);
+        registerRendererForWingType(WingType.MECH, RenderWingsMech.class);
+    }
+    
+    private void registerRendererForWingType(WingType wingType, Class<? extends IWingRenderer> renderClass) {
+        try {
+            ModLogger.log("Registering wing renderer " + renderClass.getSimpleName() + " for " + wingType.name());
+            wingRendererMap.put(wingType, renderClass.newInstance());
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     @SubscribeEvent
@@ -62,7 +87,7 @@ public final class WingRenderManager {
         tessellator.setBrightness(15728880);
         LightingHelper.disableLighting();
         for(WingRenderQueueItem wingRenderItem : wingRenderQueue) {
-            wingRenderItem.Render(this, event.partialTicks);
+            wingRenderItem.Render(event.partialTicks);
         }
         LightingHelper.enableLighting();
         GL11.glDisable(GL11.GL_BLEND);
@@ -73,7 +98,6 @@ public final class WingRenderManager {
     
     @SubscribeEvent
     public void onRender(RenderPlayerEvent.SetArmorModel ev) {
-        
         EntityPlayer player = ev.entityPlayer;
         if (player.isInvisible()) {
             return;
@@ -93,12 +117,18 @@ public final class WingRenderManager {
             }
         }
         
+        if (!wingRendererMap.containsKey(wingData.wingType)) {
+            return;
+        }
+        
+        IWingRenderer wingRenderer = wingRendererMap.get(wingData.wingType);
+        
         if (wingData.wingType.postRender) {
             if (player.getUniqueID() != Minecraft.getMinecraft().thePlayer.getUniqueID()) {
-                wingRenderQueue.add(new WingRenderQueueItem(ev.entityPlayer, wingData));
+                wingRenderQueue.add(new WingRenderQueueItem(ev.entityPlayer, wingData, wingRenderer));
             } else {
                 if (!renderingInGui) {
-                    wingRenderQueue.add(new WingRenderQueueItem(ev.entityPlayer, wingData));
+                    wingRenderQueue.add(new WingRenderQueueItem(ev.entityPlayer, wingData, wingRenderer));
                 }
             }
         }
@@ -113,57 +143,18 @@ public final class WingRenderManager {
         GL11.glTranslatef(0, 6 * 0.0625F, 0F);
         GL11.glTranslatef(0, -wingData.heightOffset * 8 * 0.0625F, 0F);
         
-        switch (wingData.wingType) {
-        case BLACK:
-            bigWings.render(ev.entityPlayer, ev.renderer, 0, wingData);
-            break;
-        case ANGEL:
-            bigWings.render(ev.entityPlayer, ev.renderer, 1, wingData);
-            break;
-        case SHANA:
-            bigWings.render(ev.entityPlayer, ev.renderer, 2, wingData);
-            break;
-        case FLANDRE:
-            extraBigWings.render(ev.entityPlayer, ev.renderer, wingData);
-            break;
-        case METAL:
-            metalWings.render(ev.entityPlayer, ev.renderer, wingData);
-            break;
-        case KUROYUKIHIME:
-            kuroyukihimeWings.render(ev.entityPlayer, ev.renderer, wingData);
-            break;
-        case SMALL_MECH:
-            smallMechWings.render(ev.entityPlayer, false, wingData);
-            if (renderingInGui) {
-                LightingHelper.disableLighting();
-                GL11.glDepthMask(false);
-                GL11.glEnable(GL11.GL_BLEND);
-                GL11.glDisable(GL11.GL_CULL_FACE);
-                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-                smallMechWings.render(ev.entityPlayer, true, wingData);
-                GL11.glEnable(GL11.GL_CULL_FACE);
-                GL11.glDisable(GL11.GL_BLEND);
-                GL11.glDepthMask(true);
-                LightingHelper.enableLighting();
-            }
-            break;  
-        case MECH:
-            mechWings.render(ev.entityPlayer, false, wingData);
-            if (renderingInGui) {
-                LightingHelper.disableLighting();
-                GL11.glDepthMask(false);
-                GL11.glEnable(GL11.GL_BLEND);
-                GL11.glDisable(GL11.GL_CULL_FACE);
-                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-                mechWings.render(ev.entityPlayer, true, wingData);
-                GL11.glEnable(GL11.GL_CULL_FACE);
-                GL11.glDisable(GL11.GL_BLEND);
-                GL11.glDepthMask(true);
-                LightingHelper.enableLighting();
-            }
-            break;
-        default:
-            break; 
+        wingRenderer.render(player, wingData, ev.partialRenderTick);
+        if (wingData.wingType.postRender && renderingInGui) {
+            LightingHelper.disableLighting();
+            GL11.glDepthMask(false);
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glDisable(GL11.GL_CULL_FACE);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+            wingRenderer.postRender(player, wingData, ev.partialRenderTick);
+            GL11.glEnable(GL11.GL_CULL_FACE);
+            GL11.glDisable(GL11.GL_BLEND);
+            GL11.glDepthMask(true);
+            LightingHelper.enableLighting();
         }
         GL11.glPopMatrix();
     }
@@ -184,25 +175,14 @@ public final class WingRenderManager {
         if (wingData==null) {
             return;
         }
-        
         if (wingData.particleSpawnRate == 0F) {
             return;
         }
-
-        switch (wingData.wingType) {
-        case BLACK:
-            bigWings.onTick(player, 0, wingData);
-            break;
-        case ANGEL:
-            bigWings.onTick(player, 1, wingData);
-            break;
-        case SHANA:
-            bigWings.onTick(player, 2, wingData);
-            break;
-        case KUROYUKIHIME:
-            kuroyukihimeWings.onTick(player, wingData);
-        default:
-            break;
+        
+        if (!wingRendererMap.containsKey(wingData.wingType)) {
+            return;
         }
+        IWingRenderer wingRenderer = wingRendererMap.get(wingData.wingType);
+        wingRenderer.onTick(player, wingData);
     }
 }

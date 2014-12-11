@@ -6,23 +6,29 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.opengl.GL11;
 
+import riskyken.cosmeticWings.client.render.wings.IWingRenderer;
 import riskyken.cosmeticWings.common.wings.WingData;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class WingRenderQueueItem {
     
     private EntityPlayer player;
     private WingData wingData;
+    private IWingRenderer wingRenderer;
     private float lightX;
     private float lightY;
     
-    public WingRenderQueueItem(EntityPlayer player, WingData wingData) {
+    public WingRenderQueueItem(EntityPlayer player, WingData wingData, IWingRenderer wingRenderer) {
         this.player = player;
         this.wingData = wingData;
+        this.wingRenderer = wingRenderer;
         lightX = OpenGlHelper.lastBrightnessX;
         lightY = OpenGlHelper.lastBrightnessY;
     }
     
-    public void Render(WingRenderManager wingRenderManager, float partialRenderTick) {
+    public void Render(float partialRenderTick) {
         GL11.glPushMatrix();
         
         float yawOffset = player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * partialRenderTick;
@@ -66,16 +72,8 @@ public class WingRenderQueueItem {
         GL11.glTranslatef(0, 6 * 0.0625F, 0F);
         GL11.glTranslatef(0, -wingData.heightOffset * 8 * 0.0625F, 0F);
         
-        switch (wingData.wingType) {
-        case SMALL_MECH:
-            wingRenderManager.smallMechWings.render(player, true, wingData);
-            break;
-        case MECH:
-            wingRenderManager.mechWings.render(player, true, wingData);
-            break;
-        default:
-            break; 
-        }
+        wingRenderer.postRender(player, wingData, partialRenderTick);
+        
         GL11.glPopMatrix();
     }
 }

@@ -2,7 +2,6 @@ package riskyken.cosmeticWings.client.model.wings;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
@@ -15,14 +14,14 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ModelExtraBigWings extends ModelWingBase {
+public class ModelWingsFlandre extends ModelWingBase {
     
     ModelRenderer leftWing;
     ModelRenderer rightWing;
     
     private final ResourceLocation[] wingsImage;
 
-    public ModelExtraBigWings() {
+    public ModelWingsFlandre() {
         textureWidth = 64;
         textureHeight = 64;
         
@@ -42,12 +41,12 @@ public class ModelExtraBigWings extends ModelWingBase {
         wingsImage[1] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/wings/flandre-wings-glow.png");
     }
 
-    public void render(EntityPlayer player, RenderPlayer renderer, WingData wingData) {
-        renderWingLayer(player, renderer, 0, wingData);
-        renderWingLayer(player, renderer, 1, wingData);
+    public void render(EntityPlayer player, WingData wingData) {
+        renderWingLayer(player, 0, wingData);
+        renderWingLayer(player, 1, wingData);
     }
 
-    private void renderWingLayer(EntityPlayer player, RenderPlayer renderer, int layerId, WingData wingData) {
+    private void renderWingLayer(EntityPlayer player, int layerId, WingData wingData) {
         if (layerId >= 0 & layerId < wingsImage.length) {
             Minecraft.getMinecraft().getTextureManager().bindTexture(wingsImage[layerId]);
         }
