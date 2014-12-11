@@ -8,7 +8,8 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import riskyken.cosmeticWings.common.lib.LibModInfo;
-import riskyken.cosmeticWings.common.wings.WingData;
+import riskyken.cosmeticWings.common.wings.IWings;
+import riskyken.cosmeticWings.common.wings.WingsData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -36,13 +37,12 @@ public class ModelMetalWings extends ModelWingBase {
         wingsImage = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/wings/metal-wings.png");
     }
 
-    public void render(EntityPlayer player, WingData wingData) {
-        GL11.glColor3f(1F, 1F, 1F);
+    public void render(EntityPlayer player, int layer, IWings wings, WingsData wingData) {
         Minecraft.getMinecraft().getTextureManager().bindTexture(wingsImage);
         RenderWing(player, player.capabilities.isFlying & player.isAirBorne, wingData);
     }
     
-    private void RenderWing(EntityPlayer player, boolean isFlying, WingData wingData) {
+    private void RenderWing(EntityPlayer player, boolean isFlying, WingsData wingData) {
         float angle = getWingAngle(isFlying, 40, 4000, 250, player.getEntityId());
         
         setRotation(leftWing, (float) Math.toRadians(angle + 20), (float) Math.toRadians(-4), (float) Math.toRadians(6));

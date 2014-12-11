@@ -10,7 +10,8 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import riskyken.cosmeticWings.common.lib.LibModInfo;
-import riskyken.cosmeticWings.common.wings.WingData;
+import riskyken.cosmeticWings.common.wings.IWings;
+import riskyken.cosmeticWings.common.wings.WingsData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -39,23 +40,22 @@ public class ModelMechWings extends ModelWingBase {
         wingsImages[1] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/wings/mech-wings-colour.png");
     }
     
-    public void render(EntityPlayer player, boolean post, WingData wingData) {
-        if (post) {
-            postRender(player, wingData);
-        } else {
+    public void render(EntityPlayer player, int layer, IWings wings, WingsData wingData) {
+        if (wings.isNomalRender(layer)) {
             preRender(player, wingData);
+        } else {
+            postRender(player, wingData);
         }
     }
     
-    private void preRender(EntityPlayer player, WingData wingData) {
+    private void preRender(EntityPlayer player, WingsData wingData) {
         GL11.glPushMatrix();
-        GL11.glColor3f(1F, 1F, 1F);
         Minecraft.getMinecraft().getTextureManager().bindTexture(wingsImages[0]);
         RenderWing(player, player.capabilities.isFlying & player.isAirBorne, wingData);
         GL11.glPopMatrix();
     }
     
-    private void postRender(EntityPlayer player, WingData wingData) {
+    private void postRender(EntityPlayer player, WingsData wingData) {
         GL11.glPushMatrix();
         
         Color c = new Color(wingData.colour);
@@ -71,7 +71,7 @@ public class ModelMechWings extends ModelWingBase {
         GL11.glPopMatrix();
     }
     
-    private void RenderWing(EntityPlayer player, boolean isFlying, WingData wingData) {
+    private void RenderWing(EntityPlayer player, boolean isFlying, WingsData wingData) {
         float angle = getWingAngle(isFlying, 40, 8000, 500, player.getEntityId());
         setRotation(leftWing, (float) Math.toRadians(angle + 20), (float) Math.toRadians(-4), (float) Math.toRadians(6));
         setRotation(rightWing, (float) Math.toRadians(-angle - 20), (float) Math.toRadians(4), (float) Math.toRadians(6));

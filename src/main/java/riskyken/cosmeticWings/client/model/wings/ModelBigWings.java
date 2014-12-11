@@ -14,10 +14,9 @@ import org.lwjgl.opengl.GL11;
 
 import riskyken.cosmeticWings.client.particles.EntityFeatherFx;
 import riskyken.cosmeticWings.client.particles.ParticleManager;
-import riskyken.cosmeticWings.client.render.LightingHelper;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
-import riskyken.cosmeticWings.common.wings.WingData;
-import riskyken.cosmeticWings.common.wings.WingType;
+import riskyken.cosmeticWings.common.wings.IWings;
+import riskyken.cosmeticWings.common.wings.WingsData;
 import riskyken.cosmeticWings.utils.PointD;
 import riskyken.cosmeticWings.utils.Trig;
 import riskyken.cosmeticWings.utils.UtilColour;
@@ -52,7 +51,7 @@ public class ModelBigWings extends ModelWingBase {
         leftWing.render(f5);
     }
 
-    public void render(EntityPlayer player, WingData wingData) {
+    public void render(EntityPlayer player, int layer, IWings wings, WingsData wingData) {
         Minecraft.getMinecraft().getTextureManager().bindTexture(wingsImage);
 
         float angle = getWingAngle(player.capabilities.isFlying & player.isAirBorne, 30, 5000, 400, player.getEntityId());
@@ -65,20 +64,14 @@ public class ModelBigWings extends ModelWingBase {
         GL11.glRotatef(90, 0, 1, 0);
         GL11.glRotatef(90, 0, 0, 1);
 
-        if (wingData.wingType.canRecolour) {
+        if (wings.canRecolour(layer)) {
             Color c = new Color(wingData.colour);
             float red = (float) c.getRed() / 255;
             float green = (float) c.getGreen() / 255;
             float blue = (float) c.getBlue() / 255;
             GL11.glColor3f(red, green, blue);
-        } else {
-            GL11.glColor3f(1F, 1F, 1F);
         }
-
-        if (wingData.wingType == WingType.SHANA | wingData.wingType == WingType.ANGEL) {
-            LightingHelper.disableLighting();
-        }
-
+        
         GL11.glPushMatrix();
         GL11.glTranslatef(0, 0, wingData.centreOffset * 3 * SCALE);
         GL11.glScalef(wingData.wingScale, wingData.wingScale, wingData.wingScale);
@@ -90,19 +83,15 @@ public class ModelBigWings extends ModelWingBase {
         GL11.glScalef(wingData.wingScale, wingData.wingScale, wingData.wingScale);
         rightWing.render(SCALE);
         GL11.glPopMatrix();
-
-        if (wingData.wingType == WingType.SHANA | wingData.wingType == WingType.ANGEL) {
-            LightingHelper.enableLighting();
-        }
-
+        
         GL11.glPopMatrix();
     }
 
-    public void onTick(EntityPlayer player, int wingId, WingData wingData) {
+    public void onTick(EntityPlayer player, int wingId, WingsData wingData) {
         spawnParticales(player, wingId, wingData);
     }
 
-    private void spawnParticales(EntityPlayer player, int type, WingData wingData) {
+    private void spawnParticales(EntityPlayer player, int type, WingsData wingData) {
         float angle = getWingAngle(player.capabilities.isFlying & player.isAirBorne, 30, 5000, 400, player.getEntityId());
         float scale = (1F - wingData.wingScale) * 0.2F;
         float spawnChance = 250;
@@ -137,13 +126,14 @@ public class ModelBigWings extends ModelWingBase {
             }
             
             EntityFeatherFx particle;
-            if (wingData.wingType.canRecolour) {
+            if (type == 1) {
                 particle = new EntityFeatherFx(player.worldObj, parX, parY, parZ, type, wingData.wingScale, wingData.colour);
             } else {
                 particle = new EntityFeatherFx(player.worldObj, parX, parY, parZ, type, wingData.wingScale, UtilColour.getMinecraftColor(0));
             }
             
             ParticleManager.INSTANCE.spawnParticle(player.worldObj, particle);
+            
         }
     }
 }

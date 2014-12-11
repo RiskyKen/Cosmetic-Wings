@@ -7,9 +7,9 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import riskyken.cosmeticWings.client.render.LightingHelper;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
-import riskyken.cosmeticWings.common.wings.WingData;
+import riskyken.cosmeticWings.common.wings.IWings;
+import riskyken.cosmeticWings.common.wings.WingsData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -41,12 +41,11 @@ public class ModelWingsFlandre extends ModelWingBase {
         wingsImage[1] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/wings/flandre-wings-glow.png");
     }
 
-    public void render(EntityPlayer player, WingData wingData) {
-        renderWingLayer(player, 0, wingData);
-        renderWingLayer(player, 1, wingData);
+    public void render(EntityPlayer player, int layer, IWings wings, WingsData wingData) {
+        renderWingLayer(player, layer, wingData);
     }
 
-    private void renderWingLayer(EntityPlayer player, int layerId, WingData wingData) {
+    private void renderWingLayer(EntityPlayer player, int layerId, WingsData wingData) {
         if (layerId >= 0 & layerId < wingsImage.length) {
             Minecraft.getMinecraft().getTextureManager().bindTexture(wingsImage[layerId]);
         }
@@ -61,13 +60,6 @@ public class ModelWingsFlandre extends ModelWingBase {
         GL11.glRotatef(90, 0, 1, 0);
         GL11.glRotatef(90, 0, 0, 1);
         
-        GL11.glColor3f(1F, 1F, 1F);
-        
-
-        if (layerId != 0) {
-            LightingHelper.disableLighting();
-        }
-        
         GL11.glPushMatrix();
         GL11.glTranslatef(0, 0, wingData.centreOffset * 3 * SCALE);
         GL11.glScalef(wingData.wingScale, wingData.wingScale, wingData.wingScale);
@@ -79,10 +71,6 @@ public class ModelWingsFlandre extends ModelWingBase {
         GL11.glScalef(wingData.wingScale, wingData.wingScale, wingData.wingScale);
         rightWing.render(SCALE);
         GL11.glPopMatrix();
-        
-        if (layerId != 0) {
-            LightingHelper.enableLighting();
-        }
         
         GL11.glPopMatrix();
     }

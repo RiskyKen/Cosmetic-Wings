@@ -3,7 +3,7 @@ package riskyken.cosmeticWings.common.network.message;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import riskyken.cosmeticWings.common.handler.WingDataHandler;
-import riskyken.cosmeticWings.common.wings.WingData;
+import riskyken.cosmeticWings.common.wings.WingsData;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
@@ -12,14 +12,14 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
  * @author RiskyKen
  *
  */
-public class MessageClientUpdateWingData implements IMessage, IMessageHandler<MessageClientUpdateWingData, IMessage> {
+public class MessageClientUpdateWingsData implements IMessage, IMessageHandler<MessageClientUpdateWingsData, IMessage> {
 
-    WingData wingData;
+    WingsData wingData;
 
-    public MessageClientUpdateWingData() {
+    public MessageClientUpdateWingsData() {
     }
 
-    public MessageClientUpdateWingData(WingData wingData) {
+    public MessageClientUpdateWingsData(WingsData wingData) {
         this.wingData = wingData;
     }
 
@@ -30,11 +30,11 @@ public class MessageClientUpdateWingData implements IMessage, IMessageHandler<Me
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        this.wingData = new WingData(buf);
+        this.wingData = new WingsData(buf);
     }
 
     @Override
-    public IMessage onMessage(MessageClientUpdateWingData message, MessageContext ctx) {
+    public IMessage onMessage(MessageClientUpdateWingsData message, MessageContext ctx) {
         EntityPlayerMP player = ctx.getServerHandler().playerEntity;
         WingDataHandler.gotWingDataFromPlayer(player, message.wingData);
         return null;

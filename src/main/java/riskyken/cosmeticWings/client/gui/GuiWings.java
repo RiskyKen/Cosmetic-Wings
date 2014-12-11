@@ -13,12 +13,11 @@ import org.lwjgl.opengl.GL11;
 import riskyken.cosmeticWings.client.gui.controls.GuiHSBSlider;
 import riskyken.cosmeticWings.client.gui.controls.GuiHSBSlider.IHSBSliderCallback;
 import riskyken.cosmeticWings.client.gui.controls.GuiHelper;
-import riskyken.cosmeticWings.client.wings.ClientWingCache;
+import riskyken.cosmeticWings.client.wings.ClientWingsCache;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 import riskyken.cosmeticWings.common.network.PacketHandler;
-import riskyken.cosmeticWings.common.network.message.MessageClientUpdateWingData;
-import riskyken.cosmeticWings.common.wings.WingData;
-import riskyken.cosmeticWings.common.wings.WingType;
+import riskyken.cosmeticWings.common.network.message.MessageClientUpdateWingsData;
+import riskyken.cosmeticWings.common.wings.WingsData;
 import riskyken.cosmeticWings.utils.UtilColour;
 import cpw.mods.fml.client.config.GuiSlider;
 import cpw.mods.fml.client.config.GuiSlider.ISlider;
@@ -44,7 +43,7 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback {
     private GuiTabWingColour tab3;
     private static int activeTab = 0;
     
-    WingData wingData;
+    WingsData wingsData;
     
     public GuiWings(EntityPlayer player) {
         this.player = player;
@@ -57,7 +56,7 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback {
     public void initGui() {
         guiLoading = true;
         super.initGui();
-        wingData = ClientWingCache.INSTANCE.getPlayerWingData(player.getUniqueID());
+        wingsData = ClientWingsCache.INSTANCE.getPlayerWingsData(player.getUniqueID());
         guiLeft = width / 2 - guiWidth / 2;
         guiTop = height / 2 - guiHeight / 2;
 
@@ -71,8 +70,8 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback {
         tabs.add(tab2);
         tabs.add(tab3);
         
-        if (wingData != null) {
-            tab3.colour = new Color(wingData.colour);
+        if (wingsData != null) {
+            tab3.colour = new Color(wingsData.colour);
         } else {
             tab3.colour = new Color(UtilColour.getMinecraftColor(0));
         }
@@ -81,26 +80,26 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback {
             tabs.get(i).initGui();
         }
 
-        if (wingData != null) {
-            tab1.fileList.setSelectedIndex(wingData.wingType.ordinal());
+        if (wingsData != null) {
+            tab1.fileList.setSelectedIndex(wingsData.wingId + 1);
             
-            tab2.sliderparticlesSpawnRate.setValue(wingData.particleSpawnRate * 100);
+            tab2.sliderparticlesSpawnRate.setValue(wingsData.particleSpawnRate * 100);
             tab2.sliderparticlesSpawnRate.precision = 0;
             tab2.sliderparticlesSpawnRate.updateSlider();
             
-            tab2.sliderScale.setValue(wingData.wingScale * 100);
+            tab2.sliderScale.setValue(wingsData.wingScale * 100);
             tab2.sliderScale.precision = 0;
             tab2.sliderScale.updateSlider();
             
-            tab2.sliderOffset.setValue(wingData.centreOffset);
+            tab2.sliderOffset.setValue(wingsData.centreOffset);
             tab2.sliderOffset.precision = 2;
             tab2.sliderOffset.updateSlider();
             
-            tab2.sliderHightOffset.setValue(wingData.heightOffset);
+            tab2.sliderHightOffset.setValue(wingsData.heightOffset);
             tab2.sliderHightOffset.precision = 2;
             tab2.sliderHightOffset.updateSlider();
         } else {
-            wingData = new WingData();
+            wingsData = new WingsData();
         }
         guiLoading = false;
     }
@@ -182,13 +181,13 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback {
         if (guiLoading) {
             return;
         }
-        wingData.wingType = WingType.getOrdinal(tab1.fileList.getSelectedIndex());
-        wingData.wingScale = (float) tab2.sliderScale.getValue() / 100;
-        wingData.particleSpawnRate = (float) tab2.sliderparticlesSpawnRate.getValue() / 100;
-        wingData.centreOffset = (float) tab2.sliderOffset.getValue();
-        wingData.heightOffset = (float) tab2.sliderHightOffset.getValue();
-        wingData.colour = tab3.colour.getRGB();
-        PacketHandler.networkWrapper.sendToServer(new MessageClientUpdateWingData(wingData));
+        wingsData.wingId = tab1.fileList.getSelectedIndex() - 1;
+        wingsData.wingScale = (float) tab2.sliderScale.getValue() / 100;
+        wingsData.particleSpawnRate = (float) tab2.sliderparticlesSpawnRate.getValue() / 100;
+        wingsData.centreOffset = (float) tab2.sliderOffset.getValue();
+        wingsData.heightOffset = (float) tab2.sliderHightOffset.getValue();
+        wingsData.colour = tab3.colour.getRGB();
+        PacketHandler.networkWrapper.sendToServer(new MessageClientUpdateWingsData(wingsData));
     }
 
     @Override
@@ -199,22 +198,22 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback {
     @Override
     public void onChangeSliderValue(GuiSlider slider) { 
         if (slider.id == tab2.sliderparticlesSpawnRate.id) {
-            if (slider.getValue() != wingData.particleSpawnRate) {
+            if (slider.getValue() != wingsData.particleSpawnRate) {
                 sendWingDataToServer();
             }
         }
         if (slider.id == tab2.sliderScale.id) {
-            if (slider.getValue() != wingData.wingScale) {
+            if (slider.getValue() != wingsData.wingScale) {
                 sendWingDataToServer();
             }
         }
         if (slider.id == tab2.sliderOffset.id) {
-            if (slider.getValue() != wingData.centreOffset) {
+            if (slider.getValue() != wingsData.centreOffset) {
                 sendWingDataToServer();
             }
         }
         if (slider.id == tab2.sliderHightOffset.id) {
-            if (slider.getValue() != wingData.heightOffset) {
+            if (slider.getValue() != wingsData.heightOffset) {
                 sendWingDataToServer();
             }
         }

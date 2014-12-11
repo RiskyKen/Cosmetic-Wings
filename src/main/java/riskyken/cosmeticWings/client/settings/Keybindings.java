@@ -8,5 +8,5 @@ import riskyken.cosmeticWings.common.lib.LibKeyBindingNames;
 
 public class Keybindings {
 
-    public static KeyBinding openWingGui = new KeyBinding(LibKeyBindingNames.WING_GUI, Keyboard.KEY_Y, LibKeyBindingNames.CATEGORY);
+    public static KeyBinding openWingsGui = new KeyBinding(LibKeyBindingNames.WINGS_GUI, Keyboard.KEY_Y, LibKeyBindingNames.CATEGORY);
 }

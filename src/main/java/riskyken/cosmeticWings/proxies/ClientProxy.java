@@ -6,8 +6,8 @@ import riskyken.cosmeticWings.client.handler.KeyboardHandler;
 import riskyken.cosmeticWings.client.particles.ParticleManager;
 import riskyken.cosmeticWings.client.render.WingRenderManager;
 import riskyken.cosmeticWings.client.settings.Keybindings;
-import riskyken.cosmeticWings.client.wings.ClientWingCache;
-import riskyken.cosmeticWings.common.wings.WingData;
+import riskyken.cosmeticWings.client.wings.ClientWingsCache;
+import riskyken.cosmeticWings.common.wings.WingsData;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -22,7 +22,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void init() {
         new KeyboardHandler();
-        ClientWingCache.init();
+        ClientWingsCache.init();
     }
 
     @Override
@@ -37,11 +37,11 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void registerKeyBindings() {
-        ClientRegistry.registerKeyBinding(Keybindings.openWingGui);
+        ClientRegistry.registerKeyBinding(Keybindings.openWingsGui);
     }
 
     @Override
-    public void receivedWingData(UUID playerId, WingData wingData) {
-        ClientWingCache.INSTANCE.setWingData(playerId, wingData);
+    public void receivedWingsData(UUID playerId, WingsData wingsData) {
+        ClientWingsCache.INSTANCE.setWingsData(playerId, wingsData);
     }
 }

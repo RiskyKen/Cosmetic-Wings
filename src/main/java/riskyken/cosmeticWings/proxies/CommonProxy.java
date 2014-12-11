@@ -2,7 +2,7 @@ package riskyken.cosmeticWings.proxies;
 
 import java.util.UUID;
 
-import riskyken.cosmeticWings.common.wings.WingData;
+import riskyken.cosmeticWings.common.wings.WingsData;
 
 public class CommonProxy {
 
@@ -21,6 +21,6 @@ public class CommonProxy {
     public void registerKeyBindings() {
     }
 
-    public void receivedWingData(UUID playerId, WingData wingData) {
+    public void receivedWingsData(UUID playerId, WingsData wingsData) {
     }
 }

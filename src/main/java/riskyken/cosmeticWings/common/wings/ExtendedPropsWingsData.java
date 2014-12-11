@@ -7,27 +7,27 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import riskyken.cosmeticWings.common.network.PacketHandler;
-import riskyken.cosmeticWings.common.network.message.MessageServerWingData;
+import riskyken.cosmeticWings.common.network.message.MessageServerWingsData;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
-public class ExtendedPropsWingData implements IExtendedEntityProperties {
+public class ExtendedPropsWingsData implements IExtendedEntityProperties {
 
     public static final String TAG_EXT_PROP_NAME = "playerWingData";
 
     private EntityPlayer player;
-    private WingData wingData;
+    private WingsData wingData;
 
-    public ExtendedPropsWingData(EntityPlayer player) {
+    public ExtendedPropsWingsData(EntityPlayer player) {
         this.player = player;
-        this.wingData = new WingData();
+        this.wingData = new WingsData();
     }
 
     public static final void register(EntityPlayer player) {
-        player.registerExtendedProperties(ExtendedPropsWingData.TAG_EXT_PROP_NAME, new ExtendedPropsWingData(player));
+        player.registerExtendedProperties(ExtendedPropsWingsData.TAG_EXT_PROP_NAME, new ExtendedPropsWingsData(player));
     }
 
-    public static final ExtendedPropsWingData get(EntityPlayer player) {
-        return (ExtendedPropsWingData) player.getExtendedProperties(TAG_EXT_PROP_NAME);
+    public static final ExtendedPropsWingsData get(EntityPlayer player) {
+        return (ExtendedPropsWingsData) player.getExtendedProperties(TAG_EXT_PROP_NAME);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class ExtendedPropsWingData implements IExtendedEntityProperties {
         wingData.loadNBTData(compound);
     }
 
-    public WingData getWingData() {
+    public WingsData getWingData() {
         return wingData;
     }
 
@@ -49,15 +49,15 @@ public class ExtendedPropsWingData implements IExtendedEntityProperties {
     }
 
     public void sendWingDataToPlayer(EntityPlayerMP targetPlayer) {
-        PacketHandler.networkWrapper.sendTo(new MessageServerWingData(player.getUniqueID(), wingData), targetPlayer);
+        PacketHandler.networkWrapper.sendTo(new MessageServerWingsData(player.getUniqueID(), wingData), targetPlayer);
     }
 
     public void sendWingDataToAllAround() {
         TargetPoint p = new TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 512);
-        PacketHandler.networkWrapper.sendToAllAround(new MessageServerWingData(player.getUniqueID(), wingData), p);
+        PacketHandler.networkWrapper.sendToAllAround(new MessageServerWingsData(player.getUniqueID(), wingData), p);
     }
 
-    public void updateWingData(WingData wingData) {
+    public void updateWingData(WingsData wingData) {
         this.wingData = wingData;
         sendWingDataToAllAround();
     }

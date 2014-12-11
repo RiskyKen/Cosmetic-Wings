@@ -13,7 +13,8 @@ import org.lwjgl.opengl.GL11;
 import riskyken.cosmeticWings.client.particles.EntityButterflyFx;
 import riskyken.cosmeticWings.client.particles.ParticleManager;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
-import riskyken.cosmeticWings.common.wings.WingData;
+import riskyken.cosmeticWings.common.wings.IWings;
+import riskyken.cosmeticWings.common.wings.WingsData;
 import riskyken.cosmeticWings.utils.PointD;
 import riskyken.cosmeticWings.utils.Trig;
 import cpw.mods.fml.relauncher.Side;
@@ -44,13 +45,12 @@ public class ModelKuroyukihimeWings extends ModelWingBase {
         wingsImage = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/wings/kuroyukihime-wings.png");
     }
 
-    public void render(EntityPlayer player, WingData wingData) {
-        GL11.glColor3f(1F, 1F, 1F);
+    public void render(EntityPlayer player, int layer, IWings wings, WingsData wingData) {
         Minecraft.getMinecraft().getTextureManager().bindTexture(wingsImage);
         RenderWing(player, player.capabilities.isFlying & player.isAirBorne, wingData);
     }
     
-    private void RenderWing(EntityPlayer player, boolean isFlying, WingData wingData) {
+    private void RenderWing(EntityPlayer player, boolean isFlying, WingsData wingData) {
         float angle = getWingAngle(isFlying, 40, 8000, 250, player.getEntityId());
         
         setRotation(leftWing, (float) Math.toRadians(angle + 20), (float) Math.toRadians(0), (float) Math.toRadians(0));
@@ -60,8 +60,6 @@ public class ModelKuroyukihimeWings extends ModelWingBase {
         GL11.glTranslatef(0, 4 * SCALE, 1.9F * SCALE);
         GL11.glRotatef(90, 0, 1, 0);
         GL11.glRotatef(90, 0, 0, 1);
-
-        GL11.glColor3f(1F, 1F, 1F);
         
         float scale = 0.32F;
         GL11.glTranslatef(0F, SCALE * scale * (wingData.wingScale - 1), 0F);
@@ -83,11 +81,11 @@ public class ModelKuroyukihimeWings extends ModelWingBase {
         GL11.glPopMatrix();
     }
     
-    public void onTick(EntityPlayer player, WingData wingData) {
+    public void onTick(EntityPlayer player, WingsData wingData) {
         spawnParticales(player, wingData);
     }
 
-    private void spawnParticales(EntityPlayer player, WingData wingData) {
+    private void spawnParticales(EntityPlayer player, WingsData wingData) {
         float scale = (1F - wingData.wingScale) * 0.2F;
         float spawnChance = 250;
         Random rnd = new Random();

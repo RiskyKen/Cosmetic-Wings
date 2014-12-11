@@ -19,7 +19,7 @@ public class KeyboardHandler {
 
     @SubscribeEvent
     public void onKeyInputEvent(InputEvent.KeyInputEvent event) {
-        if (Keybindings.openWingGui.isPressed()) {
+        if (Keybindings.openWingsGui.isPressed()) {
             EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
             player.openGui(CosmeticWings.instance, 0, player.worldObj, 0, 0, 0);
         }

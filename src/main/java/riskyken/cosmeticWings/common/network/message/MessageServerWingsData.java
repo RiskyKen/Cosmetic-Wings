@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import riskyken.cosmeticWings.CosmeticWings;
 import riskyken.cosmeticWings.common.network.ByteBufHelper;
-import riskyken.cosmeticWings.common.wings.WingData;
+import riskyken.cosmeticWings.common.wings.WingsData;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
@@ -15,34 +15,34 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
  * @author RiskyKen
  *
  */
-public class MessageServerWingData implements IMessage, IMessageHandler<MessageServerWingData, IMessage> {
+public class MessageServerWingsData implements IMessage, IMessageHandler<MessageServerWingsData, IMessage> {
 
     UUID playerId;
-    WingData wingData;
+    WingsData wingsData;
 
-    public MessageServerWingData() {
+    public MessageServerWingsData() {
     }
 
-    public MessageServerWingData(UUID playerId, WingData wingData) {
+    public MessageServerWingsData(UUID playerId, WingsData wingsData) {
         this.playerId = playerId;
-        this.wingData = wingData;
+        this.wingsData = wingsData;
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         ByteBufHelper.writeUUID(buf, this.playerId);
-        this.wingData.toBytes(buf);
+        this.wingsData.toBytes(buf);
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
         this.playerId = ByteBufHelper.readUUID(buf);
-        this.wingData = new WingData(buf);
+        this.wingsData = new WingsData(buf);
     }
 
     @Override
-    public IMessage onMessage(MessageServerWingData message, MessageContext ctx) {
-        CosmeticWings.proxy.receivedWingData(message.playerId, message.wingData);
+    public IMessage onMessage(MessageServerWingsData message, MessageContext ctx) {
+        CosmeticWings.proxy.receivedWingsData(message.playerId, message.wingsData);
         return null;
     }
 }

@@ -4,6 +4,7 @@ import riskyken.cosmeticWings.common.handler.WingDataHandler;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 import riskyken.cosmeticWings.common.network.GuiHandler;
 import riskyken.cosmeticWings.common.network.PacketHandler;
+import riskyken.cosmeticWings.common.wings.WingsRegistry;
 import riskyken.cosmeticWings.proxies.CommonProxy;
 import riskyken.cosmeticWings.utils.ModLogger;
 import cpw.mods.fml.common.Mod;
@@ -26,6 +27,7 @@ public class CosmeticWings {
     public void perInit(FMLPreInitializationEvent event) {
         ModLogger.log("Loading " + LibModInfo.NAME + " " + LibModInfo.VERSION);
         proxy.preInit();
+        WingsRegistry.init();
         proxy.initRenderers();
     }
 
