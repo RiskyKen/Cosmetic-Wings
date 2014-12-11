@@ -65,7 +65,7 @@ public class ParticleManager {
 	}
 	
     @SubscribeEvent
-    public void onRender(RenderWorldLastEvent event) {
+    public void onRenderWorldLastEvent(RenderWorldLastEvent event) {
         mc.entityRenderer.enableLightmap(event.partialTicks);
         RenderHelper.disableStandardItemLighting();
         
