@@ -51,6 +51,7 @@ public final class WingRenderManager {
     }
     
     private void loadWingRenderers() {
+        ModLogger.log("Registering wing renderers");
         for (int i = 0; i < wingsRegistry.getSize(); i++) {
             IWings wings = wingsRegistry.getWingsForId(i);
             if (wings.getRendererClass() != null) {
@@ -61,7 +62,7 @@ public final class WingRenderManager {
     
     private void registerRendererForWings(IWings wings, Class<? extends IWingRenderer> renderClass) {
         try {
-            ModLogger.log("Registering wing renderer " + renderClass.getSimpleName() + " for " + wings.getName());
+            //ModLogger.log("Registering wing renderer " + renderClass.getSimpleName() + " for " + wings.getName());
             wingRendererMap.put(wings, renderClass.newInstance());
         } catch (InstantiationException e) {
             e.printStackTrace();
