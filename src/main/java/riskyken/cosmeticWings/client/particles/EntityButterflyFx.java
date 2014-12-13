@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import riskyken.cosmeticWings.client.abstraction.IRenderBuffer;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 import riskyken.cosmeticWings.utils.UtilPlayer;
 import cpw.mods.fml.relauncher.Side;
@@ -146,9 +147,9 @@ public class EntityButterflyFx extends EntityFX {
         ParticleManager.INSTANCE.butterflyRenderQueue.add(this);
     }
     
-    public void postRender(Tessellator tessellator) {
-        tessellator.startDrawingQuads();
-        tessellator.setBrightness(getBrightnessForRender(0));
+    public void postRender(IRenderBuffer renderBuffer) {
+        renderBuffer.startDrawingQuads();
+        renderBuffer.setBrightness(getBrightnessForRender(0));
         
         int textureNumber = this.particleAge % 4;
         if (textureNumber < 2) {
@@ -162,11 +163,11 @@ public class EntityButterflyFx extends EntityFX {
         float x = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)f0 - interpPosX);
         float y = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)f0 - interpPosY);
         float z = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)f0 - interpPosZ);
-        tessellator.setColorRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
-        tessellator.addVertexWithUV((double)(x - f1 * scale - f4 * scale), (double)(y - f2 * scale), (double)(z - f3 * scale - f5 * scale), 1D, 1D);
-        tessellator.addVertexWithUV((double)(x - f1 * scale + f4 * scale), (double)(y + f2 * scale), (double)(z - f3 * scale + f5 * scale), 1D, 0D);
-        tessellator.addVertexWithUV((double)(x + f1 * scale + f4 * scale), (double)(y + f2 * scale), (double)(z + f3 * scale + f5 * scale), 0D, 0D);
-        tessellator.addVertexWithUV((double)(x + f1 * scale - f4 * scale), (double)(y - f2 * scale), (double)(z + f3 * scale - f5 * scale), 0D, 1D);
-        tessellator.draw();
+        renderBuffer.setColourRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+        renderBuffer.addVertexWithUV((double)(x - f1 * scale - f4 * scale), (double)(y - f2 * scale), (double)(z - f3 * scale - f5 * scale), 1D, 1D);
+        renderBuffer.addVertexWithUV((double)(x - f1 * scale + f4 * scale), (double)(y + f2 * scale), (double)(z - f3 * scale + f5 * scale), 1D, 0D);
+        renderBuffer.addVertexWithUV((double)(x + f1 * scale + f4 * scale), (double)(y + f2 * scale), (double)(z + f3 * scale + f5 * scale), 0D, 0D);
+        renderBuffer.addVertexWithUV((double)(x + f1 * scale - f4 * scale), (double)(y - f2 * scale), (double)(z + f3 * scale - f5 * scale), 0D, 1D);
+        renderBuffer.draw();
     }
 }

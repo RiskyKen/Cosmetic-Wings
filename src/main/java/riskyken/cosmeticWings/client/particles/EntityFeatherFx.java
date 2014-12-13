@@ -11,6 +11,8 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
+import riskyken.cosmeticWings.client.abstraction.IRenderBuffer;
+import riskyken.cosmeticWings.client.abstraction.RenderBridge;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -91,11 +93,12 @@ public class EntityFeatherFx extends EntityFX {
 
     @Override
     public void renderParticle(Tessellator tessellator, float par2, float par3, float par4, float par5, float par6, float par7) {
+        IRenderBuffer renderBuffer = RenderBridge.INSTANCE;
         if (isDead) {
             return;
         }
 
-        tessellator.draw();
+        renderBuffer.draw();
 
         GL11.glPushMatrix();
 
@@ -117,26 +120,26 @@ public class EntityFeatherFx extends EntityFX {
         float f12 = (float) (this.prevPosY + (this.posY - this.prevPosY) * (double) par2 - interpPosY);
         float f13 = (float) (this.prevPosZ + (this.posZ - this.prevPosZ) * (double) par2 - interpPosZ);
 
-        tessellator.startDrawingQuads();
+        renderBuffer.startDrawingQuads();
         if (isUnlit) {
-            tessellator.setBrightness(15728880);
+            renderBuffer.setBrightness(15728880);
         } else {
-            tessellator.setBrightness(getBrightnessForRender(0));
+            renderBuffer.setBrightness(getBrightnessForRender(0));
         }
 
         drawBillboard(f11 - par3 * f10 - par6 * f10, f12 - par4 * f10, f13
                 - par5 * f10 - par7 * f10, rotationPitch);
         
-        tessellator.draw();
+        renderBuffer.draw();
         GL11.glPopMatrix();
 
         Minecraft.getMinecraft().renderEngine.bindTexture(particleTextures);
-        tessellator.startDrawingQuads();
+        renderBuffer.startDrawingQuads();
     }
     
     private void drawBillboard(double x, double y, double z, float rotation) {
         RenderManager renderManager = RenderManager.instance;
-        Tessellator tessellator = Tessellator.instance;
+        IRenderBuffer renderBuffer = RenderBridge.INSTANCE;
 
         float scale = 0.05F;
 
@@ -151,10 +154,10 @@ public class EntityFeatherFx extends EntityFX {
         GL11.glScalef(scale, scale, scale);
         GL11.glScalef(particleScale, particleScale, particleScale);
 
-        tessellator.setColorRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
-        tessellator.addVertexWithUV(-1, -1, 0, 0, 0);
-        tessellator.addVertexWithUV(-1, 1, 0, 0, 1);
-        tessellator.addVertexWithUV(1, 1, 0, 1, 1);
-        tessellator.addVertexWithUV(1, -1, 0, 1, 0);
+        renderBuffer.setColourRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+        renderBuffer.addVertexWithUV(-1, -1, 0, 0, 0);
+        renderBuffer.addVertexWithUV(-1, 1, 0, 0, 1);
+        renderBuffer.addVertexWithUV(1, 1, 0, 1, 1);
+        renderBuffer.addVertexWithUV(1, -1, 0, 1, 0);
     }
 }

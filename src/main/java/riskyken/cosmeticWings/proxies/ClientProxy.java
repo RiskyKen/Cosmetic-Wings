@@ -2,6 +2,7 @@ package riskyken.cosmeticWings.proxies;
 
 import java.util.UUID;
 
+import riskyken.cosmeticWings.client.abstraction.RenderBridge;
 import riskyken.cosmeticWings.client.handler.KeyboardHandler;
 import riskyken.cosmeticWings.client.particles.ParticleManager;
 import riskyken.cosmeticWings.client.render.WingRenderManager;
@@ -17,6 +18,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void preInit() {
+        RenderBridge.init();
     }
     
     @Override

@@ -6,13 +6,14 @@ import java.util.Queue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.opengl.GL11;
 
+import riskyken.cosmeticWings.client.abstraction.IRenderBuffer;
+import riskyken.cosmeticWings.client.abstraction.RenderBridge;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -74,10 +75,10 @@ public class ParticleManager {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glAlphaFunc(GL11.GL_GREATER, 0.003921569F);
-        Tessellator tessellator = Tessellator.instance;
+        IRenderBuffer renderBuffer = RenderBridge.INSTANCE;
 
         for(EntityButterflyFx butterflyFx : butterflyRenderQueue) {
-            butterflyFx.postRender(tessellator);
+            butterflyFx.postRender(renderBuffer);
         }
         
         butterflyRenderQueue.clear();
