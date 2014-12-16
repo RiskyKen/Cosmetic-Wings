@@ -25,4 +25,4 @@ wings.cosmeticwings:mech.name=Mech
 
 # Keybindings
 keys.cosmeticwings:category=Cosmetic Wings
-keys.cosmeticwings.wingGui=Open Wing GUI
+keys.cosmeticwings.wingsGui=Open Wing GUI
