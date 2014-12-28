@@ -1,6 +1,8 @@
 package riskyken.cosmeticWings.client.particles;
 
 import java.awt.Color;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
@@ -13,6 +15,7 @@ import org.lwjgl.opengl.GL11;
 
 import riskyken.cosmeticWings.client.abstraction.IRenderBuffer;
 import riskyken.cosmeticWings.client.abstraction.RenderBridge;
+import riskyken.cosmeticWings.client.render.LightingHelper;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -20,21 +23,18 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EntityFeatherFx extends EntityFX {
 
-    private static final ResourceLocation particleTextures;
-    private static final ResourceLocation whiteFeather;
-    private static final ResourceLocation blackFeather;
-    private static final ResourceLocation redFeather;
+    private static final ResourceLocation featherParticles = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/particles/featherParticles.png");
+    private static Queue<EntityFeatherFx> featherRenderQueue = new ArrayDeque();;
     
-    static {
-        particleTextures = new ResourceLocation("textures/particle/particles.png");
-        whiteFeather = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/particles/tiny-white-feather.png");
-        blackFeather = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/particles/tiny-black-feather.png");
-        redFeather = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/particles/tiny-red-feather.png");
-    }
-
     private final int type;
     private final boolean isUnlit;
     private float rotationSpeed;
+    float f0;
+    float f1;
+    float f2;
+    float f3;
+    float f4;
+    float f5;
 
     public EntityFeatherFx(World world, double x, double y, double z, int type, float wingScale, int colour) {
         super(world, x, y, z);
@@ -71,6 +71,21 @@ public class EntityFeatherFx extends EntityFX {
             this.rotationSpeed = -this.rotationSpeed;
         }
         this.particleGravity = 0;
+        
+        switch (type) {
+        case 0:
+            particleTextureIndexX = 0;
+            particleTextureIndexY = 1;
+            break;
+        case 1:
+            particleTextureIndexX = 0;
+            particleTextureIndexY = 0;
+            break;
+        case 2:
+            particleTextureIndexX = 1;
+            particleTextureIndexY = 0;
+            break;
+        }
     }
 
     @Override
@@ -92,55 +107,63 @@ public class EntityFeatherFx extends EntityFX {
     }
 
     @Override
-    public void renderParticle(Tessellator tessellator, float par2, float par3, float par4, float par5, float par6, float par7) {
-        IRenderBuffer renderBuffer = RenderBridge.INSTANCE;
+    public void renderParticle(Tessellator tessellator, float f0, float f1, float f2, float f3, float f4, float f5) {
+        this.f0 = f0;
+        this.f1 = f1;
+        this.f2 = f2;
+        this.f3 = f3;
+        this.f4 = f4;
+        this.f5 = f5;
+        featherRenderQueue.add(this);
+    }
+    
+    public static void renderQueue(IRenderBuffer renderBuffer) {
+        
+        Minecraft.getMinecraft().renderEngine.bindTexture(featherParticles);
+        for(EntityFeatherFx featherFx : featherRenderQueue) {
+            featherFx.postRender(renderBuffer);
+        }
+        
+        featherRenderQueue.clear();
+    }
+    
+    public void postRender(IRenderBuffer renderBuffer) {
         if (isDead) {
             return;
         }
-
-        renderBuffer.draw();
-
-        GL11.glPushMatrix();
-
-        switch (type) {
-        case 0:
-            Minecraft.getMinecraft().renderEngine.bindTexture(blackFeather);
-            break;
-        case 1:
-            Minecraft.getMinecraft().renderEngine.bindTexture(whiteFeather);
-            break;
-        case 2:
-            Minecraft.getMinecraft().renderEngine.bindTexture(redFeather);
-            break;
-        }
-
-        float f10 = 0.1F * this.particleScale;
-
-        float f11 = (float) (this.prevPosX + (this.posX - this.prevPosX) * (double) par2 - interpPosX);
-        float f12 = (float) (this.prevPosY + (this.posY - this.prevPosY) * (double) par2 - interpPosY);
-        float f13 = (float) (this.prevPosZ + (this.posZ - this.prevPosZ) * (double) par2 - interpPosZ);
-
-        renderBuffer.startDrawingQuads();
+        
+        double x1 = (float)this.particleTextureIndexX / 2.0F;
+        double y1 = (float)this.particleTextureIndexY / 2.0F;
+        double x2 = x1 + 0.5D;
+        double y2 = y1 + 0.5D;
+        
         if (isUnlit) {
+            LightingHelper.disableLighting();
             renderBuffer.setBrightness(15728880);
         } else {
+            
             renderBuffer.setBrightness(getBrightnessForRender(0));
         }
 
-        drawBillboard(f11 - par3 * f10 - par6 * f10, f12 - par4 * f10, f13
-                - par5 * f10 - par7 * f10, rotationPitch);
+        float x = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)f0 - interpPosX);
+        float y = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)f0 - interpPosY);
+        float z = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)f0 - interpPosZ);
         
+        GL11.glPushMatrix();
+        renderBuffer.startDrawingQuads();
+        drawBillboard(x, y, z, x1, y1, x2, y2, rotationPitch);
         renderBuffer.draw();
         GL11.glPopMatrix();
-
-        Minecraft.getMinecraft().renderEngine.bindTexture(particleTextures);
-        renderBuffer.startDrawingQuads();
+        
+        if (isUnlit) {
+            LightingHelper.enableLighting();
+        }
     }
     
-    private void drawBillboard(double x, double y, double z, float rotation) {
+    private void drawBillboard(double x, double y, double z, double x1, double y1, double x2, double y2, float rotation) {
         RenderManager renderManager = RenderManager.instance;
         IRenderBuffer renderBuffer = RenderBridge.INSTANCE;
-
+        //GL11.glPushMatrix();
         float scale = 0.05F;
 
         GL11.glTranslatef((float) x, (float) y, (float) z);
@@ -155,9 +178,10 @@ public class EntityFeatherFx extends EntityFX {
         GL11.glScalef(particleScale, particleScale, particleScale);
 
         renderBuffer.setColourRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
-        renderBuffer.addVertexWithUV(-1, -1, 0, 0, 0);
-        renderBuffer.addVertexWithUV(-1, 1, 0, 0, 1);
-        renderBuffer.addVertexWithUV(1, 1, 0, 1, 1);
-        renderBuffer.addVertexWithUV(1, -1, 0, 1, 0);
+        renderBuffer.addVertexWithUV(-1, -1, 0, x1, y1);
+        renderBuffer.addVertexWithUV(-1, 1, 0, x1, y2);
+        renderBuffer.addVertexWithUV(1, 1, 0, x2, y2);
+        renderBuffer.addVertexWithUV(1, -1, 0, x2, y1);
+        //GL11.glPopMatrix();
     }
 }

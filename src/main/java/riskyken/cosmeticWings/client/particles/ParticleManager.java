@@ -1,8 +1,5 @@
 package riskyken.cosmeticWings.client.particles;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.RenderHelper;
@@ -22,7 +19,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ParticleManager {
 
 	public static ParticleManager INSTANCE;
-	public Queue<EntityButterflyFx> butterflyRenderQueue;
 	private Minecraft mc;
 	
     public static void init() {
@@ -31,7 +27,6 @@ public class ParticleManager {
 	
 	public ParticleManager() {
 	    MinecraftForge.EVENT_BUS.register(this);
-	    butterflyRenderQueue = new ArrayDeque();
 	    mc = Minecraft.getMinecraft();
     }
 	
@@ -76,13 +71,10 @@ public class ParticleManager {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glAlphaFunc(GL11.GL_GREATER, 0.003921569F);
         IRenderBuffer renderBuffer = RenderBridge.INSTANCE;
-
-        for(EntityButterflyFx butterflyFx : butterflyRenderQueue) {
-            butterflyFx.postRender(renderBuffer);
-        }
-        
-        butterflyRenderQueue.clear();
-        
+        mc.mcProfiler.startSection("wingParticles");
+        EntityButterflyFx.renderQueue(renderBuffer);
+        EntityFeatherFx.renderQueue(renderBuffer);
+        mc.mcProfiler.endSection();
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glDepthMask(true);
         

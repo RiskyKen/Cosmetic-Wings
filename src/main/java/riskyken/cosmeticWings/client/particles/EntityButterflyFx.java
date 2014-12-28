@@ -1,5 +1,8 @@
 package riskyken.cosmeticWings.client.particles;
 
+import java.util.ArrayDeque;
+import java.util.Queue;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
@@ -15,13 +18,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EntityButterflyFx extends EntityFX {
 
-    private static final ResourceLocation[] bufferflyTexture;
-    
-    static {
-        bufferflyTexture = new ResourceLocation[2];
-        bufferflyTexture[0] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/particles/kuroyukihime-butterfly.png");
-        bufferflyTexture[1] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/particles/kuroyukihime-butterfly-flap.png");
-    }
+    private static final ResourceLocation bufferflyTexture = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/particles/butterflyParticles.png");
+    private static Queue<EntityButterflyFx> butterflyRenderQueue = new ArrayDeque();;
     
     private EntityPlayer target;
     float f0;
@@ -144,19 +142,31 @@ public class EntityButterflyFx extends EntityFX {
         this.f3 = f3;
         this.f4 = f4;
         this.f5 = f5;
-        ParticleManager.INSTANCE.butterflyRenderQueue.add(this);
+        butterflyRenderQueue.add(this);
+    }
+    
+    public static void renderQueue(IRenderBuffer renderBuffer) {
+        renderBuffer.startDrawingQuads();
+        Minecraft.getMinecraft().renderEngine.bindTexture(bufferflyTexture);
+        for(EntityButterflyFx butterflyFx : butterflyRenderQueue) {
+            butterflyFx.postRender(renderBuffer);
+        }
+        renderBuffer.draw();
+        butterflyRenderQueue.clear();
     }
     
     public void postRender(IRenderBuffer renderBuffer) {
-        renderBuffer.startDrawingQuads();
         renderBuffer.setBrightness(getBrightnessForRender(0));
-        
         int textureNumber = this.particleAge % 4;
         if (textureNumber < 2) {
-            Minecraft.getMinecraft().renderEngine.bindTexture(bufferflyTexture[0]);
+            this.particleTextureIndexX = 1;
         } else {
-            Minecraft.getMinecraft().renderEngine.bindTexture(bufferflyTexture[1]);
+            this.particleTextureIndexX = 0;
         }
+        double x1 = (float)this.particleTextureIndexX / 2.0F;
+        double y1 = 0D;
+        double x2 = x1 + 0.5D;
+        double y2 = 0.5D;
         
         float scale = 0.1F * this.particleScale;
 
@@ -164,10 +174,9 @@ public class EntityButterflyFx extends EntityFX {
         float y = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)f0 - interpPosY);
         float z = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)f0 - interpPosZ);
         renderBuffer.setColourRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
-        renderBuffer.addVertexWithUV((double)(x - f1 * scale - f4 * scale), (double)(y - f2 * scale), (double)(z - f3 * scale - f5 * scale), 1D, 1D);
-        renderBuffer.addVertexWithUV((double)(x - f1 * scale + f4 * scale), (double)(y + f2 * scale), (double)(z - f3 * scale + f5 * scale), 1D, 0D);
-        renderBuffer.addVertexWithUV((double)(x + f1 * scale + f4 * scale), (double)(y + f2 * scale), (double)(z + f3 * scale + f5 * scale), 0D, 0D);
-        renderBuffer.addVertexWithUV((double)(x + f1 * scale - f4 * scale), (double)(y - f2 * scale), (double)(z + f3 * scale - f5 * scale), 0D, 1D);
-        renderBuffer.draw();
+        renderBuffer.addVertexWithUV((double)(x - f1 * scale - f4 * scale), (double)(y - f2 * scale), (double)(z - f3 * scale - f5 * scale), x2, y2);
+        renderBuffer.addVertexWithUV((double)(x - f1 * scale + f4 * scale), (double)(y + f2 * scale), (double)(z - f3 * scale + f5 * scale), x2, y1);
+        renderBuffer.addVertexWithUV((double)(x + f1 * scale + f4 * scale), (double)(y + f2 * scale), (double)(z + f3 * scale + f5 * scale), x1, y1);
+        renderBuffer.addVertexWithUV((double)(x + f1 * scale - f4 * scale), (double)(y - f2 * scale), (double)(z + f3 * scale - f5 * scale), x1, y2);
     }
 }
