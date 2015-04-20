@@ -28,14 +28,12 @@ public class CosmeticWings {
         ModLogger.log("Loading " + LibModInfo.NAME + " " + LibModInfo.VERSION);
         proxy.preInit();
         WingsRegistry.init();
-        proxy.initRenderers();
     }
 
     @Mod.EventHandler
     public void load(FMLInitializationEvent event) {
         PacketHandler.init();
         proxy.init();
-        proxy.registerKeyBindings();
         new GuiHandler();
     }
     

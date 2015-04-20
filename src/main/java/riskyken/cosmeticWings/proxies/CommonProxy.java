@@ -12,13 +12,7 @@ public class CommonProxy {
     public void init() {
     }
 
-    public void initRenderers() {
-    }
-
     public void postInit() {
-    }
-
-    public void registerKeyBindings() {
     }
 
     public void receivedWingsData(UUID playerId, WingsData wingsData) {

@@ -24,26 +24,26 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void init() {
         new KeyboardHandler();
+        registerKeyBindings();
         ClientWingsCache.init();
-    }
-
-    @Override
-    public void initRenderers() {
-        WingRenderManager.init();
-        ParticleManager.init();
+        initRenderers();
     }
 
     @Override
     public void postInit() {
     }
-
-    @Override
-    public void registerKeyBindings() {
-        ClientRegistry.registerKeyBinding(Keybindings.openWingsGui);
-    }
-
+    
     @Override
     public void receivedWingsData(UUID playerId, WingsData wingsData) {
         ClientWingsCache.INSTANCE.setWingsData(playerId, wingsData);
+    }
+    
+    private void initRenderers() {
+        WingRenderManager.init();
+        ParticleManager.init();
+    }
+
+    private void registerKeyBindings() {
+        ClientRegistry.registerKeyBinding(Keybindings.openWingsGui);
     }
 }
