@@ -6,9 +6,15 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class WingsFlandre extends AbstractWings {
-
-    public WingsFlandre() {
-        super("flandre");
+    
+    @Override
+    public String getName() {
+        return "flandre";
+    }
+    
+    @Override
+    public String getAuthorName() {
+        return null;
     }
     
     @Override
@@ -30,5 +36,4 @@ public class WingsFlandre extends AbstractWings {
     public Class<? extends IWingRenderer> getRendererClass() {
         return RenderWingsFlandre.class;
     }
-
 }

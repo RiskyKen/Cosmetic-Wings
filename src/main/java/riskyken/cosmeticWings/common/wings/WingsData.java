@@ -3,6 +3,7 @@ package riskyken.cosmeticWings.common.wings;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import riskyken.cosmeticWings.utils.UtilColour;
+import cpw.mods.fml.common.network.ByteBufUtils;
 /**
  * Holds all the options a player can select for their wings.
  * All the information in this class is send to players when they
@@ -13,14 +14,14 @@ import riskyken.cosmeticWings.utils.UtilColour;
 public class WingsData {
 
     private static final String TAG_WING_DATA = "wingData";
-    private static final String TAG_WING_ID = "wingId";
+    private static final String TAG_WING_TYPE = "wingType";
     private static final String TAG_WING_SCALE = "wingScale";
     private static final String TAG_PARTICLE_SPAWN_RATE = "particleSpawnRate";
     private static final String TAG_CENTRE_OFFSET = "centreOffset";
     private static final String TAG_HEIGHT_OFFSET = "heightOffset";
     private static final String TAG_COLOUR = "colour";
 
-    public int wingId;
+    public IWings wingType;
     public float wingScale;
     public float particleSpawnRate;
     public float centreOffset;
@@ -33,7 +34,7 @@ public class WingsData {
     
     /** Default options that will be used for new players. */
     private void setWingDefaultValues() {
-        this.wingId = -1;
+        this.wingType = null;
         this.wingScale = 0.75F;
         this.particleSpawnRate = 1F;
         this.centreOffset = 0F;
@@ -51,7 +52,9 @@ public class WingsData {
      */
     public void saveNBTData(NBTTagCompound compound) {
         NBTTagCompound wingCompound = new NBTTagCompound();
-        wingCompound.setInteger(TAG_WING_ID, this.wingId);
+        if (this.wingType != null) {
+            wingCompound.setString(TAG_WING_TYPE, wingType.getRegistryName());
+        }
         wingCompound.setFloat(TAG_WING_SCALE, this.wingScale);
         wingCompound.setFloat(TAG_PARTICLE_SPAWN_RATE, this.particleSpawnRate);
         wingCompound.setFloat(TAG_CENTRE_OFFSET, this.centreOffset);
@@ -67,8 +70,9 @@ public class WingsData {
     public void loadNBTData(NBTTagCompound compound) {
         if (compound.hasKey(TAG_WING_DATA)) {
             NBTTagCompound wingCompound = compound.getCompoundTag(TAG_WING_DATA);
-            if (wingCompound.hasKey(TAG_WING_ID)) {
-                this.wingId = wingCompound.getInteger(TAG_WING_ID);
+            if (wingCompound.hasKey(TAG_WING_TYPE)) {
+                String registryName = wingCompound.getString(TAG_WING_TYPE);
+                this.wingType = WingsRegistry.INSTANCE.getWingsFormRegistryName(registryName);
             }
             if (wingCompound.hasKey(TAG_WING_SCALE)) {
                 this.wingScale = wingCompound.getFloat(TAG_WING_SCALE);
@@ -95,7 +99,11 @@ public class WingsData {
      * @param buf ByteBuf to write to.
      */
     public void toBytes(ByteBuf buf) {
-        buf.writeInt(this.wingId);
+        String registryName = "";
+        if (this.wingType != null) {
+            registryName = this.wingType.getRegistryName();
+        }
+        ByteBufUtils.writeUTF8String(buf, registryName);
         buf.writeFloat(this.wingScale);
         buf.writeFloat(this.particleSpawnRate);
         buf.writeFloat(this.centreOffset);
@@ -108,7 +116,8 @@ public class WingsData {
      * @param buf ByteBuf to read from.
      */
     private void fromBytes(ByteBuf buf) {
-        this.wingId = buf.readInt();
+        String registryName = ByteBufUtils.readUTF8String(buf);
+        this.wingType = WingsRegistry.INSTANCE.getWingsFormRegistryName(registryName);
         this.wingScale = buf.readFloat();
         this.particleSpawnRate = buf.readFloat();
         this.centreOffset = buf.readFloat();

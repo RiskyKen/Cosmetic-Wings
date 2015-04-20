@@ -6,9 +6,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public interface IWings {
     
-    public void setId(int Id);
-    
     public String getName();
+    
+    public String getRegistryName();
+    
+    public String getAuthorName();
     
     public int getNumberOfRenderLayers();
     

@@ -5,11 +5,16 @@ import riskyken.cosmeticWings.client.render.wings.RenderWingsAngel;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-
 public class WingsAngel extends AbstractWings {
-
-    public WingsAngel() {
-        super("angel");
+    
+    @Override
+    public String getName() {
+        return "angel";
+    }
+    
+    @Override
+    public String getAuthorName() {
+        return null;
     }
     
     @Override

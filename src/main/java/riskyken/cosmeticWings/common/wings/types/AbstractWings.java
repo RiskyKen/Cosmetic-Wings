@@ -9,21 +9,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class AbstractWings implements IWings {
     
-    protected final String name;
-    protected int id;
-    
-    public AbstractWings(String name) {
-        this.name = name;
-    }
-    
     @Override
-    public void setId(int id) {
-        this.id = id;
-    }
-    
-    @Override
-    public String getName() {
-        return name;
+    public String getRegistryName() {
+        return "cosmeticWings:" + getName();
     }
     
     @Override
@@ -51,7 +39,7 @@ public abstract class AbstractWings implements IWings {
     
     @Override
     public String getLocalizedName() {
-        String unlocalizedName = "wings." + LibModInfo.ID.toLowerCase() + ":" + this.name.toLowerCase() + ".name";
+        String unlocalizedName = "wings." + LibModInfo.ID.toLowerCase() + ":" + this.getName().toLowerCase() + ".name";
         String localizedName = StatCollector.translateToLocal(unlocalizedName);
         if (!unlocalizedName.equals(localizedName)) {
             return localizedName;
@@ -61,7 +49,7 @@ public abstract class AbstractWings implements IWings {
     
     @Override
     public String getFlavourText() {
-        String unlocalizedName = "wings." + LibModInfo.ID.toLowerCase() + ":" + this.name.toLowerCase() + ".flavour";
+        String unlocalizedName = "wings." + LibModInfo.ID.toLowerCase() + ":" + this.getName().toLowerCase() + ".flavour";
         String localizedName = StatCollector.translateToLocal(unlocalizedName);
         if (!unlocalizedName.equals(localizedName)) {
             return localizedName;

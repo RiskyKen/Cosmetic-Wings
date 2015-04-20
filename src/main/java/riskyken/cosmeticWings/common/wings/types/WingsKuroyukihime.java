@@ -6,9 +6,15 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class WingsKuroyukihime extends AbstractWings {
-
-    public WingsKuroyukihime() {
-        super("kuroyukihime");
+    
+    @Override
+    public String getName() {
+        return "kuroyukihime";
+    }
+    
+    @Override
+    public String getAuthorName() {
+        return null;
     }
 
     @Override

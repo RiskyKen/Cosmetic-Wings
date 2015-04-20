@@ -6,9 +6,15 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class WingsSmallMech extends AbstractWings {
-
-    public WingsSmallMech() {
-        super("small_mech");
+    
+    @Override
+    public String getName() {
+        return "small_mech";
+    }
+    
+    @Override
+    public String getAuthorName() {
+        return null;
     }
     
     @Override

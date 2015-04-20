@@ -7,7 +7,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.opengl.GL11;
 
 import riskyken.cosmeticWings.client.render.wings.IWingRenderer;
-import riskyken.cosmeticWings.common.wings.IWings;
 import riskyken.cosmeticWings.common.wings.WingsData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -17,16 +16,14 @@ public class WingRenderQueueItem {
     
     private EntityPlayer player;
     private WingsData wingData;
-    private IWings wings;
     private IWingRenderer wingRenderer;
     private float lightX;
     private float lightY;
     
-    public WingRenderQueueItem(EntityPlayer player, WingsData wingData, IWingRenderer wingRenderer, IWings wings) {
+    public WingRenderQueueItem(EntityPlayer player, WingsData wingData, IWingRenderer wingRenderer) {
         this.player = player;
         this.wingData = wingData;
         this.wingRenderer = wingRenderer;
-        this.wings = wings;
         lightX = OpenGlHelper.lastBrightnessX;
         lightY = OpenGlHelper.lastBrightnessY;
     }
@@ -75,9 +72,9 @@ public class WingRenderQueueItem {
         GL11.glTranslatef(0, 6 * 0.0625F, 0F);
         GL11.glTranslatef(0, -wingData.heightOffset * 8 * 0.0625F, 0F);
         
-        for (int layer = 0; layer < wings.getNumberOfRenderLayers(); layer++) {
-            if (!wings.isNomalRender(layer)) {
-                wingRenderer.postRender(player, wingData, layer, wings, partialRenderTick);
+        for (int layer = 0; layer < wingData.wingType.getNumberOfRenderLayers(); layer++) {
+            if (!wingData.wingType.isNomalRender(layer)) {
+                wingRenderer.postRender(player, wingData, layer, partialRenderTick);
             }
         }
         

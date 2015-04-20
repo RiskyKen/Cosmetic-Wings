@@ -10,7 +10,6 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import riskyken.cosmeticWings.common.lib.LibModInfo;
-import riskyken.cosmeticWings.common.wings.IWings;
 import riskyken.cosmeticWings.common.wings.WingsData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -40,8 +39,8 @@ public class ModelMechWings extends ModelWingBase {
         wingsImages[1] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/wings/mech-wings-colour.png");
     }
     
-    public void render(EntityPlayer player, int layer, IWings wings, WingsData wingData) {
-        if (wings.isNomalRender(layer)) {
+    public void render(EntityPlayer player, int layer, WingsData wingData) {
+        if (wingData.wingType.isNomalRender(layer)) {
             preRender(player, wingData);
         } else {
             postRender(player, wingData);

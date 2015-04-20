@@ -10,6 +10,9 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+import riskyken.cosmeticWings.client.gui.controls.GuiDropDownList;
+import riskyken.cosmeticWings.client.gui.controls.GuiDropDownList.DropDownListItem;
+import riskyken.cosmeticWings.client.gui.controls.GuiDropDownList.IDropDownListCallback;
 import riskyken.cosmeticWings.client.gui.controls.GuiHSBSlider;
 import riskyken.cosmeticWings.client.gui.controls.GuiHSBSlider.IHSBSliderCallback;
 import riskyken.cosmeticWings.client.gui.controls.GuiHelper;
@@ -18,6 +21,7 @@ import riskyken.cosmeticWings.common.lib.LibModInfo;
 import riskyken.cosmeticWings.common.network.PacketHandler;
 import riskyken.cosmeticWings.common.network.message.MessageClientUpdateWingsData;
 import riskyken.cosmeticWings.common.wings.WingsData;
+import riskyken.cosmeticWings.common.wings.WingsRegistry;
 import riskyken.cosmeticWings.utils.UtilColour;
 import cpw.mods.fml.client.config.GuiSlider;
 import cpw.mods.fml.client.config.GuiSlider.ISlider;
@@ -25,7 +29,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback {
+public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback, IDropDownListCallback {
 
     private static final ResourceLocation wingsGuiTexture = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/gui/wings.png");
 
@@ -43,7 +47,7 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback {
     private GuiTabWingColour tab3;
     private static int activeTab = 0;
     
-    WingsData wingsData;
+    public WingsData wingsData;
     
     public GuiWings(EntityPlayer player) {
         this.player = player;
@@ -81,8 +85,6 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback {
         }
 
         if (wingsData != null) {
-            tab1.fileList.setSelectedIndex(wingsData.wingId + 1);
-            
             tab2.sliderparticlesSpawnRate.setValue(wingsData.particleSpawnRate * 100);
             tab2.sliderparticlesSpawnRate.precision = 0;
             tab2.sliderparticlesSpawnRate.updateSlider();
@@ -156,23 +158,30 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback {
                 }
             }
         }
-        
+        super.mouseMovedOrUp(mouseX, mouseY, button);
         for (int i = 0; i < tabs.size(); i++) {
             if (i == activeTab) {
                 tabs.get(i).mouseMovedOrUp(mouseX, mouseY, button);
             }
         }
-        
-        super.mouseMovedOrUp(mouseX, mouseY, button);
     }
     
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int button) {
         super.mouseClicked(mouseX, mouseY, button);
-        
         for (int i = 0; i < tabs.size(); i++) {
             if (i == activeTab) {
                 tabs.get(i).mouseClicked(mouseX, mouseY, button);
+            }
+        }
+    }
+    
+    @Override
+    protected void mouseClickMove(int mouseX, int mouseY, int lastButtonClicked, long timeSinceMouseClick) {
+        super.mouseClickMove(mouseX, mouseY, lastButtonClicked, timeSinceMouseClick);
+        for (int i = 0; i < tabs.size(); i++) {
+            if (i == activeTab) {
+                tabs.get(i).mouseClickMove(mouseX, mouseY, lastButtonClicked, timeSinceMouseClick);
             }
         }
     }
@@ -181,7 +190,8 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback {
         if (guiLoading) {
             return;
         }
-        wingsData.wingId = tab1.fileList.getSelectedIndex() - 1;
+        DropDownListItem listItem = tab1.dropDownList.getListSelectedItem();
+        wingsData.wingType = WingsRegistry.INSTANCE.getWingsFormRegistryName(listItem.tag);
         wingsData.wingScale = (float) tab2.sliderScale.getValue() / 100;
         wingsData.particleSpawnRate = (float) tab2.sliderparticlesSpawnRate.getValue() / 100;
         wingsData.centreOffset = (float) tab2.sliderOffset.getValue();
@@ -221,6 +231,11 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback {
 
     @Override
     public void valueUpdated(GuiHSBSlider source, double sliderValue) {
+        sendWingDataToServer();
+    }
+
+    @Override
+    public void onDropDownListChanged(GuiDropDownList dropDownList) {
         sendWingDataToServer();
     }
 }

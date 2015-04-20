@@ -1,6 +1,7 @@
 package riskyken.cosmeticWings.client.render;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Queue;
 
@@ -52,8 +53,9 @@ public final class WingRenderManager {
     
     private void loadWingRenderers() {
         ModLogger.log("Registering wing renderers");
-        for (int i = 0; i < wingsRegistry.getSize(); i++) {
-            IWings wings = wingsRegistry.getWingsForId(i);
+        ArrayList<IWings> wingTypes = wingsRegistry.getRegisteredWingTypes();
+        for (int i = 0; i < wingTypes.size(); i++) {
+            IWings wings = wingTypes.get(i);
             if (wings.getRendererClass() != null) {
                 registerRendererForWings(wings, wings.getRendererClass());
             }
@@ -62,7 +64,6 @@ public final class WingRenderManager {
     
     private void registerRendererForWings(IWings wings, Class<? extends IWingRenderer> renderClass) {
         try {
-            //ModLogger.log("Registering wing renderer " + renderClass.getSimpleName() + " for " + wings.getName());
             wingRendererMap.put(wings, renderClass.newInstance());
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -109,15 +110,14 @@ public final class WingRenderManager {
             }
         }
         
-        IWings wings = wingsRegistry.getWingsForId(wingsData.wingId);
-        if (wings == null) {
+        if (wingsData.wingType == null) {
             return;
         }
         
-        if (!wingRendererMap.containsKey(wings)) {
+        if (!wingRendererMap.containsKey(wingsData.wingType)) {
             return;
         }
-        IWingRenderer wingRenderer = wingRendererMap.get(wings);
+        IWingRenderer wingRenderer = wingRendererMap.get(wingsData.wingType);
         
         GL11.glPushMatrix();
         if (player.isSneaking()) {
@@ -128,31 +128,31 @@ public final class WingRenderManager {
         GL11.glTranslatef(0, 6 * 0.0625F, 0F);
         GL11.glTranslatef(0, -wingsData.heightOffset * 8 * 0.0625F, 0F);
         
-        for (int layer = 0; layer < wings.getNumberOfRenderLayers(); layer++) {
-            if (!wings.isNomalRender(layer)) {
+        for (int layer = 0; layer < wingsData.wingType.getNumberOfRenderLayers(); layer++) {
+            if (!wingsData.wingType.isNomalRender(layer)) {
                 if (player.getUniqueID() != Minecraft.getMinecraft().thePlayer.getUniqueID()) {
-                    wingRenderQueue.add(new WingRenderQueueItem(ev.entityPlayer, wingsData, wingRenderer, wings));
+                    wingRenderQueue.add(new WingRenderQueueItem(ev.entityPlayer, wingsData, wingRenderer));
                 } else {
                     if (!renderingInGui) {
-                        wingRenderQueue.add(new WingRenderQueueItem(ev.entityPlayer, wingsData, wingRenderer, wings));
+                        wingRenderQueue.add(new WingRenderQueueItem(ev.entityPlayer, wingsData, wingRenderer));
                     }
                 }
             }
             
-            if (wings.isGlowing(layer)) {
+            if (wingsData.wingType.isGlowing(layer)) {
                 LightingHelper.disableLighting();
             }
-            if (!wings.canRecolour(layer)) {
+            if (!wingsData.wingType.canRecolour(layer)) {
                 GL11.glColor3f(1F, 1F, 1F);
             }
-            if (wings.isNomalRender(layer)) {
-                wingRenderer.render(player, wingsData, layer, wings, ev.partialRenderTick);
+            if (wingsData.wingType.isNomalRender(layer)) {
+                wingRenderer.render(player, wingsData, layer, ev.partialRenderTick);
             }
             
-            if (!wings.isNomalRender(layer) && renderingInGui) {
-                renderInGUI(player, layer, wingsData, wingRenderer, wings, ev.partialRenderTick);
+            if (!wingsData.wingType.isNomalRender(layer) && renderingInGui) {
+                renderInGUI(player, layer, wingsData, wingRenderer, ev.partialRenderTick);
             }
-            if (wings.isGlowing(layer)) {
+            if (wingsData.wingType.isGlowing(layer)) {
                 LightingHelper.enableLighting();
             }
         }
@@ -160,12 +160,12 @@ public final class WingRenderManager {
         GL11.glPopMatrix();
     }
     
-    private void renderInGUI(EntityPlayer player, int layer, WingsData wingsData, IWingRenderer wingRenderer, IWings wings, float partialRenderTick) {
+    private void renderInGUI(EntityPlayer player, int layer, WingsData wingsData, IWingRenderer wingRenderer, float partialRenderTick) {
         GL11.glDepthMask(false);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-        wingRenderer.postRender(player, wingsData, layer, wings, partialRenderTick);
+        wingRenderer.postRender(player, wingsData, layer, partialRenderTick);
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glDepthMask(true);
@@ -191,16 +191,15 @@ public final class WingRenderManager {
             return;
         }
         
-        IWings wings = wingsRegistry.getWingsForId(wingsData.wingId);
-        if (wings == null) {
+        if (wingsData.wingType == null) {
             return;
         }
         
-        if (!wingRendererMap.containsKey(wings)) {
+        if (!wingRendererMap.containsKey(wingsData.wingType)) {
             return;
         }
-        IWingRenderer wingRenderer = wingRendererMap.get(wings);
+        IWingRenderer wingRenderer = wingRendererMap.get(wingsData.wingType);
         
-        wingRenderer.onTick(player, wingsData, wings);
+        wingRenderer.onTick(player, wingsData);
     }
 }

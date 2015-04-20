@@ -6,9 +6,15 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class WingsShana extends AbstractWings {
-
-    public WingsShana() {
-        super("shana");
+    
+    @Override
+    public String getName() {
+        return "shana";
+    }
+    
+    @Override
+    public String getAuthorName() {
+        return null;
     }
     
     @Override

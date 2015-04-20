@@ -15,7 +15,6 @@ import org.lwjgl.opengl.GL11;
 import riskyken.cosmeticWings.client.particles.EntityFeatherFx;
 import riskyken.cosmeticWings.client.particles.ParticleManager;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
-import riskyken.cosmeticWings.common.wings.IWings;
 import riskyken.cosmeticWings.common.wings.WingsData;
 import riskyken.cosmeticWings.utils.PointD;
 import riskyken.cosmeticWings.utils.Trig;
@@ -52,7 +51,7 @@ public class ModelBigWings extends ModelWingBase {
         leftWing.render(f5);
     }
 
-    public void render(EntityPlayer player, int layer, IWings wings, WingsData wingData) {
+    public void render(EntityPlayer player, int layer, WingsData wingData) {
         Minecraft.getMinecraft().getTextureManager().bindTexture(wingsImage);
 
         float angle = getWingAngle(player.capabilities.isFlying & player.isAirBorne, 30, 5000, 400, player.getEntityId());
@@ -65,7 +64,7 @@ public class ModelBigWings extends ModelWingBase {
         GL11.glRotatef(90, 0, 1, 0);
         GL11.glRotatef(90, 0, 0, 1);
 
-        if (wings.canRecolour(layer)) {
+        if (wingData.wingType.canRecolour(layer)) {
             Color c = new Color(wingData.colour);
             float red = (float) c.getRed() / 255;
             float green = (float) c.getGreen() / 255;

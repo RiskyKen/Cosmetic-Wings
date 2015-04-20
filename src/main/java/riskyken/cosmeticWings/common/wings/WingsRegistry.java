@@ -1,6 +1,7 @@
 package riskyken.cosmeticWings.common.wings;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import riskyken.cosmeticWings.common.wings.types.WingsAngel;
 import riskyken.cosmeticWings.common.wings.types.WingsBlack;
@@ -16,14 +17,14 @@ public class WingsRegistry {
     
     public static WingsRegistry INSTANCE;
     
-    private final ArrayList<IWings> wingsList;
+    private final HashMap<String, IWings> wingsMap;
     
     public static void init() {
         INSTANCE = new WingsRegistry();
     }
     
     public WingsRegistry() {
-        wingsList = new ArrayList<IWings>();
+        wingsMap = new HashMap<String, IWings>();
         registerWings();
     }
     
@@ -38,25 +39,28 @@ public class WingsRegistry {
         registerWingsClass(new WingsMech());
     }
     
-    public int getSize() {
-        return wingsList.size();
-    }
-    
-    public IWings getWingsForId(int index) {
-        if (index < 0 | index > wingsList.size() - 1) {
-            return null;
-        }
-        return wingsList.get(index);
-    }
-    
     private void registerWingsClass(IWings wings) {
-        int wingId = getNextFreeWingsId();
-        wings.setId(wingId);
-        ModLogger.log("Registering wings: " + wings.getName() + " with id: " + wingId);
-        wingsList.add(wings);
+        ModLogger.log("Registering wings: " + wings.getName() + " as: " + wings.getRegistryName());
+        wingsMap.put(wings.getRegistryName(), wings);
     }
     
-    private int getNextFreeWingsId() {
-        return wingsList.size();
+    public int getNumberOfWingsRegistered() {
+        return wingsMap.size();
+    }
+    
+    public IWings getWingsFormRegistryName(String registryName) {
+        return wingsMap.get(registryName);
+    }
+    
+    public ArrayList<IWings> getRegisteredWingTypes() {
+        ArrayList<IWings> wingTypes = new ArrayList<IWings>();
+        for (int i = 0; i < wingsMap.size(); i++) {
+            String registryName = (String) wingsMap.keySet().toArray()[i];
+            IWings wingType = getWingsFormRegistryName(registryName);
+            if (wingType != null) {
+                wingTypes.add(wingType);
+            }
+        }
+        return wingTypes;
     }
 }

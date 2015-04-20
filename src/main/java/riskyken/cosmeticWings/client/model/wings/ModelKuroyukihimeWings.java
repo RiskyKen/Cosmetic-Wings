@@ -12,7 +12,6 @@ import org.lwjgl.opengl.GL11;
 import riskyken.cosmeticWings.client.particles.EntityButterflyFx;
 import riskyken.cosmeticWings.client.particles.ParticleManager;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
-import riskyken.cosmeticWings.common.wings.IWings;
 import riskyken.cosmeticWings.common.wings.WingsData;
 import riskyken.cosmeticWings.utils.PointD;
 import riskyken.cosmeticWings.utils.Trig;
@@ -45,7 +44,7 @@ public class ModelKuroyukihimeWings extends ModelWingBase {
         wingsImage = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/wings/kuroyukihime-wings.png");
     }
 
-    public void render(EntityPlayer player, int layer, IWings wings, WingsData wingData) {
+    public void render(EntityPlayer player, int layer, WingsData wingData) {
         Minecraft.getMinecraft().getTextureManager().bindTexture(wingsImage);
         RenderWing(player, player.capabilities.isFlying & player.isAirBorne, wingData);
     }

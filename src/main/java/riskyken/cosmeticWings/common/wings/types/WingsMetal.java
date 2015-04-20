@@ -7,8 +7,14 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class WingsMetal extends AbstractWings {
 
-    public WingsMetal() {
-        super("metal");
+    @Override
+    public String getName() {
+        return "metal";
+    }
+    
+    @Override
+    public String getAuthorName() {
+        return null;
     }
 
     @Override

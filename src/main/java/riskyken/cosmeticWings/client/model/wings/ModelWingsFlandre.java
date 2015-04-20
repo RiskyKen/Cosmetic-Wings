@@ -8,7 +8,6 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import riskyken.cosmeticWings.common.lib.LibModInfo;
-import riskyken.cosmeticWings.common.wings.IWings;
 import riskyken.cosmeticWings.common.wings.WingsData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -41,7 +40,7 @@ public class ModelWingsFlandre extends ModelWingBase {
         wingsImage[1] = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/wings/flandre-wings-glow.png");
     }
 
-    public void render(EntityPlayer player, int layer, IWings wings, WingsData wingData) {
+    public void render(EntityPlayer player, int layer, WingsData wingData) {
         renderWingLayer(player, layer, wingData);
     }
 

@@ -25,11 +25,18 @@ public class GuiTabPage extends GuiScreen {
     }
     
     public void drawScreen(int mouseX, int mouseY, float tickTime) {
+        super.drawScreen(mouseX, mouseY, tickTime);
     }
     
     public void mouseMovedOrUp(int mouseX, int mouseY, int button) {
+        super.mouseMovedOrUp(mouseX, mouseY, button);
     }
     
     public void mouseClicked(int mouseX, int mouseY, int button) {
+        super.mouseClicked(mouseX, mouseY, button);
+    }
+    
+    public void mouseClickMove(int mouseX, int mouseY, int lastButtonClicked, long timeSinceMouseClick) {
+        super.mouseClickMove(mouseX, mouseY, lastButtonClicked, timeSinceMouseClick);
     }
 }
