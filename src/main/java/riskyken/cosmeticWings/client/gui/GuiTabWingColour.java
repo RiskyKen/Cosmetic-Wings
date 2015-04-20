@@ -22,15 +22,20 @@ public class GuiTabWingColour extends GuiTabPage implements IHSBSliderCallback {
 
     @Override
     public void initGui() {
+        buttonList.clear();
         float[] hsbvals = Color.RGBtoHSB(colour.getRed(), colour.getGreen(), colour.getBlue(), null);
         slidersHSB = new GuiHSBSlider[3];
         slidersHSB[0] = new GuiHSBSlider(0, this.x + 5, this.y + 50, 128, 10, this, HSBSliderType.HUE, hsbvals[0], hsbvals[0], hsbvals[2]);
         slidersHSB[1] = new GuiHSBSlider(1, this.x + 5, this.y + 70, 128, 10, this, HSBSliderType.SATURATION, hsbvals[1], hsbvals[0], hsbvals[2]);
         slidersHSB[2] = new GuiHSBSlider(2, this.x + 5, this.y + 90, 128, 10, this, HSBSliderType.BRIGHTNESS, hsbvals[2], hsbvals[0], hsbvals[2]);
+        buttonList.add(slidersHSB[0]);
+        buttonList.add(slidersHSB[1]);
+        buttonList.add(slidersHSB[2]);
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float tickTime) {
+        super.drawScreen(mouseX, mouseY, tickTime);
         String hueLabel = GuiHelper.getLocalizedControlName("wings", "label.hue");
         String saturationLabel = GuiHelper.getLocalizedControlName("wings", "label.saturation");
         String brightnessLabel = GuiHelper.getLocalizedControlName("wings", "label.brightness");
@@ -38,33 +43,6 @@ public class GuiTabWingColour extends GuiTabPage implements IHSBSliderCallback {
         this.fontRendererObj.drawString(hueLabel, this.x + 5, this.y + 41, 4210752);
         this.fontRendererObj.drawString(saturationLabel, this.x + 5, this.y + 61, 4210752);
         this.fontRendererObj.drawString(brightnessLabel, this.x + 5, this.y + 81, 4210752);
-        
-        slidersHSB[0].drawButton(mc, mouseX, mouseY);
-        slidersHSB[1].drawButton(mc, mouseX, mouseY);
-        slidersHSB[2].drawButton(mc, mouseX, mouseY);
-    }
-    
-    @Override
-    public void mouseMovedOrUp(int mouseX, int mouseY, int button) {
-        slidersHSB[0].mouseReleased(mouseX, mouseY);
-        slidersHSB[1].mouseReleased(mouseX, mouseY);
-        slidersHSB[2].mouseReleased(mouseX, mouseY);
-    }
-    
-    @Override
-    public void mouseClicked(int mouseX, int mouseY, int button) {
-        if (slidersHSB[0].mousePressed(mc, mouseX, mouseY)) {
-            slidersHSB[0].func_146113_a(mc.getSoundHandler());
-            this.actionPerformed(slidersHSB[0]);
-        }
-        if (slidersHSB[1].mousePressed(mc, mouseX, mouseY)) {
-            slidersHSB[1].func_146113_a(mc.getSoundHandler());
-            this.actionPerformed(slidersHSB[1]);
-        }
-        if (slidersHSB[2].mousePressed(mc, mouseX, mouseY)) {
-            slidersHSB[2].func_146113_a(mc.getSoundHandler());
-            this.actionPerformed(slidersHSB[2]);
-        }
     }
     
     @Override
