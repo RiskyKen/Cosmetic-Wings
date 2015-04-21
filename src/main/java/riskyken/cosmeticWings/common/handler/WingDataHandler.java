@@ -12,6 +12,9 @@ import riskyken.cosmeticWings.common.wings.WingsData;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 /**
  * Handles sending and receiving wing data and extended wing data properties creation.
+ * 
+ * Jibril approves of wing handlers.
+ * 
  * @author RiskyKen
  *
  */
