@@ -14,7 +14,7 @@ public class WingsShana extends AbstractWings {
     
     @Override
     public String getAuthorName() {
-        return null;
+        return "@LittleChippie";
     }
     
     @Override

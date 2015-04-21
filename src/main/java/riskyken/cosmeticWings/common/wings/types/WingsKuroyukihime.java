@@ -14,7 +14,7 @@ public class WingsKuroyukihime extends AbstractWings {
     
     @Override
     public String getAuthorName() {
-        return null;
+        return "@VicNightfall";
     }
 
     @Override
