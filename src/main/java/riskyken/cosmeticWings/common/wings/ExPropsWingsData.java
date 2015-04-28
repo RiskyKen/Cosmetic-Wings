@@ -10,24 +10,24 @@ import riskyken.cosmeticWings.common.network.PacketHandler;
 import riskyken.cosmeticWings.common.network.message.MessageServerWingsData;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
-public class ExtendedPropsWingsData implements IExtendedEntityProperties {
+public class ExPropsWingsData implements IExtendedEntityProperties {
 
     public static final String TAG_EXT_PROP_NAME = "playerWingData";
 
     private EntityPlayer player;
     private WingsData wingData;
 
-    public ExtendedPropsWingsData(EntityPlayer player) {
+    public ExPropsWingsData(EntityPlayer player) {
         this.player = player;
         this.wingData = new WingsData();
     }
 
     public static final void register(EntityPlayer player) {
-        player.registerExtendedProperties(ExtendedPropsWingsData.TAG_EXT_PROP_NAME, new ExtendedPropsWingsData(player));
+        player.registerExtendedProperties(ExPropsWingsData.TAG_EXT_PROP_NAME, new ExPropsWingsData(player));
     }
 
-    public static final ExtendedPropsWingsData get(EntityPlayer player) {
-        return (ExtendedPropsWingsData) player.getExtendedProperties(TAG_EXT_PROP_NAME);
+    public static final ExPropsWingsData get(EntityPlayer player) {
+        return (ExPropsWingsData) player.getExtendedProperties(TAG_EXT_PROP_NAME);
     }
 
     @Override
