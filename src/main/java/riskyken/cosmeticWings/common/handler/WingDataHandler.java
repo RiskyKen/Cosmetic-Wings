@@ -20,6 +20,14 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
  */
 public final class WingDataHandler {
 
+    public static WingDataHandler INSTANCE;
+    
+    public static void init() {
+        if (INSTANCE == null) {
+            INSTANCE = new WingDataHandler();
+        }
+    }
+    
     public WingDataHandler() {
         MinecraftForge.EVENT_BUS.register(this);
     }

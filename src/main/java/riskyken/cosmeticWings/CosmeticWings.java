@@ -44,6 +44,6 @@ public class CosmeticWings {
     
     @Mod.EventHandler
     public void serverStart(FMLServerStartingEvent event) {
-        new WingDataHandler();
+        WingDataHandler.init();
     }
 }
