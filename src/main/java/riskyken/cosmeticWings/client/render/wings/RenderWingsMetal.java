@@ -1,7 +1,7 @@
 package riskyken.cosmeticWings.client.render.wings;
 
 import net.minecraft.entity.player.EntityPlayer;
-import riskyken.cosmeticWings.client.model.wings.ModelMetalWings;
+import riskyken.cosmeticWings.client.lib.LibModels;
 import riskyken.cosmeticWings.common.wings.WingsData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -9,11 +9,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RenderWingsMetal implements IWingRenderer {
     
-    public final ModelMetalWings metalWings = new ModelMetalWings();
-    
     @Override
     public void render(EntityPlayer player, WingsData wingData, int layer, float partialRenderTick) {
-        metalWings.render(player, layer, wingData);
+        LibModels.METAL_WINGS.render(player, layer, wingData);
     }
 
     @Override
