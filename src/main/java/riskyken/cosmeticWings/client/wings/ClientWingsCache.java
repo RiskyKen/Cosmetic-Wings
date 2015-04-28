@@ -7,7 +7,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import riskyken.cosmeticWings.common.wings.WingsData;
+import riskyken.cosmeticWings.utils.ModLogger;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 /**
@@ -30,6 +33,7 @@ public class ClientWingsCache {
     public ClientWingsCache() {
         playerWingsData = new HashMap<UUID, WingsData>();
         MinecraftForge.EVENT_BUS.register(this);
+        FMLCommonHandler.instance().bus().register(this);
     }
     
     public void setWingsData(UUID playerId, WingsData wingsData) {
@@ -54,5 +58,10 @@ public class ClientWingsCache {
                 playerWingsData.remove(player.getUniqueID());
             }
         }
+    }
+    
+    @SubscribeEvent
+    public void onClientDisconnect(ClientDisconnectionFromServerEvent event) {
+        playerWingsData.clear();
     }
 }
