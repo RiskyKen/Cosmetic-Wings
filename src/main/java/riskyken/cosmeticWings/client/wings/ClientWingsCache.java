@@ -3,7 +3,11 @@ package riskyken.cosmeticWings.client.wings;
 import java.util.HashMap;
 import java.util.UUID;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import riskyken.cosmeticWings.common.wings.WingsData;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 /**
@@ -17,7 +21,6 @@ public class ClientWingsCache {
     public static ClientWingsCache INSTANCE;
     
     /** Holds UUID's of players as a key and their wing data. */
-    //TODO Removed players when they go offline/leave tracking range.
     private final  HashMap<UUID, WingsData> playerWingsData;
     
     public static void init() {
@@ -26,6 +29,7 @@ public class ClientWingsCache {
     
     public ClientWingsCache() {
         playerWingsData = new HashMap<UUID, WingsData>();
+        MinecraftForge.EVENT_BUS.register(this);
     }
     
     public void setWingsData(UUID playerId, WingsData wingsData) {
@@ -40,5 +44,15 @@ public class ClientWingsCache {
             return null;
         }
         return playerWingsData.get(playerId);
+    }
+    
+    @SubscribeEvent
+    public void onStopTracking(PlayerEvent.StopTracking event) {
+        if (event.target instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) event.target;
+            if (playerWingsData.containsKey(player.getUniqueID())) {
+                playerWingsData.remove(player.getUniqueID());
+            }
+        }
     }
 }
