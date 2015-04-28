@@ -9,7 +9,10 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import riskyken.cosmeticWings.common.wings.ExPropsWingsData;
 import riskyken.cosmeticWings.common.wings.WingsData;
+import riskyken.cosmeticWings.utils.ModLogger;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
 /**
  * Handles sending and receiving wing data and extended wing data properties creation.
  * 
@@ -31,10 +34,10 @@ public final class WingDataHandler {
     public WingDataHandler() {
         MinecraftForge.EVENT_BUS.register(this);
     }
-
+    
     @SubscribeEvent
     public void onStartTracking(PlayerEvent.StartTracking event) {
-        if (event.target instanceof EntityPlayerMP) {
+        if (event.target instanceof EntityPlayerMP & getEffectiveSide() == Side.SERVER) {
             //A player walked into tracking range of another. Send them the players wing data.
             //Note: Is called for each player.
             EntityPlayerMP targetPlayer = (EntityPlayerMP) event.target;
@@ -44,9 +47,11 @@ public final class WingDataHandler {
 
     @SubscribeEvent
     public void onEntityConstructing(EntityConstructing event) {
-        if (event.entity instanceof EntityPlayer && ExPropsWingsData.get((EntityPlayer) event.entity) == null) {
+        if (event.entity instanceof EntityPlayer & getEffectiveSide() == Side.SERVER) {
+            EntityPlayer player = (EntityPlayer) event.entity;
+            ModLogger.log(player.getClass().getName());
             //A new player join that has no extended wing data properties. Lets make some for them.
-            ExPropsWingsData.register((EntityPlayer) event.entity);
+            ExPropsWingsData.register(player);
         }
     }
 
@@ -66,6 +71,10 @@ public final class WingDataHandler {
         ExPropsWingsData newProps = ExPropsWingsData.get(event.entityPlayer);
         oldProps.saveNBTData(compound);
         newProps.loadNBTData(compound);
+    }
+    
+    private Side getEffectiveSide() {
+        return FMLCommonHandler.instance().getEffectiveSide();
     }
 
     public static void gotWingDataFromPlayer(EntityPlayerMP player, WingsData wingData) {
