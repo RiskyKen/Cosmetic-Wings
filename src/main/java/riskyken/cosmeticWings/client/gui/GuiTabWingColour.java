@@ -25,9 +25,9 @@ public class GuiTabWingColour extends GuiTabPage implements IHSBSliderCallback {
         buttonList.clear();
         float[] hsbvals = Color.RGBtoHSB(colour.getRed(), colour.getGreen(), colour.getBlue(), null);
         slidersHSB = new GuiHSBSlider[3];
-        slidersHSB[0] = new GuiHSBSlider(0, this.x + 5, this.y + 50, 128, 10, this, HSBSliderType.HUE, hsbvals[0], hsbvals[0], hsbvals[2]);
-        slidersHSB[1] = new GuiHSBSlider(1, this.x + 5, this.y + 70, 128, 10, this, HSBSliderType.SATURATION, hsbvals[1], hsbvals[0], hsbvals[2]);
-        slidersHSB[2] = new GuiHSBSlider(2, this.x + 5, this.y + 90, 128, 10, this, HSBSliderType.BRIGHTNESS, hsbvals[2], hsbvals[0], hsbvals[2]);
+        slidersHSB[0] = new GuiHSBSlider(0, this.x + 5, this.y + 30, 128, 10, this, HSBSliderType.HUE, hsbvals[0], hsbvals[0], hsbvals[2]);
+        slidersHSB[1] = new GuiHSBSlider(1, this.x + 5, this.y + 50, 128, 10, this, HSBSliderType.SATURATION, hsbvals[1], hsbvals[0], hsbvals[2]);
+        slidersHSB[2] = new GuiHSBSlider(2, this.x + 5, this.y + 70, 128, 10, this, HSBSliderType.BRIGHTNESS, hsbvals[2], hsbvals[0], hsbvals[2]);
         buttonList.add(slidersHSB[0]);
         buttonList.add(slidersHSB[1]);
         buttonList.add(slidersHSB[2]);
@@ -40,9 +40,9 @@ public class GuiTabWingColour extends GuiTabPage implements IHSBSliderCallback {
         String saturationLabel = GuiHelper.getLocalizedControlName("wings", "label.saturation");
         String brightnessLabel = GuiHelper.getLocalizedControlName("wings", "label.brightness");
         
-        this.fontRendererObj.drawString(hueLabel, this.x + 5, this.y + 41, 4210752);
-        this.fontRendererObj.drawString(saturationLabel, this.x + 5, this.y + 61, 4210752);
-        this.fontRendererObj.drawString(brightnessLabel, this.x + 5, this.y + 81, 4210752);
+        this.fontRendererObj.drawString(hueLabel, this.x + 5, this.y + 21, 4210752);
+        this.fontRendererObj.drawString(saturationLabel, this.x + 5, this.y + 41, 4210752);
+        this.fontRendererObj.drawString(brightnessLabel, this.x + 5, this.y + 61, 4210752);
     }
     
     @Override

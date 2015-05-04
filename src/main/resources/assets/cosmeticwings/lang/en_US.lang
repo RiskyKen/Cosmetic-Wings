@@ -24,7 +24,7 @@ wings.cosmeticwings:small_mech.name=Small Mech
 wings.cosmeticwings:mech.name=Mech
 
 # Flavour
-#wings.cosmeticwings:none.flavour=Test flavour text
+#wings.cosmeticwings:shana.flavour=Test flavour text
 
 # Keybindings
 keys.cosmeticwings:category=Cosmetic Wings
