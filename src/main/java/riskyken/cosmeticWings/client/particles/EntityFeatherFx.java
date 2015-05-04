@@ -15,7 +15,7 @@ import org.lwjgl.opengl.GL11;
 
 import riskyken.cosmeticWings.client.abstraction.IRenderBuffer;
 import riskyken.cosmeticWings.client.abstraction.RenderBridge;
-import riskyken.cosmeticWings.client.render.LightingHelper;
+import riskyken.cosmeticWings.client.render.ModRenderHelper;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -138,7 +138,7 @@ public class EntityFeatherFx extends EntityFX {
         double y2 = y1 + 0.5D;
         
         if (isUnlit) {
-            LightingHelper.disableLighting();
+            ModRenderHelper.disableLighting();
             renderBuffer.setBrightness(15728880);
         } else {
             
@@ -156,7 +156,7 @@ public class EntityFeatherFx extends EntityFX {
         GL11.glPopMatrix();
         
         if (isUnlit) {
-            LightingHelper.enableLighting();
+            ModRenderHelper.enableLighting();
         }
     }
     

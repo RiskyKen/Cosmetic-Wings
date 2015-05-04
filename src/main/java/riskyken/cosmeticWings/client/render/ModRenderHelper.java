@@ -7,14 +7,9 @@ import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-/**
- * Helps turn Minecraft's lighting on and off.
- * Yip that's all!
- * @author RiskyKen
- * 
- */
+
 @SideOnly(Side.CLIENT)
-public final class LightingHelper {
+public final class ModRenderHelper {
     
     private static float lightX;
     private static float lightY;
@@ -36,5 +31,18 @@ public final class LightingHelper {
         int j = i % 65536;
         int k = i / 65536;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F);
+    }
+    
+    public static void enableAlphaBlend() {
+        enableAlphaBlend(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+    }
+    
+    public static void enableAlphaBlend(int sfactor, int dfactor) {
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(sfactor, dfactor);
+    }
+    
+    public static void disableAlphaBlend() {
+        GL11.glDisable(GL11.GL_BLEND);
     }
 }

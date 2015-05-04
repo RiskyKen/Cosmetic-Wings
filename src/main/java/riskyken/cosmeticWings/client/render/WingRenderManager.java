@@ -34,9 +34,17 @@ public final class WingRenderManager {
 
     public static WingRenderManager INSTANCE;
     
+    /** Local reference to the wing registry. */
     private WingsRegistry wingsRegistry;
+    
+    /** Queue if items that need to be rendered after the world. */
     private Queue<WingRenderQueueItem> wingRenderQueue;
+    
+    /** Hash map that links wing types to their renderer classes. */
     private final HashMap<IWings, IWingRenderer> wingRendererMap;
+    
+    /** Is the shaders mod loaded? */
+    private boolean shadersModLoaded;
     
     public static void init() {
         INSTANCE = new WingRenderManager();
@@ -49,6 +57,7 @@ public final class WingRenderManager {
         wingRendererMap = new HashMap<IWings, IWingRenderer>();
         wingsRegistry = WingsRegistry.INSTANCE;
         loadWingRenderers();
+        checkForShadersMod();
     }
     
     private void loadWingRenderers() {
@@ -71,89 +80,100 @@ public final class WingRenderManager {
             e.printStackTrace();
         }
     }
-
-    @SubscribeEvent
-    public void onRenderWorldLastEvent(RenderWorldLastEvent event) {
-        GL11.glDepthMask(false);
-        GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.setBrightness(15728880);
-        LightingHelper.disableLighting();
-        for(WingRenderQueueItem wingRenderItem : wingRenderQueue) {
-            wingRenderItem.Render(event.partialTicks);
+    
+    private void checkForShadersMod() {
+        try {
+            Class.forName("shadersmodcore.client.Shaders");
+            ModLogger.log("Shaders mod support active");
+            shadersModLoaded = true;
+        } catch (Exception e) {
         }
-        LightingHelper.enableLighting();
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glDepthMask(true);
-        wingRenderQueue.clear();
     }
     
     @SubscribeEvent
     public void onRender(RenderPlayerEvent.SetArmorModel ev) {
         EntityPlayer player = ev.entityPlayer;
+        
         if (player.isInvisible()) {
+            //Don't render if they player is invisible.
             return;
         }
         
+        //Get the wing data for the player we are rendering.
         WingsData wingsData = ClientWingsCache.INSTANCE.getPlayerWingsData(player.getUniqueID());
-        if (wingsData==null) {
+        if (wingsData==null || wingsData.wingType == null) {
+            //This player has no wing data. :(
             return;
         }
         
+        //Get the renderer for the players wings.
+        IWingRenderer wingRenderer = wingRendererMap.get(wingsData.wingType);
+        if (wingRenderer == null) {
+            //The players wings have no renderer class. :O
+            //This should never happen.
+            return;
+        }
+        
+        //This hacky mess is used to make post world renders show in GUI's.
+        //Check id the local player has a GUI open.
         boolean renderingInGui = UtilPlayer.localPlayerHasGuiOpen();
         if (renderingInGui) {
+            //Is the player we are rendering the local player?
             if (!UtilPlayer.isLocalPlayer(player)) {
                 renderingInGui = false;
             }
         }
         
-        if (wingsData.wingType == null) {
-            return;
-        }
-        
-        if (!wingRendererMap.containsKey(wingsData.wingType)) {
-            return;
-        }
-        IWingRenderer wingRenderer = wingRendererMap.get(wingsData.wingType);
-        
         GL11.glPushMatrix();
+        
         if (player.isSneaking()) {
+            //Tilt the wings if the player is sneaking.
             GL11.glRotatef(28.6F, 1, 0, 0);
         }
-        GL11.glTranslatef(0, (wingsData.wingScale - 1F) * 0.10F, (1F - wingsData.wingScale) * 0.0625F);
         
+        GL11.glTranslatef(0, (wingsData.wingScale - 1F) * 0.10F, (1F - wingsData.wingScale) * 0.0625F);
         GL11.glTranslatef(0, 6 * 0.0625F, 0F);
         GL11.glTranslatef(0, -wingsData.heightOffset * 8 * 0.0625F, 0F);
         
+        //Loop over each wing layer and render it.
         for (int layer = 0; layer < wingsData.wingType.getNumberOfRenderLayers(); layer++) {
             if (!wingsData.wingType.isNomalRender(layer)) {
+                //This layer should be rendered post world.
                 if (player.getUniqueID() != Minecraft.getMinecraft().thePlayer.getUniqueID()) {
-                    wingRenderQueue.add(new WingRenderQueueItem(ev.entityPlayer, wingsData, wingRenderer));
+                    //This is a remote player so just add the render to the queue.
+                    wingRenderQueue.add(new WingRenderQueueItem(player, wingsData, wingRenderer));
                 } else {
+                    //If this is the local player make sure they don't have a GUI open.
                     if (!renderingInGui) {
-                        wingRenderQueue.add(new WingRenderQueueItem(ev.entityPlayer, wingsData, wingRenderer));
+                        wingRenderQueue.add(new WingRenderQueueItem(player, wingsData, wingRenderer));
                     }
                 }
             }
             
             if (wingsData.wingType.isGlowing(layer)) {
-                LightingHelper.disableLighting();
+                //If the layer should glow turn off the lighting.
+                ModRenderHelper.disableLighting();
             }
+            
             if (!wingsData.wingType.canRecolour(layer)) {
+              //If the layer does not set the colour make sure it's reset for it.
                 GL11.glColor3f(1F, 1F, 1F);
             }
+            
             if (wingsData.wingType.isNomalRender(layer)) {
+                //If it's a normal layer render it.
                 wingRenderer.render(player, wingsData, layer, ev.partialRenderTick);
             }
             
             if (!wingsData.wingType.isNomalRender(layer) && renderingInGui) {
+                //If this is a post world layer don't render it, unless this is the local
+                //player and they have a GUI open.
                 renderInGUI(player, layer, wingsData, wingRenderer, ev.partialRenderTick);
             }
+            
             if (wingsData.wingType.isGlowing(layer)) {
-                LightingHelper.enableLighting();
+                //Turn the lighting back on if it was a glowing layer.
+                ModRenderHelper.enableLighting();
             }
         }
 
@@ -169,6 +189,25 @@ public final class WingRenderManager {
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glDepthMask(true);
+    }
+    
+    @SubscribeEvent
+    public void onRenderWorldLastEvent(RenderWorldLastEvent event) {
+        GL11.glDepthMask(false);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+        Tessellator tessellator = Tessellator.instance;
+        tessellator.setBrightness(15728880);
+        ModRenderHelper.disableLighting();
+        for(WingRenderQueueItem wingRenderItem : wingRenderQueue) {
+            wingRenderItem.Render(event.partialTicks);
+        }
+        ModRenderHelper.enableLighting();
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glDepthMask(true);
+        wingRenderQueue.clear();
     }
 
     @SubscribeEvent

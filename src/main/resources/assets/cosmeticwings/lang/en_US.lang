@@ -8,6 +8,9 @@ inventory.cosmeticwings:wings.label.height=Vertical Offset
 inventory.cosmeticwings:wings.label.hue=Hue
 inventory.cosmeticwings:wings.label.saturation=Saturation
 inventory.cosmeticwings:wings.label.brightness=Brightness
+inventory.cosmeticwings:wings.label.author=&fAuthor:&6 %s
+inventory.cosmeticwings:wings.label.glowing=&fGlowing:&a %s
+inventory.cosmeticwings:wings.label.colourable=&fColourable:&a %s
 
 # Wings
 wings.cosmeticwings:none.name=None
