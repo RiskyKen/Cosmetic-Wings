@@ -9,7 +9,6 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import riskyken.cosmeticWings.common.wings.ExPropsWingsData;
 import riskyken.cosmeticWings.common.wings.WingsData;
-import riskyken.cosmeticWings.utils.ModLogger;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -49,7 +48,6 @@ public final class WingDataHandler {
     public void onEntityConstructing(EntityConstructing event) {
         if (event.entity instanceof EntityPlayer & getEffectiveSide() == Side.SERVER) {
             EntityPlayer player = (EntityPlayer) event.entity;
-            ModLogger.log(player.getClass().getName());
             //A new player join that has no extended wing data properties. Lets make some for them.
             ExPropsWingsData.register(player);
         }
