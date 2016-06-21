@@ -5,14 +5,16 @@ import java.awt.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.client.config.GuiSlider;
-import cpw.mods.fml.client.config.GuiUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.client.config.GuiSlider;
+import net.minecraftforge.fml.client.config.GuiUtils;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiHSBSlider extends GuiSlider {
@@ -36,9 +38,9 @@ public class GuiHSBSlider extends GuiSlider {
     @Override
     public void drawButton(Minecraft mc, int mouseX, int mouseY) {
         if (this.visible) {
-            this.field_146123_n = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
-            int k = this.getHoverState(this.field_146123_n);
-            GuiUtils.drawContinuousTexturedBox(buttonTextures, this.xPosition, this.yPosition, 0, 46, this.width, this.height, 200, 20, 2, 3, 2, 2, this.zLevel);
+            this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
+            int k = this.getHoverState(this.hovered);
+            GuiUtils.drawContinuousTexturedBox(BUTTON_TEXTURES, this.xPosition, this.yPosition, 0, 46, this.width, this.height, 200, 20, 2, 3, 2, 2, this.zLevel);
             mc.renderEngine.bindTexture(sliderTexture);
             
             if (type == HSBSliderType.SATURATION) {
@@ -47,7 +49,7 @@ public class GuiHSBSlider extends GuiSlider {
                 float green = (float) hueColour.getGreen() / 255;
                 float blue = (float) hueColour.getBlue() / 255;
                 GL11.glColor4f(red, green, blue, 1.0F);
-                drawTexturedModalRectScaled(xPosition + 1, yPosition + 1, 0, 176, 256, 20, this.width - 2, this.height - 2);
+                //drawTexturedModalRectScaled(xPosition + 1, yPosition + 1, 0, 176, 256, 20, this.width - 2, this.height - 2);
             }
             
             int srcY = 236;
@@ -65,10 +67,10 @@ public class GuiHSBSlider extends GuiSlider {
                 float green = (float) hueColour.getGreen() / 255;
                 float blue = (float) hueColour.getBlue() / 255;
                 GL11.glColor4f(red, green, blue, 1.0F);
-                drawTexturedModalRectScaled(xPosition + 1, yPosition + 1, 0, srcY, 231, 20, this.width - 2, this.height - 2);
+                //drawTexturedModalRectScaled(xPosition + 1, yPosition + 1, 0, srcY, 231, 20, this.width - 2, this.height - 2);
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             } else {
-                drawTexturedModalRectScaled(xPosition + 1, yPosition + 1, 0, srcY, 256, 20, this.width - 2, this.height - 2);
+                //drawTexturedModalRectScaled(xPosition + 1, yPosition + 1, 0, srcY, 256, 20, this.width - 2, this.height - 2);
             }
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             
@@ -89,7 +91,7 @@ public class GuiHSBSlider extends GuiSlider {
 
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             
-            ScaledResolution screenRes = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+            ScaledResolution screenRes = new ScaledResolution(mc);
             double scaleWidth = (double)mc.displayWidth / screenRes.getScaledWidth_double();
             double scaleHeight = (double)mc.displayHeight / screenRes.getScaledHeight_double();
             
@@ -127,19 +129,20 @@ public class GuiHSBSlider extends GuiSlider {
     public void setBrightness(float value) {
         this.briValue = value;
     }
-    
-    public void drawTexturedModalRectScaled (int x, int y, int u, int v, int srcWidth, int srcHeight, int tarWidth, int tarHeight) {
+    /*
+    public void drawTexturedModalRectScaled (int x, int y, int textureX, int textureY, int width, int height) {
         float f = 0.00390625F;
         float f1 = 0.00390625F;
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV((double)(x + 0), (double)(y + tarHeight), (double)this.zLevel, (double)((float)(u + 0) * f), (double)((float)(v + srcHeight) * f1));
-        tessellator.addVertexWithUV((double)(x + tarWidth), (double)(y + tarHeight), (double)this.zLevel, (double)((float)(u + srcWidth) * f), (double)((float)(v + srcHeight) * f1));
-        tessellator.addVertexWithUV((double)(x + tarWidth), (double)(y + 0), (double)this.zLevel, (double)((float)(u + srcWidth) * f), (double)((float)(v + 0) * f1));
-        tessellator.addVertexWithUV((double)(x + 0), (double)(y + 0), (double)this.zLevel, (double)((float)(u + 0) * f), (double)((float)(v + 0) * f1));
+        Tessellator tessellator = Tessellator.getInstance();
+        VertexBuffer vertexbuffer = tessellator.getBuffer();
+        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        vertexbuffer.pos((double)(x + 0), (double)(y + height), (double)this.zLevel).tex((double)((float)(textureX + 0) * f), (double)((float)(textureY + height) * f1)).endVertex();
+        vertexbuffer.pos((double)(x + width), (double)(y + height), (double)this.zLevel).tex((double)((float)(textureX + width) * f), (double)((float)(textureY + height) * f1)).endVertex();
+        vertexbuffer.pos((double)(x + width), (double)(y + 0), (double)this.zLevel).tex((double)((float)(textureX + width) * f), (double)((float)(textureY + 0) * f1)).endVertex();
+        vertexbuffer.pos((double)(x + 0), (double)(y + 0), (double)this.zLevel).tex((double)((float)(textureX + 0) * f), (double)((float)(textureY + 0) * f1)).endVertex();
         tessellator.draw();
     }
-    
+    */
     public enum HSBSliderType {
         HUE, SATURATION, BRIGHTNESS;
     }

@@ -4,7 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -12,11 +12,11 @@ import net.minecraft.world.World;
 import riskyken.cosmeticWings.client.abstraction.IRenderBuffer;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 import riskyken.cosmeticWings.utils.UtilPlayer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+/*
 @SideOnly(Side.CLIENT)
-public class EntityButterflyFx extends EntityFX {
+public class EntityButterflyFx extends Particle {
 
     private static final ResourceLocation bufferflyTexture = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/particles/butterflyParticles.png");
     private static Queue<EntityButterflyFx> butterflyRenderQueue = new ArrayDeque();;
@@ -65,7 +65,7 @@ public class EntityButterflyFx extends EntityFX {
         double minRange = 3;
         
         if (this.particleAge++ >= this.particleMaxAge) {
-            this.setDead();
+            this.setExpired();
         }
         
         if (posX + minRange < targetX) {
@@ -180,3 +180,4 @@ public class EntityButterflyFx extends EntityFX {
         renderBuffer.addVertexWithUV((double)(x + f1 * scale - f4 * scale), (double)(y - f2 * scale), (double)(z + f3 * scale - f5 * scale), x1, y2);
     }
 }
+*/

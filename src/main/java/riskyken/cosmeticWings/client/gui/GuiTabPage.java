@@ -1,10 +1,12 @@
 package riskyken.cosmeticWings.client.gui;
 
+import java.io.IOException;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiTabPage extends GuiScreen {
@@ -15,7 +17,7 @@ public class GuiTabPage extends GuiScreen {
     
     public GuiTabPage(Gui parent, int x, int y) {
         mc = Minecraft.getMinecraft();
-        fontRendererObj = mc.fontRenderer;
+        fontRendererObj = mc.fontRendererObj;
         this.parent = parent;
         this.x = x;
         this.y = y;
@@ -28,11 +30,11 @@ public class GuiTabPage extends GuiScreen {
         super.drawScreen(mouseX, mouseY, tickTime);
     }
     
-    public void mouseMovedOrUp(int mouseX, int mouseY, int button) {
-        super.mouseMovedOrUp(mouseX, mouseY, button);
+    public void mouseReleased(int mouseX, int mouseY, int button) {
+        super.mouseReleased(mouseX, mouseY, button);
     }
     
-    public void mouseClicked(int mouseX, int mouseY, int button) {
+    public void mouseClicked(int mouseX, int mouseY, int button) throws IOException {
         super.mouseClicked(mouseX, mouseY, button);
     }
     

@@ -7,8 +7,8 @@ import riskyken.cosmeticWings.client.gui.controls.GuiHSBSlider;
 import riskyken.cosmeticWings.client.gui.controls.GuiHSBSlider.HSBSliderType;
 import riskyken.cosmeticWings.client.gui.controls.GuiHSBSlider.IHSBSliderCallback;
 import riskyken.cosmeticWings.client.gui.controls.GuiHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiTabWingColour extends GuiTabPage implements IHSBSliderCallback {

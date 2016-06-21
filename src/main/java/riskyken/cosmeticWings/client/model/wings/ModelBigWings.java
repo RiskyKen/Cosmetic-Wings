@@ -3,25 +3,21 @@ package riskyken.cosmeticWings.client.model.wings;
 import java.awt.Color;
 import java.util.Random;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
-import riskyken.cosmeticWings.client.particles.EntityFeatherFx;
-import riskyken.cosmeticWings.client.particles.ParticleManager;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 import riskyken.cosmeticWings.common.wings.WingsData;
 import riskyken.cosmeticWings.utils.PointD;
 import riskyken.cosmeticWings.utils.Trig;
-import riskyken.cosmeticWings.utils.UtilColour;
 import riskyken.cosmeticWings.utils.UtilPlayer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ModelBigWings extends ModelWingBase {
@@ -119,12 +115,12 @@ public class ModelBigWings extends ModelWingBase {
             double parY = player.posY - 0.4D + scale - (6 * SCALE) + (wingData.heightOffset * 6 * SCALE);
             double parZ = offset.y;
 
-            EntityClientPlayerMP localPlayer = Minecraft.getMinecraft().thePlayer;
+            EntityPlayerSP localPlayer = Minecraft.getMinecraft().thePlayer;
 
             if (!UtilPlayer.isLocalPlayer(player)) {
                 parY += 1.6D;
             }
-            
+            /*
             EntityFeatherFx particle;
             if (type == 1) {
                 particle = new EntityFeatherFx(player.worldObj, parX, parY, parZ, type, wingData.wingScale, wingData.colour);
@@ -133,7 +129,7 @@ public class ModelBigWings extends ModelWingBase {
             }
             
             ParticleManager.INSTANCE.spawnParticle(player.worldObj, particle);
-            
+            */
         }
     }
 }

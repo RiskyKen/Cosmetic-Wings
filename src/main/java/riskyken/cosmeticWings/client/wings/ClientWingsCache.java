@@ -6,13 +6,12 @@ import java.util.UUID;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import riskyken.cosmeticWings.common.wings.WingsData;
-import riskyken.cosmeticWings.utils.ModLogger;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 /**
  * Stores the wing data for all player near the local player.
  * @author RiskyKen
@@ -52,8 +51,8 @@ public class ClientWingsCache {
     
     @SubscribeEvent
     public void onStopTracking(PlayerEvent.StopTracking event) {
-        if (event.target instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) event.target;
+        if (event.getTarget() instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) event.getTarget();
             if (playerWingsData.containsKey(player.getUniqueID())) {
                 playerWingsData.remove(player.getUniqueID());
             }

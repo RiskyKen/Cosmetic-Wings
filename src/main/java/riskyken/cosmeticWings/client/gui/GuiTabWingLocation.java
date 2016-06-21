@@ -3,10 +3,10 @@ package riskyken.cosmeticWings.client.gui;
 import net.minecraft.client.gui.Gui;
 import riskyken.cosmeticWings.client.gui.controls.GuiCustomSlider;
 import riskyken.cosmeticWings.client.gui.controls.GuiHelper;
-import cpw.mods.fml.client.config.GuiSlider;
-import cpw.mods.fml.client.config.GuiSlider.ISlider;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.client.config.GuiSlider;
+import net.minecraftforge.fml.client.config.GuiSlider.ISlider;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiTabWingLocation extends GuiTabPage implements ISlider {

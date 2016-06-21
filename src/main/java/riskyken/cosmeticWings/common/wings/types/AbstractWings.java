@@ -1,11 +1,11 @@
 package riskyken.cosmeticWings.common.wings.types;
 
-import net.minecraft.util.StatCollector;
+import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import riskyken.cosmeticWings.client.render.wings.IWingRenderer;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 import riskyken.cosmeticWings.common.wings.IWings;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class AbstractWings implements IWings {
     
@@ -40,7 +40,7 @@ public abstract class AbstractWings implements IWings {
     @Override
     public String getLocalizedName() {
         String unlocalizedName = "wings." + LibModInfo.ID.toLowerCase() + ":" + this.getName().toLowerCase() + ".name";
-        String localizedName = StatCollector.translateToLocal(unlocalizedName);
+        String localizedName = I18n.format(unlocalizedName);
         if (!unlocalizedName.equals(localizedName)) {
             return localizedName;
         }
@@ -50,7 +50,7 @@ public abstract class AbstractWings implements IWings {
     @Override
     public String getFlavourText() {
         String unlocalizedName = "wings." + LibModInfo.ID.toLowerCase() + ":" + this.getName().toLowerCase() + ".flavour";
-        String localizedName = StatCollector.translateToLocal(unlocalizedName);
+        String localizedName = I18n.format(unlocalizedName);
         if (!unlocalizedName.equals(localizedName)) {
             return localizedName;
         }

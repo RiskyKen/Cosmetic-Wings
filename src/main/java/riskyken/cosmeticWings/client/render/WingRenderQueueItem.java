@@ -8,8 +8,8 @@ import org.lwjgl.opengl.GL11;
 
 import riskyken.cosmeticWings.client.render.wings.IWingRenderer;
 import riskyken.cosmeticWings.common.wings.WingsData;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class WingRenderQueueItem {
@@ -60,7 +60,7 @@ public class WingRenderQueueItem {
         float scale = 15F * 0.0625F;
         GL11.glScalef(scale, scale, scale);
         
-        GL11.glTranslatef(0, 3F * 0.0625F, 0F);
+        GL11.glTranslatef(0, -24F * 0.0625F, 0F);
         
         if (player.isSneaking()) {
             GL11.glRotatef(28.6F, 1, 0, 0);
@@ -71,6 +71,7 @@ public class WingRenderQueueItem {
         GL11.glTranslatef(0, (wingData.wingScale - 1F) * 0.10F, (1F - wingData.wingScale) * 0.0625F);
         GL11.glTranslatef(0, 6 * 0.0625F, 0F);
         GL11.glTranslatef(0, -wingData.heightOffset * 8 * 0.0625F, 0F);
+        
         
         for (int layer = 0; layer < wingData.wingType.getNumberOfRenderLayers(); layer++) {
             if (!wingData.wingType.isNomalRender(layer)) {

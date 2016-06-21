@@ -1,17 +1,17 @@
 package riskyken.cosmeticWings.client.gui.controls;
 
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.StatCollector;
+import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiHelper {
     
     public static void renderLocalizedGuiName(FontRenderer fontRenderer, int guiLeft, int guiTop, int xSize, String name) {
         String unlocalizedName = "inventory." + LibModInfo.ID.toLowerCase() + ":" + name + ".name";
-        String localizedName = StatCollector.translateToLocal(unlocalizedName);
+        String localizedName = I18n.format(unlocalizedName);
         String renderText = unlocalizedName;
         if (!unlocalizedName.equals(localizedName)){
             renderText = localizedName;
@@ -22,7 +22,7 @@ public class GuiHelper {
     
     public static String getLocalizedControlName(String guiName, String controlName) {
         String unlocalizedName = "inventory." + LibModInfo.ID.toLowerCase() + ":" + guiName + "." + controlName;
-        String localizedName = StatCollector.translateToLocal(unlocalizedName);
+        String localizedName = I18n.format(unlocalizedName);
         if (!unlocalizedName.equals(localizedName)){
             return localizedName;
         }

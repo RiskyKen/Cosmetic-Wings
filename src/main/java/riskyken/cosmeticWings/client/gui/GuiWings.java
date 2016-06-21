@@ -1,6 +1,7 @@
 package riskyken.cosmeticWings.client.gui;
 
 import java.awt.Color;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import net.minecraft.client.gui.GuiScreen;
@@ -8,6 +9,7 @@ import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
+import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
 
 import riskyken.cosmeticWings.client.gui.controls.GuiDropDownList;
@@ -22,11 +24,12 @@ import riskyken.cosmeticWings.common.network.PacketHandler;
 import riskyken.cosmeticWings.common.network.message.MessageClientUpdateWingsData;
 import riskyken.cosmeticWings.common.wings.WingsData;
 import riskyken.cosmeticWings.common.wings.WingsRegistry;
+import riskyken.cosmeticWings.utils.ModLogger;
 import riskyken.cosmeticWings.utils.UtilColour;
-import cpw.mods.fml.client.config.GuiSlider;
-import cpw.mods.fml.client.config.GuiSlider.ISlider;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.client.config.GuiSlider;
+import net.minecraftforge.fml.client.config.GuiSlider.ISlider;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback, IDropDownListCallback {
@@ -61,6 +64,10 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback, 
         guiLoading = true;
         super.initGui();
         wingsData = ClientWingsCache.INSTANCE.getPlayerWingsData(player.getUniqueID());
+        if (wingsData == null) {
+            ModLogger.log(Level.WARN, String.format("Failed to get player %s wing data.", player.getGameProfile().getName()));
+            wingsData = new WingsData();
+        }
         guiLeft = width / 2 - guiWidth / 2;
         guiTop = height / 2 - guiHeight / 2;
 
@@ -74,35 +81,28 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback, 
         tabs.add(tab2);
         tabs.add(tab3);
         
-        if (wingsData != null) {
-            tab3.colour = new Color(wingsData.colour);
-        } else {
-            tab3.colour = new Color(UtilColour.getMinecraftColor(0));
-        }
+        tab3.colour = new Color(wingsData.colour);
         
         for (int i = 0; i < tabs.size(); i++) {
             tabs.get(i).initGui();
         }
 
-        if (wingsData != null) {
-            tab2.sliderparticlesSpawnRate.setValue(wingsData.particleSpawnRate * 100);
-            tab2.sliderparticlesSpawnRate.precision = 0;
-            tab2.sliderparticlesSpawnRate.updateSlider();
-            
-            tab2.sliderScale.setValue(wingsData.wingScale * 100);
-            tab2.sliderScale.precision = 0;
-            tab2.sliderScale.updateSlider();
-            
-            tab2.sliderOffset.setValue(wingsData.centreOffset);
-            tab2.sliderOffset.precision = 2;
-            tab2.sliderOffset.updateSlider();
-            
-            tab2.sliderHightOffset.setValue(wingsData.heightOffset);
-            tab2.sliderHightOffset.precision = 2;
-            tab2.sliderHightOffset.updateSlider();
-        } else {
-            wingsData = new WingsData();
-        }
+        tab2.sliderparticlesSpawnRate.setValue(wingsData.particleSpawnRate * 100);
+        tab2.sliderparticlesSpawnRate.precision = 0;
+        tab2.sliderparticlesSpawnRate.updateSlider();
+        
+        tab2.sliderScale.setValue(wingsData.wingScale * 100);
+        tab2.sliderScale.precision = 0;
+        tab2.sliderScale.updateSlider();
+        
+        tab2.sliderOffset.setValue(wingsData.centreOffset);
+        tab2.sliderOffset.precision = 2;
+        tab2.sliderOffset.updateSlider();
+        
+        tab2.sliderHightOffset.setValue(wingsData.heightOffset);
+        tab2.sliderHightOffset.precision = 2;
+        tab2.sliderHightOffset.updateSlider();
+        
         guiLoading = false;
     }
 
@@ -141,14 +141,14 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback, 
         GL11.glRotatef(180, 0, 1, 0);
         
         GL11.glPushMatrix();
-        GuiInventory.func_147046_a(-boxX, 0, 28, lookX, lookY, this.mc.thePlayer);
+        GuiInventory.drawEntityOnScreen(-boxX, 0, 28, lookX, lookY, this.mc.thePlayer);
         GL11.glPopMatrix();
         GL11.glPopMatrix();
     }
-
+    
     @Override
-    protected void mouseMovedOrUp(int mouseX, int mouseY, int button) {
-        if (button == 0) {
+    protected void mouseReleased(int mouseX, int mouseY, int state) {
+        if (state == 0) {
             for (int i = 0; i < tabs.size(); i++) {
                 if (mouseX >= (this.guiLeft - 20) & mouseX <= this.guiLeft) {
                     int top = i * 22;
@@ -158,20 +158,20 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback, 
                 }
             }
         }
-        super.mouseMovedOrUp(mouseX, mouseY, button);
+        super.mouseReleased(mouseX, mouseY, state);
         for (int i = 0; i < tabs.size(); i++) {
             if (i == activeTab) {
-                tabs.get(i).mouseMovedOrUp(mouseX, mouseY, button);
+                tabs.get(i).mouseReleased(mouseX, mouseY, state);
             }
         }
     }
     
     @Override
-    protected void mouseClicked(int mouseX, int mouseY, int button) {
-        super.mouseClicked(mouseX, mouseY, button);
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        super.mouseClicked(mouseX, mouseY, mouseButton);
         for (int i = 0; i < tabs.size(); i++) {
             if (i == activeTab) {
-                tabs.get(i).mouseClicked(mouseX, mouseY, button);
+                tabs.get(i).mouseClicked(mouseX, mouseY, mouseButton);
             }
         }
     }

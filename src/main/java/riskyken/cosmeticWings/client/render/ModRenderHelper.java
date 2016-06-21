@@ -1,12 +1,14 @@
 package riskyken.cosmeticWings.client.render;
 
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public final class ModRenderHelper {
@@ -27,7 +29,7 @@ public final class ModRenderHelper {
     }
     
     public static void setLightingForBlock(World world, int x, int y, int z) {
-        int i = world.getLightBrightnessForSkyBlocks(x, y, z, 0);
+        int i = world.getLightFor(EnumSkyBlock.BLOCK, new BlockPos(x, y, z));
         int j = i % 65536;
         int k = i / 65536;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F);

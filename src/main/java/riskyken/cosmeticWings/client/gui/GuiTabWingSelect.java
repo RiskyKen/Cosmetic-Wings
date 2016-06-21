@@ -3,8 +3,10 @@ package riskyken.cosmeticWings.client.gui;
 import java.util.ArrayList;
 
 import net.minecraft.client.gui.Gui;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import riskyken.cosmeticWings.client.gui.controls.GuiDropDownList;
 import riskyken.cosmeticWings.client.gui.controls.GuiDropDownList.DropDownListItem;
 import riskyken.cosmeticWings.client.gui.controls.GuiDropDownList.IDropDownListCallback;
@@ -13,8 +15,7 @@ import riskyken.cosmeticWings.client.gui.controls.GuiTextBox;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 import riskyken.cosmeticWings.common.wings.IWings;
 import riskyken.cosmeticWings.common.wings.WingsRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import riskyken.cosmeticWings.utils.ModLogger;
 
 @SideOnly(Side.CLIENT)
 public class GuiTabWingSelect extends GuiTabPage implements IDropDownListCallback {
@@ -37,7 +38,7 @@ public class GuiTabWingSelect extends GuiTabPage implements IDropDownListCallbac
         
         WingsRegistry wr = WingsRegistry.INSTANCE;
         String unlocalizedName = "wings." + LibModInfo.ID.toLowerCase() + ":none.name";
-        String localizedName = StatCollector.translateToLocal(unlocalizedName);
+        String localizedName = I18n.format(unlocalizedName);
         
         dropDownList.addListItem(localizedName, "", true);
         dropDownList.setListSelectedIndex(0);
@@ -93,16 +94,16 @@ public class GuiTabWingSelect extends GuiTabPage implements IDropDownListCallbac
         wingInfoBox.addDisplayLine(translate(labelAuthor, wings.getAuthorName()));
         wingInfoBox.addDisplayLine(translate(labelGlowing, glowFlag));
         wingInfoBox.addDisplayLine(translate(labelColourable, colourFlag));
-        wingInfoBox.addDisplayLine(EnumChatFormatting.GRAY.toString() + EnumChatFormatting.ITALIC.toString() + wings.getFlavourText());
+        wingInfoBox.addDisplayLine(TextFormatting.GRAY.toString() + TextFormatting.ITALIC.toString() + wings.getFlavourText());
     }
     
     public static String translate(String unlocalizedText) {
-        String localizedText = StatCollector.translateToLocal(unlocalizedText);
+        String localizedText = I18n.format(unlocalizedText);
         return localizedText.replace("&", "\u00a7");
     }
     
     public static String translate(String unlocalizedText, Object ... args) {
-        String localizedText = StatCollector.translateToLocalFormatted(unlocalizedText, args);
+        String localizedText = I18n.format(unlocalizedText, args);
         return localizedText.replace("&", "\u00a7");
     }
 }

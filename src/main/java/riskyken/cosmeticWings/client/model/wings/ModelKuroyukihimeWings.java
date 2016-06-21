@@ -2,22 +2,19 @@ package riskyken.cosmeticWings.client.model.wings;
 
 import java.util.Random;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
-import riskyken.cosmeticWings.client.particles.EntityButterflyFx;
-import riskyken.cosmeticWings.client.particles.ParticleManager;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 import riskyken.cosmeticWings.common.wings.WingsData;
 import riskyken.cosmeticWings.utils.PointD;
 import riskyken.cosmeticWings.utils.Trig;
 import riskyken.cosmeticWings.utils.UtilPlayer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ModelKuroyukihimeWings extends ModelWingBase {
@@ -110,8 +107,8 @@ public class ModelKuroyukihimeWings extends ModelWingBase {
                 parY += 1.6D;
             }
 
-            EntityButterflyFx particle = new EntityButterflyFx(player.worldObj, parX, parY, parZ, wingData.wingScale, player);
-            ParticleManager.INSTANCE.spawnParticle(player.worldObj, particle);
+            //EntityButterflyFx particle = new EntityButterflyFx(player.worldObj, parX, parY, parZ, wingData.wingScale, player);
+            //ParticleManager.INSTANCE.spawnParticle(player.worldObj, particle);
         }
     }
 }

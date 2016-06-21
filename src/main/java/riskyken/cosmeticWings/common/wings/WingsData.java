@@ -3,7 +3,7 @@ package riskyken.cosmeticWings.common.wings;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import riskyken.cosmeticWings.utils.UtilColour;
-import cpw.mods.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 /**
  * Holds all the options a player can select for their wings.
  * All the information in this class is send to players when they

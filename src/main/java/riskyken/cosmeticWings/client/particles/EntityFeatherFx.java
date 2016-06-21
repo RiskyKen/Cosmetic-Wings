@@ -5,7 +5,7 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -17,11 +17,11 @@ import riskyken.cosmeticWings.client.abstraction.IRenderBuffer;
 import riskyken.cosmeticWings.client.abstraction.RenderBridge;
 import riskyken.cosmeticWings.client.render.ModRenderHelper;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+/*
 @SideOnly(Side.CLIENT)
-public class EntityFeatherFx extends EntityFX {
+public class EntityFeatherFx extends Particle {
 
     private static final ResourceLocation featherParticles = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/particles/featherParticles.png");
     private static Queue<EntityFeatherFx> featherRenderQueue = new ArrayDeque();;
@@ -66,7 +66,7 @@ public class EntityFeatherFx extends EntityFX {
         
         this.motionY = -0.03F;
         this.rotationSpeed = 2.0F + rand.nextFloat();
-        this.rotationPitch = rand.nextFloat() * 20 - 10;
+        //this.rotationPitch = rand.nextFloat() * 20 - 10;
         if (rand.nextFloat() >= 0.5F) {
             this.rotationSpeed = -this.rotationSpeed;
         }
@@ -128,7 +128,7 @@ public class EntityFeatherFx extends EntityFX {
     }
     
     public void postRender(IRenderBuffer renderBuffer) {
-        if (isDead) {
+        if (isExpired) {
             return;
         }
         
@@ -185,3 +185,4 @@ public class EntityFeatherFx extends EntityFX {
         //GL11.glPopMatrix();
     }
 }
+*/

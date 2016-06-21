@@ -1,16 +1,17 @@
 package riskyken.cosmeticWings.common.wings;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.IExtendedEntityProperties;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import riskyken.cosmeticWings.common.network.PacketHandler;
 import riskyken.cosmeticWings.common.network.message.MessageServerWingsData;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
-public class ExPropsWingsData implements IExtendedEntityProperties {
+public class ExPropsWingsData implements ICapabilitySerializable {
 
     public static final String TAG_EXT_PROP_NAME = "playerWingData";
 
@@ -21,31 +22,15 @@ public class ExPropsWingsData implements IExtendedEntityProperties {
         this.player = player;
         this.wingData = new WingsData();
     }
-
-    public static final void register(EntityPlayer player) {
-        player.registerExtendedProperties(ExPropsWingsData.TAG_EXT_PROP_NAME, new ExPropsWingsData(player));
-    }
-
+/*
     public static final ExPropsWingsData get(EntityPlayer player) {
+        player.getCapability(this, EnumFacing.NORTH);
         return (ExPropsWingsData) player.getExtendedProperties(TAG_EXT_PROP_NAME);
     }
-
-    @Override
-    public void saveNBTData(NBTTagCompound compound) {
-        wingData.saveNBTData(compound);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound compound) {
-        wingData.loadNBTData(compound);
-    }
+*/
 
     public WingsData getWingData() {
         return wingData;
-    }
-
-    @Override
-    public void init(Entity entity, World world) {
     }
 
     public void sendWingDataToPlayer(EntityPlayerMP targetPlayer) {
@@ -60,5 +45,29 @@ public class ExPropsWingsData implements IExtendedEntityProperties {
     public void updateWingData(WingsData wingData) {
         this.wingData = wingData;
         sendWingDataToAllAround();
+    }
+
+    @Override
+    public NBTBase serializeNBT() {
+        NBTTagCompound compound = new NBTTagCompound();
+        wingData.saveNBTData(compound);
+        return compound;
+    }
+
+    @Override
+    public void deserializeNBT(NBTBase nbt) {
+        wingData.loadNBTData((NBTTagCompound) nbt);
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

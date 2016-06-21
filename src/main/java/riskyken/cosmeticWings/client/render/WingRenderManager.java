@@ -21,13 +21,13 @@ import riskyken.cosmeticWings.common.wings.WingsData;
 import riskyken.cosmeticWings.common.wings.WingsRegistry;
 import riskyken.cosmeticWings.utils.ModLogger;
 import riskyken.cosmeticWings.utils.UtilPlayer;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.common.gameevent.TickEvent.Type;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Type;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public final class WingRenderManager {
@@ -91,8 +91,8 @@ public final class WingRenderManager {
     }
     
     @SubscribeEvent
-    public void onRender(RenderPlayerEvent.SetArmorModel ev) {
-        EntityPlayer player = ev.entityPlayer;
+    public void onRender(RenderPlayerEvent.Pre ev) {
+        EntityPlayer player = ev.getEntityPlayer();
         
         if (player.isInvisible()) {
             //Don't render if they player is invisible.
@@ -101,6 +101,8 @@ public final class WingRenderManager {
         
         //Get the wing data for the player we are rendering.
         WingsData wingsData = ClientWingsCache.INSTANCE.getPlayerWingsData(player.getUniqueID());
+        wingsData = new WingsData();
+        wingsData.wingType = WingsRegistry.INSTANCE.getWingsFormRegistryName("cosmeticWings:mech");
         if (wingsData==null || wingsData.wingType == null) {
             //This player has no wing data. :(
             return;
@@ -126,14 +128,20 @@ public final class WingRenderManager {
         
         GL11.glPushMatrix();
         
+
+        
+        float yawOffset = player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * ev.getPartialRenderTick();
+        
+        GL11.glTranslatef(0, (wingsData.wingScale - 1F) * 0.10F, (1F - wingsData.wingScale) * 0.0625F);
+        GL11.glTranslatef(0, 28 * 0.0625F, 0F);
+        GL11.glTranslatef(0, -wingsData.heightOffset * 8 * 0.0625F, 0F);
+        GL11.glScalef(1, -1, -1);
+        GL11.glRotatef(yawOffset, 0, 1, 0);
+
         if (player.isSneaking()) {
             //Tilt the wings if the player is sneaking.
             GL11.glRotatef(28.6F, 1, 0, 0);
         }
-        
-        GL11.glTranslatef(0, (wingsData.wingScale - 1F) * 0.10F, (1F - wingsData.wingScale) * 0.0625F);
-        GL11.glTranslatef(0, 6 * 0.0625F, 0F);
-        GL11.glTranslatef(0, -wingsData.heightOffset * 8 * 0.0625F, 0F);
         
         //Loop over each wing layer and render it.
         for (int layer = 0; layer < wingsData.wingType.getNumberOfRenderLayers(); layer++) {
@@ -162,13 +170,13 @@ public final class WingRenderManager {
             
             if (wingsData.wingType.isNomalRender(layer)) {
                 //If it's a normal layer render it.
-                wingRenderer.render(player, wingsData, layer, ev.partialRenderTick);
+                wingRenderer.render(player, wingsData, layer, ev.getPartialRenderTick());
             }
             
             if (!wingsData.wingType.isNomalRender(layer) && renderingInGui) {
                 //If this is a post world layer don't render it, unless this is the local
                 //player and they have a GUI open.
-                renderInGUI(player, layer, wingsData, wingRenderer, ev.partialRenderTick);
+                renderInGUI(player, layer, wingsData, wingRenderer, ev.getPartialRenderTick());
             }
             
             if (wingsData.wingType.isGlowing(layer)) {
@@ -197,11 +205,11 @@ public final class WingRenderManager {
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.setBrightness(15728880);
+        //Tessellator tessellator = Tessellator.instance;
+        //tessellator.setBrightness(15728880);
         ModRenderHelper.disableLighting();
         for(WingRenderQueueItem wingRenderItem : wingRenderQueue) {
-            wingRenderItem.Render(event.partialTicks);
+            wingRenderItem.Render(event.getPartialTicks());
         }
         ModRenderHelper.enableLighting();
         GL11.glDisable(GL11.GL_BLEND);
