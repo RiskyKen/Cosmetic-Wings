@@ -101,8 +101,6 @@ public final class WingRenderManager {
         
         //Get the wing data for the player we are rendering.
         WingsData wingsData = ClientWingsCache.INSTANCE.getPlayerWingsData(player.getUniqueID());
-        wingsData = new WingsData();
-        wingsData.wingType = WingsRegistry.INSTANCE.getWingsFormRegistryName("cosmeticWings:mech");
         if (wingsData==null || wingsData.wingType == null) {
             //This player has no wing data. :(
             return;
@@ -127,7 +125,7 @@ public final class WingRenderManager {
         }
         
         GL11.glPushMatrix();
-        
+        GL11.glDisable(GL11.GL_CULL_FACE);
 
         
         float yawOffset = player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * ev.getPartialRenderTick();
@@ -184,7 +182,7 @@ public final class WingRenderManager {
                 ModRenderHelper.enableLighting();
             }
         }
-
+        GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glPopMatrix();
     }
     
@@ -234,6 +232,7 @@ public final class WingRenderManager {
         if (wingsData==null) {
             return;
         }
+        
         if (wingsData.particleSpawnRate == 0F) {
             return;
         }

@@ -1,5 +1,6 @@
 package riskyken.cosmeticWings.client.abstraction;
 
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -8,9 +9,9 @@ public interface IRenderBuffer {
 
     public void draw();
     
-    public void startDrawingQuads();
+    public void startDrawingQuads(VertexFormat vertexFormat);
     
-    public void startDrawing(int state);
+    public void startDrawing(int glMode, VertexFormat vertexFormat);
     
     public void setBrightness(int brightness);
     
@@ -23,4 +24,6 @@ public interface IRenderBuffer {
     public void addVertex(double x, double y, double z);
     
     public void addVertexWithUV(double x, double y, double z, double u, double v);
+    
+    public void endVertex();
 }

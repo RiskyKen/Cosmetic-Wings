@@ -10,6 +10,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import riskyken.cosmeticWings.client.particles.EntityButterflyFx;
+import riskyken.cosmeticWings.client.particles.ParticleManager;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 import riskyken.cosmeticWings.common.wings.WingsData;
 import riskyken.cosmeticWings.utils.PointD;
@@ -107,8 +109,8 @@ public class ModelKuroyukihimeWings extends ModelWingBase {
                 parY += 1.6D;
             }
 
-            //EntityButterflyFx particle = new EntityButterflyFx(player.worldObj, parX, parY, parZ, wingData.wingScale, player);
-            //ParticleManager.INSTANCE.spawnParticle(player.worldObj, particle);
+            EntityButterflyFx particle = new EntityButterflyFx(player.worldObj, parX, parY, parZ, wingData.wingScale, player);
+            ParticleManager.INSTANCE.spawnParticle(player.worldObj, particle);
         }
     }
 }

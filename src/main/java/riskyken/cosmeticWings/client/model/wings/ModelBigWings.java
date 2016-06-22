@@ -13,10 +13,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import riskyken.cosmeticWings.client.particles.EntityFeatherFx;
+import riskyken.cosmeticWings.client.particles.ParticleManager;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 import riskyken.cosmeticWings.common.wings.WingsData;
 import riskyken.cosmeticWings.utils.PointD;
 import riskyken.cosmeticWings.utils.Trig;
+import riskyken.cosmeticWings.utils.UtilColour;
 import riskyken.cosmeticWings.utils.UtilPlayer;
 
 @SideOnly(Side.CLIENT)
@@ -80,6 +83,7 @@ public class ModelBigWings extends ModelWingBase {
         rightWing.render(SCALE);
         GL11.glPopMatrix();
         
+        
         GL11.glPopMatrix();
     }
 
@@ -116,11 +120,12 @@ public class ModelBigWings extends ModelWingBase {
             double parZ = offset.y;
 
             EntityPlayerSP localPlayer = Minecraft.getMinecraft().thePlayer;
-
-            if (!UtilPlayer.isLocalPlayer(player)) {
+            parY += 1.6D;
+            /*
+            if (UtilPlayer.isLocalPlayer(player)) {
                 parY += 1.6D;
             }
-            /*
+            */
             EntityFeatherFx particle;
             if (type == 1) {
                 particle = new EntityFeatherFx(player.worldObj, parX, parY, parZ, type, wingData.wingScale, wingData.colour);
@@ -129,7 +134,7 @@ public class ModelBigWings extends ModelWingBase {
             }
             
             ParticleManager.INSTANCE.spawnParticle(player.worldObj, particle);
-            */
+            
         }
     }
 }

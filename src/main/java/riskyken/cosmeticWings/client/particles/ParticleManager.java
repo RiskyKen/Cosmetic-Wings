@@ -73,7 +73,7 @@ public class ParticleManager {
         IRenderBuffer renderBuffer = RenderBridge.INSTANCE;
         mc.mcProfiler.startSection("wingParticles");
         //EntityButterflyFx.renderQueue(renderBuffer);
-        //EntityFeatherFx.renderQueue(renderBuffer);
+        EntityFeatherFx.renderQueue(renderBuffer);
         mc.mcProfiler.endSection();
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glDepthMask(true);

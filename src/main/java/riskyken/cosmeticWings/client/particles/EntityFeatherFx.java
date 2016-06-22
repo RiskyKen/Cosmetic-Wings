@@ -7,7 +7,10 @@ import java.util.Queue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -17,9 +20,10 @@ import riskyken.cosmeticWings.client.abstraction.IRenderBuffer;
 import riskyken.cosmeticWings.client.abstraction.RenderBridge;
 import riskyken.cosmeticWings.client.render.ModRenderHelper;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
+import riskyken.cosmeticWings.utils.ModLogger;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-/*
+
 @SideOnly(Side.CLIENT)
 public class EntityFeatherFx extends Particle {
 
@@ -29,12 +33,9 @@ public class EntityFeatherFx extends Particle {
     private final int type;
     private final boolean isUnlit;
     private float rotationSpeed;
-    float f0;
-    float f1;
-    float f2;
-    float f3;
-    float f4;
-    float f5;
+    private float rotationPitch;
+    
+    float partialTicks;
 
     public EntityFeatherFx(World world, double x, double y, double z, int type, float wingScale, int colour) {
         super(world, x, y, z);
@@ -92,7 +93,7 @@ public class EntityFeatherFx extends Particle {
     public void onUpdate() {
         super.onUpdate();
 
-        if (this.isCollidedVertically) {
+        if (this.isCollided) {
             this.rotationSpeed = 0F;
         }
 
@@ -107,23 +108,17 @@ public class EntityFeatherFx extends Particle {
     }
 
     @Override
-    public void renderParticle(Tessellator tessellator, float f0, float f1, float f2, float f3, float f4, float f5) {
-        this.f0 = f0;
-        this.f1 = f1;
-        this.f2 = f2;
-        this.f3 = f3;
-        this.f4 = f4;
-        this.f5 = f5;
+    public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks,
+            float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+        this.partialTicks = partialTicks;
         featherRenderQueue.add(this);
     }
     
     public static void renderQueue(IRenderBuffer renderBuffer) {
-        
         Minecraft.getMinecraft().renderEngine.bindTexture(featherParticles);
         for(EntityFeatherFx featherFx : featherRenderQueue) {
             featherFx.postRender(renderBuffer);
         }
-        
         featherRenderQueue.clear();
     }
     
@@ -145,12 +140,12 @@ public class EntityFeatherFx extends Particle {
             renderBuffer.setBrightness(getBrightnessForRender(0));
         }
 
-        float x = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)f0 - interpPosX);
-        float y = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)f0 - interpPosY);
-        float z = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)f0 - interpPosZ);
+        float x = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)partialTicks - interpPosX);
+        float y = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)partialTicks - interpPosY);
+        float z = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)partialTicks - interpPosZ);
         
         GL11.glPushMatrix();
-        renderBuffer.startDrawingQuads();
+        renderBuffer.startDrawingQuads(DefaultVertexFormats.POSITION_TEX_COLOR);
         drawBillboard(x, y, z, x1, y1, x2, y2, rotationPitch);
         renderBuffer.draw();
         GL11.glPopMatrix();
@@ -161,14 +156,13 @@ public class EntityFeatherFx extends Particle {
     }
     
     private void drawBillboard(double x, double y, double z, double x1, double y1, double x2, double y2, float rotation) {
-        RenderManager renderManager = RenderManager.instance;
+        RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
         IRenderBuffer renderBuffer = RenderBridge.INSTANCE;
-        //GL11.glPushMatrix();
         float scale = 0.05F;
 
-        GL11.glTranslatef((float) x, (float) y, (float) z);
-        GL11.glRotatef(-RenderManager.instance.playerViewY, 0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(RenderManager.instance.playerViewX, 1.0F, 0.0F, 0.0F);
+        GL11.glTranslatef((float)x, (float)y, (float)z);
+        GL11.glRotatef(-renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+        GL11.glRotatef(renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
         GL11.glRotatef(180, 0, 0, 1);
 
         GL11.glTranslatef((float) -0.01F, (float) -0.01F, (float) -0.01F);
@@ -176,13 +170,21 @@ public class EntityFeatherFx extends Particle {
         GL11.glTranslatef((float) 0.01F, (float) 0.01F, (float) 0.01F);
         GL11.glScalef(scale, scale, scale);
         GL11.glScalef(particleScale, particleScale, particleScale);
-
-        renderBuffer.setColourRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+        
         renderBuffer.addVertexWithUV(-1, -1, 0, x1, y1);
+        renderBuffer.setColourRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+        renderBuffer.endVertex();
+        
         renderBuffer.addVertexWithUV(-1, 1, 0, x1, y2);
+        renderBuffer.setColourRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+        renderBuffer.endVertex();
+        
         renderBuffer.addVertexWithUV(1, 1, 0, x2, y2);
+        renderBuffer.setColourRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+        renderBuffer.endVertex();
+        
         renderBuffer.addVertexWithUV(1, -1, 0, x2, y1);
-        //GL11.glPopMatrix();
+        renderBuffer.setColourRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+        renderBuffer.endVertex();
     }
 }
-*/

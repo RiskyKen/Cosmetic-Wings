@@ -1,5 +1,8 @@
 package riskyken.cosmeticWings;
 
+import riskyken.cosmeticWings.common.capability.DefaultWingCapability;
+import riskyken.cosmeticWings.common.capability.IWingCapability;
+import riskyken.cosmeticWings.common.capability.WingStorage;
 import riskyken.cosmeticWings.common.handler.WingDataHandler;
 import riskyken.cosmeticWings.common.lib.LibModInfo;
 import riskyken.cosmeticWings.common.network.GuiHandler;
@@ -12,6 +15,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod(modid = LibModInfo.ID, name = LibModInfo.NAME, version = LibModInfo.VERSION)
@@ -26,6 +30,7 @@ public class CosmeticWings {
     @Mod.EventHandler
     public void perInit(FMLPreInitializationEvent event) {
         ModLogger.log("Loading " + LibModInfo.NAME + " " + LibModInfo.VERSION);
+        CapabilityManager.INSTANCE.register(IWingCapability.class, new WingStorage(), DefaultWingCapability.class);
         proxy.preInit();
         WingsRegistry.init();
     }

@@ -6,6 +6,8 @@ import java.util.Queue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -14,7 +16,7 @@ import riskyken.cosmeticWings.common.lib.LibModInfo;
 import riskyken.cosmeticWings.utils.UtilPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-/*
+
 @SideOnly(Side.CLIENT)
 public class EntityButterflyFx extends Particle {
 
@@ -128,13 +130,18 @@ public class EntityButterflyFx extends Particle {
         
         this.moveEntity(this.motionX, this.motionY, this.motionZ);
         
-        if (this.onGround) {
+        if (this.isCollided) {
             this.motionX *= 0.699999988079071D;
             this.motionZ *= 0.699999988079071D;
         }
     }
 
     @Override
+    public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks, float rotationX,
+            float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+        butterflyRenderQueue.add(this);
+    }
+    
     public void renderParticle(Tessellator tessellator, float f0, float f1, float f2, float f3, float f4, float f5) {
         this.f0 = f0;
         this.f1 = f1;
@@ -146,12 +153,14 @@ public class EntityButterflyFx extends Particle {
     }
     
     public static void renderQueue(IRenderBuffer renderBuffer) {
+        /*
         renderBuffer.startDrawingQuads();
         Minecraft.getMinecraft().renderEngine.bindTexture(bufferflyTexture);
         for(EntityButterflyFx butterflyFx : butterflyRenderQueue) {
             butterflyFx.postRender(renderBuffer);
         }
         renderBuffer.draw();
+        */
         butterflyRenderQueue.clear();
     }
     
@@ -173,6 +182,7 @@ public class EntityButterflyFx extends Particle {
         float x = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)f0 - interpPosX);
         float y = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)f0 - interpPosY);
         float z = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)f0 - interpPosZ);
+        
         renderBuffer.setColourRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
         renderBuffer.addVertexWithUV((double)(x - f1 * scale - f4 * scale), (double)(y - f2 * scale), (double)(z - f3 * scale - f5 * scale), x2, y2);
         renderBuffer.addVertexWithUV((double)(x - f1 * scale + f4 * scale), (double)(y + f2 * scale), (double)(z - f3 * scale + f5 * scale), x2, y1);
@@ -180,4 +190,3 @@ public class EntityButterflyFx extends Particle {
         renderBuffer.addVertexWithUV((double)(x + f1 * scale - f4 * scale), (double)(y - f2 * scale), (double)(z + f3 * scale - f5 * scale), x1, y2);
     }
 }
-*/
