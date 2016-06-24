@@ -62,22 +62,22 @@ public class ParticleManager {
 	
     @SubscribeEvent
     public void onRenderWorldLastEvent(RenderWorldLastEvent event) {
-        mc.entityRenderer.enableLightmap();
-        RenderHelper.disableStandardItemLighting();
+        //mc.entityRenderer.enableLightmap();
+        RenderHelper.enableStandardItemLighting();
         
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glDepthMask(false);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glAlphaFunc(GL11.GL_GREATER, 0.003921569F);
+        //GL11.glAlphaFunc(GL11.GL_GREATER, 0.003921569F);
         IRenderBuffer renderBuffer = RenderBridge.INSTANCE;
         mc.mcProfiler.startSection("wingParticles");
-        //EntityButterflyFx.renderQueue(renderBuffer);
+        EntityButterflyFx.renderQueue(renderBuffer);
         EntityFeatherFx.renderQueue(renderBuffer);
         mc.mcProfiler.endSection();
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glDepthMask(true);
         
-        mc.entityRenderer.disableLightmap();
+        //mc.entityRenderer.disableLightmap();
     }
 }

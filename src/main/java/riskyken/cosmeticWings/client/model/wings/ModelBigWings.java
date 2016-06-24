@@ -83,7 +83,6 @@ public class ModelBigWings extends ModelWingBase {
         rightWing.render(SCALE);
         GL11.glPopMatrix();
         
-        
         GL11.glPopMatrix();
     }
 

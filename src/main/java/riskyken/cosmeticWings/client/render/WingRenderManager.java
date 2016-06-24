@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Queue;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.RenderPlayerEvent;
@@ -124,9 +125,8 @@ public final class WingRenderManager {
             }
         }
         
-        GL11.glPushMatrix();
-        GL11.glDisable(GL11.GL_CULL_FACE);
-
+        GlStateManager.pushMatrix();
+        GlStateManager.disableCull();
         
         float yawOffset = player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * ev.getPartialRenderTick();
         
@@ -134,10 +134,11 @@ public final class WingRenderManager {
         GL11.glTranslatef(0, 28 * 0.0625F, 0F);
         GL11.glTranslatef(0, -wingsData.heightOffset * 8 * 0.0625F, 0F);
         GL11.glScalef(1, -1, -1);
+        
         GL11.glRotatef(yawOffset, 0, 1, 0);
-
         if (player.isSneaking()) {
             //Tilt the wings if the player is sneaking.
+            GL11.glTranslatef(0, 2 * 0.0625F, 0);
             GL11.glRotatef(28.6F, 1, 0, 0);
         }
         
@@ -158,12 +159,13 @@ public final class WingRenderManager {
             
             if (wingsData.wingType.isGlowing(layer)) {
                 //If the layer should glow turn off the lighting.
+                GlStateManager.disableLighting();
                 ModRenderHelper.disableLighting();
             }
             
             if (!wingsData.wingType.canRecolour(layer)) {
-              //If the layer does not set the colour make sure it's reset for it.
-                GL11.glColor3f(1F, 1F, 1F);
+                //If the layer does not set the colour make sure it's reset for it.
+                GL11.glColor4f(1F, 1F, 1F, 1F);
             }
             
             if (wingsData.wingType.isNomalRender(layer)) {
@@ -179,40 +181,46 @@ public final class WingRenderManager {
             
             if (wingsData.wingType.isGlowing(layer)) {
                 //Turn the lighting back on if it was a glowing layer.
+                GlStateManager.enableLighting();
                 ModRenderHelper.enableLighting();
             }
         }
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glPopMatrix();
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+        GlStateManager.enableCull();
+        GlStateManager.popMatrix();
     }
     
     private void renderInGUI(EntityPlayer player, int layer, WingsData wingsData, IWingRenderer wingRenderer, float partialRenderTick) {
-        GL11.glDepthMask(false);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+        GlStateManager.disableDepth();
+        GlStateManager.enableBlend();
+        GlStateManager.disableCull();
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
         wingRenderer.postRender(player, wingsData, layer, partialRenderTick);
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glDepthMask(true);
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+        GlStateManager.enableCull();
+        GlStateManager.disableBlend();
+        GlStateManager.enableDepth();
     }
     
     @SubscribeEvent
     public void onRenderWorldLastEvent(RenderWorldLastEvent event) {
-        GL11.glDepthMask(false);
-        GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+        //GlStateManager.disableDepth();
+        GlStateManager.enableBlend();
+        GlStateManager.disableCull();
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
         //Tessellator tessellator = Tessellator.instance;
         //tessellator.setBrightness(15728880);
         ModRenderHelper.disableLighting();
+        GlStateManager.disableLighting();
         for(WingRenderQueueItem wingRenderItem : wingRenderQueue) {
             wingRenderItem.Render(event.getPartialTicks());
         }
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+        GlStateManager.enableLighting();
         ModRenderHelper.enableLighting();
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glDepthMask(true);
+        GlStateManager.enableCull();
+        GlStateManager.disableBlend();
+        //GlStateManager.enableDepth();
         wingRenderQueue.clear();
     }
 

@@ -48,30 +48,19 @@ public class WingRenderQueueItem {
         double y = tarY1 - tarY2;
         double z = tarZ1 - tarZ2;
         
-        if (localPlayer.getUniqueID() != renderTarget.getUniqueID()) {
-            y += 26D * 0.0625F;
-        }
-        
         GL11.glTranslated(x, y, z);
         
-        GL11.glScalef(1, -1, -1);
-        GL11.glRotatef(yawOffset, 0, 1, 0);
-        
-        float scale = 15F * 0.0625F;
-        GL11.glScalef(scale, scale, scale);
-        
-        GL11.glTranslatef(0, -24F * 0.0625F, 0F);
-        
-        if (player.isSneaking()) {
-            GL11.glRotatef(28.6F, 1, 0, 0);
-        }
-        
-        GL11.glTranslatef(0, 0.6F * 0.0625F, 0F);
-        
         GL11.glTranslatef(0, (wingData.wingScale - 1F) * 0.10F, (1F - wingData.wingScale) * 0.0625F);
-        GL11.glTranslatef(0, 6 * 0.0625F, 0F);
+        GL11.glTranslatef(0, 28 * 0.0625F, 0F);
         GL11.glTranslatef(0, -wingData.heightOffset * 8 * 0.0625F, 0F);
         
+        GL11.glScalef(1, -1, -1);
+        
+        GL11.glRotatef(yawOffset, 0, 1, 0);
+        if (player.isSneaking()) {
+            GL11.glTranslatef(0, 2 * 0.0625F, 0);
+            GL11.glRotatef(28.6F, 1, 0, 0);
+        }
         
         for (int layer = 0; layer < wingData.wingType.getNumberOfRenderLayers(); layer++) {
             if (!wingData.wingType.isNomalRender(layer)) {

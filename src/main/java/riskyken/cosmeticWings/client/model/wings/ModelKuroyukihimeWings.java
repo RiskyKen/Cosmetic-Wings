@@ -104,11 +104,13 @@ public class ModelKuroyukihimeWings extends ModelWingBase {
             double parX = offset.x;
             double parY = player.posY - 0.4D + scale + rnd.nextFloat() * 0.5F;
             double parZ = offset.y;
-
+            
+            parY += 1.6D;
+            /*
             if (!UtilPlayer.isLocalPlayer(player)) {
                 parY += 1.6D;
             }
-
+*/
             EntityButterflyFx particle = new EntityButterflyFx(player.worldObj, parX, parY, parZ, wingData.wingScale, player);
             ParticleManager.INSTANCE.spawnParticle(player.worldObj, particle);
         }

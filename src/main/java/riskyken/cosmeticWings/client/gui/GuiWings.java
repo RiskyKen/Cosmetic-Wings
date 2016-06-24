@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
@@ -139,6 +140,8 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback, 
         GL11.glPushMatrix();
         GL11.glTranslatef(0, boxY, boxX);
         GL11.glRotatef(180, 0, 1, 0);
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+        GlStateManager.resetColor();
         
         GL11.glPushMatrix();
         GuiInventory.drawEntityOnScreen(-boxX, 0, 28, lookX, lookY, this.mc.thePlayer);

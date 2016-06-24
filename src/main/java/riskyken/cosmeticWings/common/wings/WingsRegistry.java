@@ -2,6 +2,7 @@ package riskyken.cosmeticWings.common.wings;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import riskyken.cosmeticWings.common.wings.types.WingsAngel;
 import riskyken.cosmeticWings.common.wings.types.WingsBlack;
@@ -17,14 +18,14 @@ public class WingsRegistry {
     
     public static WingsRegistry INSTANCE;
     
-    private final HashMap<String, IWings> wingsMap;
+    private final LinkedHashMap<String, IWings> wingsMap;
     
     public static void init() {
         INSTANCE = new WingsRegistry();
     }
     
     public WingsRegistry() {
-        wingsMap = new HashMap<String, IWings>();
+        wingsMap = new LinkedHashMap<String, IWings>();
         registerWings();
     }
     
