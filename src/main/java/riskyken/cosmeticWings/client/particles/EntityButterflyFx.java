@@ -25,7 +25,7 @@ public class EntityButterflyFx extends Particle {
     private static Queue<EntityButterflyFx> butterflyRenderQueue = new ArrayDeque();;
     
     private EntityPlayer target;
-    float f0;
+    float partialTicks;
     float f1;
     float f2;
     float f3;
@@ -142,7 +142,7 @@ public class EntityButterflyFx extends Particle {
     @Override
     public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks,
             float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-        this.f0 = partialTicks;
+        this.partialTicks = partialTicks;
         this.f1 = rotationX;
         this.f2 = rotationZ;
         this.f3 = rotationYZ;
@@ -151,19 +151,9 @@ public class EntityButterflyFx extends Particle {
         butterflyRenderQueue.add(this);
     }
     
-    public void renderParticle(Tessellator tessellator, float f0, float f1, float f2, float f3, float f4, float f5) {
-        this.f0 = f0;
-        this.f1 = f1;
-        this.f2 = f2;
-        this.f3 = f3;
-        this.f4 = f4;
-        this.f5 = f5;
-        butterflyRenderQueue.add(this);
-    }
-    
     public static void renderQueue(IRenderBuffer renderBuffer) {
         
-        renderBuffer.startDrawingQuads(DefaultVertexFormats.POSITION_TEX);
+        renderBuffer.startDrawingQuads(DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
         Minecraft.getMinecraft().renderEngine.bindTexture(bufferflyTexture);
         for(EntityButterflyFx butterflyFx : butterflyRenderQueue) {
             butterflyFx.postRender(renderBuffer);
@@ -187,28 +177,34 @@ public class EntityButterflyFx extends Particle {
         double y2 = 0.5D;
         
         float scale = 0.1F * this.particleScale;
-        particleRed = 1F;
-        particleGreen = 1F;
-        particleBlue = 1F;
-        particleAlpha = 1F;
-        float x = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)f0 - interpPosX);
-        float y = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)f0 - interpPosY);
-        float z = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)f0 - interpPosZ);
         
-        renderBuffer.addVertexWithUV((double)(x - f1 * scale - f4 * scale), (double)(y - f2 * scale), (double)(z - f3 * scale - f5 * scale), x2, y2);
-        //renderBuffer.setColourRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+        float x = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)partialTicks - interpPosX);
+        float y = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)partialTicks - interpPosY);
+        float z = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)partialTicks - interpPosZ);
+        
+        int i = this.getBrightnessForRender(partialTicks);
+        int j = i >> 16 & 65535;
+        int k = i & 65535;
+        
+        renderBuffer.addVertex((double)(x - f1 * scale - f4 * scale), (double)(y - f2 * scale), (double)(z - f3 * scale - f5 * scale));
+        renderBuffer.setTextureUV(x2, y2);
+        renderBuffer.setColourRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+        renderBuffer.lightmap(j, k);
         renderBuffer.endVertex();
         
         renderBuffer.addVertexWithUV((double)(x - f1 * scale + f4 * scale), (double)(y + f2 * scale), (double)(z - f3 * scale + f5 * scale), x2, y1);
-        //renderBuffer.setColourRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+        renderBuffer.setColourRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+        renderBuffer.lightmap(j, k);
         renderBuffer.endVertex();
         
         renderBuffer.addVertexWithUV((double)(x + f1 * scale + f4 * scale), (double)(y + f2 * scale), (double)(z + f3 * scale + f5 * scale), x1, y1);
-        //renderBuffer.setColourRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+        renderBuffer.setColourRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+        renderBuffer.lightmap(j, k);
         renderBuffer.endVertex();
         
         renderBuffer.addVertexWithUV((double)(x + f1 * scale - f4 * scale), (double)(y - f2 * scale), (double)(z + f3 * scale - f5 * scale), x1, y2);
-        //renderBuffer.setColourRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+        renderBuffer.setColourRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+        renderBuffer.lightmap(j, k);
         renderBuffer.endVertex();
     }
 }

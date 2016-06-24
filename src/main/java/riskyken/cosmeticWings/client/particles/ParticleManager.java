@@ -62,7 +62,7 @@ public class ParticleManager {
 	
     @SubscribeEvent
     public void onRenderWorldLastEvent(RenderWorldLastEvent event) {
-        //mc.entityRenderer.enableLightmap();
+        mc.entityRenderer.enableLightmap();
         RenderHelper.enableStandardItemLighting();
         
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -78,6 +78,6 @@ public class ParticleManager {
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glDepthMask(true);
         
-        //mc.entityRenderer.disableLightmap();
+        mc.entityRenderer.disableLightmap();
     }
 }

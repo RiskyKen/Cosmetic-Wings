@@ -134,10 +134,6 @@ public class EntityFeatherFx extends Particle {
         
         if (isUnlit) {
             ModRenderHelper.disableLighting();
-            renderBuffer.setBrightness(15728880);
-        } else {
-            
-            renderBuffer.setBrightness(getBrightnessForRender(0));
         }
 
         float x = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)partialTicks - interpPosX);
@@ -145,7 +141,7 @@ public class EntityFeatherFx extends Particle {
         float z = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)partialTicks - interpPosZ);
         
         GL11.glPushMatrix();
-        renderBuffer.startDrawingQuads(DefaultVertexFormats.POSITION_TEX_COLOR);
+        renderBuffer.startDrawingQuads(DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
         drawBillboard(x, y, z, x1, y1, x2, y2, rotationPitch);
         renderBuffer.draw();
         GL11.glPopMatrix();
@@ -171,20 +167,33 @@ public class EntityFeatherFx extends Particle {
         GL11.glScalef(scale, scale, scale);
         GL11.glScalef(particleScale, particleScale, particleScale);
         
+        int j = 240;
+        int k = 240;
+        
+        if (!isUnlit) {
+            int i = this.getBrightnessForRender(partialTicks);
+            j = i >> 16 & 65535;
+            k = i & 65535;
+        }
+        
         renderBuffer.addVertexWithUV(-1, -1, 0, x1, y1);
         renderBuffer.setColourRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+        renderBuffer.lightmap(j, k);
         renderBuffer.endVertex();
         
         renderBuffer.addVertexWithUV(-1, 1, 0, x1, y2);
         renderBuffer.setColourRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+        renderBuffer.lightmap(j, k);
         renderBuffer.endVertex();
         
         renderBuffer.addVertexWithUV(1, 1, 0, x2, y2);
         renderBuffer.setColourRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+        renderBuffer.lightmap(j, k);
         renderBuffer.endVertex();
         
         renderBuffer.addVertexWithUV(1, -1, 0, x2, y1);
         renderBuffer.setColourRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+        renderBuffer.lightmap(j, k);
         renderBuffer.endVertex();
     }
 }
