@@ -49,7 +49,7 @@ public class GuiHSBSlider extends GuiSlider {
                 float green = (float) hueColour.getGreen() / 255;
                 float blue = (float) hueColour.getBlue() / 255;
                 GL11.glColor4f(red, green, blue, 1.0F);
-                //drawTexturedModalRectScaled(xPosition + 1, yPosition + 1, 0, 176, 256, 20, this.width - 2, this.height - 2);
+                drawTexturedModalRectScaled(xPosition + 1, yPosition + 1, 0, 176, 256, 20, this.width - 2, this.height - 2);
             }
             
             int srcY = 236;
@@ -67,10 +67,10 @@ public class GuiHSBSlider extends GuiSlider {
                 float green = (float) hueColour.getGreen() / 255;
                 float blue = (float) hueColour.getBlue() / 255;
                 GL11.glColor4f(red, green, blue, 1.0F);
-                //drawTexturedModalRectScaled(xPosition + 1, yPosition + 1, 0, srcY, 231, 20, this.width - 2, this.height - 2);
+                drawTexturedModalRectScaled(xPosition + 1, yPosition + 1, 0, srcY, 231, 20, this.width - 2, this.height - 2);
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             } else {
-                //drawTexturedModalRectScaled(xPosition + 1, yPosition + 1, 0, srcY, 256, 20, this.width - 2, this.height - 2);
+                drawTexturedModalRectScaled(xPosition + 1, yPosition + 1, 0, srcY, 256, 20, this.width - 2, this.height - 2);
             }
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             
@@ -129,20 +129,32 @@ public class GuiHSBSlider extends GuiSlider {
     public void setBrightness(float value) {
         this.briValue = value;
     }
-    /*
-    public void drawTexturedModalRectScaled (int x, int y, int textureX, int textureY, int width, int height) {
+    
+    public void drawTexturedModalRectScaled (int x, int y, int u, int v, int srcWidth, int srcHeight, int tarWidth, int tarHeight) {
         float f = 0.00390625F;
         float f1 = 0.00390625F;
-        Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vertexbuffer = tessellator.getBuffer();
-        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vertexbuffer.pos((double)(x + 0), (double)(y + height), (double)this.zLevel).tex((double)((float)(textureX + 0) * f), (double)((float)(textureY + height) * f1)).endVertex();
-        vertexbuffer.pos((double)(x + width), (double)(y + height), (double)this.zLevel).tex((double)((float)(textureX + width) * f), (double)((float)(textureY + height) * f1)).endVertex();
-        vertexbuffer.pos((double)(x + width), (double)(y + 0), (double)this.zLevel).tex((double)((float)(textureX + width) * f), (double)((float)(textureY + 0) * f1)).endVertex();
-        vertexbuffer.pos((double)(x + 0), (double)(y + 0), (double)this.zLevel).tex((double)((float)(textureX + 0) * f), (double)((float)(textureY + 0) * f1)).endVertex();
-        tessellator.draw();
+        Tessellator tess = Tessellator.getInstance();
+        VertexBuffer buff = tess.getBuffer();
+        buff.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        
+        buff.pos((double)(x + 0), (double)(y + tarHeight), (double)this.zLevel);
+        buff.tex((double)((float)(u + 0) * f), (double)((float)(v + srcHeight) * f1));
+        buff.endVertex();
+        
+        buff.pos((double)(x + tarWidth), (double)(y + tarHeight), (double)this.zLevel);
+        buff.tex((double)((float)(u + srcWidth) * f), (double)((float)(v + srcHeight) * f1));
+        buff.endVertex();
+        
+        buff.pos((double)(x + tarWidth), (double)(y + 0), (double)this.zLevel);
+        buff.tex((double)((float)(u + srcWidth) * f), (double)((float)(v + 0) * f1));
+        buff.endVertex();
+        
+        buff.pos((double)(x + 0), (double)(y + 0), (double)this.zLevel);
+        buff.tex((double)((float)(u + 0) * f), (double)((float)(v + 0) * f1));
+        buff.endVertex();
+        tess.draw();
     }
-    */
+    
     public enum HSBSliderType {
         HUE, SATURATION, BRIGHTNESS;
     }
