@@ -5,7 +5,7 @@
   "description": "Adds cosmetic wings to Minecraft.",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "https://github.com/RiskyKen/Cosmetic-Wings",
+  "url": "http://minecraft.curseforge.com/projects/cosmetic-wings",
   "updateUrl": "",
   "authorList": ["RiskyKen"],
   "credits": "Wing art by Choccie_Bunny",

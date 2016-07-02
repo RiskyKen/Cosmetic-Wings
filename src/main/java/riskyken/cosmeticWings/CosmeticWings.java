@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod(modid = LibModInfo.ID, name = LibModInfo.NAME, version = LibModInfo.VERSION)
+@Mod(modid = LibModInfo.ID, name = LibModInfo.NAME, version = LibModInfo.VERSION, updateJSON = LibModInfo.UPDATE_JSON)
 public class CosmeticWings {
 
     @Mod.Instance(LibModInfo.ID)
@@ -29,7 +29,7 @@ public class CosmeticWings {
 
     @Mod.EventHandler
     public void perInit(FMLPreInitializationEvent event) {
-        ModLogger.log("Loading " + LibModInfo.NAME + " " + LibModInfo.VERSION);
+        ModLogger.log(String.format("Loading %s version %s", LibModInfo.NAME, LibModInfo.VERSION));
         CapabilityManager.INSTANCE.register(IWingCapability.class, new WingStorage(), DefaultWingCapability.class);
         proxy.preInit();
         WingsRegistry.init();
