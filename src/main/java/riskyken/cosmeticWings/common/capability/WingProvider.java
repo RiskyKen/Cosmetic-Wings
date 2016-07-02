@@ -15,11 +15,9 @@ public class WingProvider implements ICapabilitySerializable, IWingCapability {
     @CapabilityInject(IWingCapability.class)
     private static final Capability<IWingCapability> WING_CAP = null;
     
-    private final Entity entity;
     private WingsData wingData;
     
-    public WingProvider(Entity entity) {
-        this.entity = entity;
+    public WingProvider() {
         wingData = new WingsData();
     }
     

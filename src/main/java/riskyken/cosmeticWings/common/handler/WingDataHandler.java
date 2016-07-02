@@ -53,7 +53,7 @@ public final class WingDataHandler {
     @SubscribeEvent
     public void onAttachCapabilities(AttachCapabilitiesEvent.Entity event) {
         if (event.getEntity() instanceof EntityPlayer & getEffectiveSide() == Side.SERVER) {
-            event.addCapability(key, new WingProvider(event.getEntity()));
+            event.addCapability(key, new WingProvider());
         }
     }
     
@@ -91,13 +91,13 @@ public final class WingDataHandler {
     @SubscribeEvent
     public void onPlayerCloneEvent(PlayerEvent.Clone event) {
         //Copy a players wing data over when they die/change dimension.
-        /*
-        NBTTagCompound compound = new NBTTagCompound();
-        ExPropsWingsData oldProps = ExPropsWingsData.get(event.getOriginal());
-        ExPropsWingsData newProps = ExPropsWingsData.get(event.getEntityPlayer());
-        oldProps.saveNBTData(compound);
-        newProps.loadNBTData(compound);
-        */
+        if (event.isWasDeath()) {
+            IWingCapability oldCap = event.getOriginal().getCapability(WING_CAP, null);
+            IWingCapability newCap = event.getEntityPlayer().getCapability(WING_CAP, null);
+            if (oldCap != null & newCap != null) {
+                newCap.setWingsData(oldCap.getWingData());
+            }
+        }
     }
     
     private Side getEffectiveSide() {
@@ -112,7 +112,5 @@ public final class WingDataHandler {
             TargetPoint p = new TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 512);
             PacketHandler.networkWrapper.sendToAllAround(new MessageServerWingsData(player.getUniqueID(), wingData), p);
         }
-        //ExPropsWingsData extendedPropsWingData = ExPropsWingsData.get(player);
-        //extendedPropsWingData.updateWingData(wingData);
     }
 }
