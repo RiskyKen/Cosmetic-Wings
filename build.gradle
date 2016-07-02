@@ -22,13 +22,13 @@ group= "riskyken.cosmeticWings"
 archivesBaseName = "Cosmetic-Wings"
 
 minecraft {
-	version = "${minecraftVersion}-latest"
+    version = "1.9.4-12.17.0.1968"
     runDir = "eclipse"
     
     replaceIn "common/lib/LibModInfo.java"
     replace "@VERSION@", project.version
-	
-	mappings = "snapshot_20160518"
+    
+    mappings = "snapshot_20160518"
 }
 
 processResources {
