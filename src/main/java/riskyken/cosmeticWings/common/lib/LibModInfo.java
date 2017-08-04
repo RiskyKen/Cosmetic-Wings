@@ -1,7 +1,7 @@
 package riskyken.cosmeticWings.common.lib;
 
 public class LibModInfo {
-    public static final String ID = "cosmeticWings";
+    public static final String ID = "cosmeticwings";
     public static final String NAME = "Cosmetic Wings";
     public static final String VERSION = "@VERSION@";
     public static final String CHANNEL = "cosWings";

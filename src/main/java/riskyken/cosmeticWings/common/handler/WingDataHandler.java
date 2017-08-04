@@ -73,7 +73,7 @@ public final class WingDataHandler {
 
     @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinWorldEvent event) {
-        if (!event.getEntity().worldObj.isRemote && event.getEntity() instanceof EntityPlayerMP) {
+        if (!event.getEntity().getEntityWorld().isRemote && event.getEntity() instanceof EntityPlayerMP) {
             //A player has joined. Send them their own wing data.
             EntityPlayerMP targetPlayer = (EntityPlayerMP) event.getEntity();
             IWingCapability cap = targetPlayer.getCapability(WING_CAP, null);

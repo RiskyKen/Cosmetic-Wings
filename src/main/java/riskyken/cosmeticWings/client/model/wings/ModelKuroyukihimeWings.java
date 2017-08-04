@@ -111,8 +111,8 @@ public class ModelKuroyukihimeWings extends ModelWingBase {
                 parY += 1.6D;
             }
 */
-            EntityButterflyFx particle = new EntityButterflyFx(player.worldObj, parX, parY, parZ, wingData.wingScale, player);
-            ParticleManager.INSTANCE.spawnParticle(player.worldObj, particle);
+            EntityButterflyFx particle = new EntityButterflyFx(player.world, parX, parY, parZ, wingData.wingScale, player);
+            ParticleManager.INSTANCE.spawnParticle(player.world, particle);
         }
     }
 }

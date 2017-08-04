@@ -20,8 +20,8 @@ public class KeyboardHandler {
     @SubscribeEvent
     public void onKeyInputEvent(InputEvent.KeyInputEvent event) {
         if (Keybindings.openWingsGui.isPressed()) {
-            EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
-            player.openGui(CosmeticWings.instance, 0, player.worldObj, 0, 0, 0);
+            EntityPlayerSP player = Minecraft.getMinecraft().player;
+            player.openGui(CosmeticWings.instance, 0, player.world, 0, 0, 0);
         }
     }
 }

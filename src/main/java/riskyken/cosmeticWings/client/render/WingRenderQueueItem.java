@@ -32,7 +32,7 @@ public class WingRenderQueueItem {
         GL11.glPushMatrix();
         
         float yawOffset = player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * partialRenderTick;
-        EntityPlayer localPlayer = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer localPlayer = Minecraft.getMinecraft().player;
         EntityPlayer renderTarget = player;
         
         double tarX1 = renderTarget.prevPosX + (renderTarget.posX - renderTarget.prevPosX) * partialRenderTick;

@@ -144,7 +144,7 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback, 
         GlStateManager.resetColor();
         
         GL11.glPushMatrix();
-        GuiInventory.drawEntityOnScreen(-boxX, 0, 28, lookX, lookY, this.mc.thePlayer);
+        GuiInventory.drawEntityOnScreen(-boxX, 0, 28, lookX, lookY, this.mc.player);
         GL11.glPopMatrix();
         GL11.glPopMatrix();
     }

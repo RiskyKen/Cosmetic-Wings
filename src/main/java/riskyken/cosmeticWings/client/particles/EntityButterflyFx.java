@@ -21,7 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EntityButterflyFx extends Particle {
 
-    private static final ResourceLocation bufferflyTexture = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/particles/butterflyParticles.png");
+    private static final ResourceLocation bufferflyTexture = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/particles/butterfly-particles.png");
     private static Queue<EntityButterflyFx> butterflyRenderQueue = new ArrayDeque();;
     
     private EntityPlayer target;
@@ -131,9 +131,9 @@ public class EntityButterflyFx extends Particle {
             motionZ = -maxSpeed; 
         }
         
-        this.moveEntity(this.motionX, this.motionY, this.motionZ);
+        this.move(this.motionX, this.motionY, this.motionZ);
         
-        if (this.isCollided) {
+        if (this.onGround) {
             this.motionX *= 0.699999988079071D;
             this.motionZ *= 0.699999988079071D;
         }

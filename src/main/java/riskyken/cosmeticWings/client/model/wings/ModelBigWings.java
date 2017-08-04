@@ -118,7 +118,7 @@ public class ModelBigWings extends ModelWingBase {
             double parY = player.posY - 0.4D + scale - (6 * SCALE) + (wingData.heightOffset * 6 * SCALE);
             double parZ = offset.y;
 
-            EntityPlayerSP localPlayer = Minecraft.getMinecraft().thePlayer;
+            EntityPlayerSP localPlayer = Minecraft.getMinecraft().player;
             parY += 1.6D;
             /*
             if (UtilPlayer.isLocalPlayer(player)) {
@@ -127,12 +127,12 @@ public class ModelBigWings extends ModelWingBase {
             */
             EntityFeatherFx particle;
             if (type == 1) {
-                particle = new EntityFeatherFx(player.worldObj, parX, parY, parZ, type, wingData.wingScale, wingData.colour);
+                particle = new EntityFeatherFx(player.world, parX, parY, parZ, type, wingData.wingScale, wingData.colour);
             } else {
-                particle = new EntityFeatherFx(player.worldObj, parX, parY, parZ, type, wingData.wingScale, UtilColour.getMinecraftColor(0));
+                particle = new EntityFeatherFx(player.world, parX, parY, parZ, type, wingData.wingScale, UtilColour.getMinecraftColor(0));
             }
             
-            ParticleManager.INSTANCE.spawnParticle(player.worldObj, particle);
+            ParticleManager.INSTANCE.spawnParticle(player.world, particle);
             
         }
     }

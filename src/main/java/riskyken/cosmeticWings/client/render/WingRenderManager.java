@@ -146,7 +146,7 @@ public final class WingRenderManager {
         for (int layer = 0; layer < wingsData.wingType.getNumberOfRenderLayers(); layer++) {
             if (!wingsData.wingType.isNomalRender(layer)) {
                 //This layer should be rendered post world.
-                if (player.getUniqueID() != Minecraft.getMinecraft().thePlayer.getUniqueID()) {
+                if (player.getUniqueID() != Minecraft.getMinecraft().player.getUniqueID()) {
                     //This is a remote player so just add the render to the queue.
                     wingRenderQueue.add(new WingRenderQueueItem(player, wingsData, wingRenderer));
                 } else {

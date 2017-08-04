@@ -27,7 +27,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EntityFeatherFx extends Particle {
 
-    private static final ResourceLocation featherParticles = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/particles/featherParticles.png");
+    private static final ResourceLocation featherParticles = new ResourceLocation(LibModInfo.ID.toLowerCase(), "textures/particles/feather-particles.png");
     private static Queue<EntityFeatherFx> featherRenderQueue = new ArrayDeque();;
     
     private final int type;
@@ -93,7 +93,7 @@ public class EntityFeatherFx extends Particle {
     public void onUpdate() {
         super.onUpdate();
 
-        if (this.isCollided) {
+        if (this.onGround) {
             this.rotationSpeed = 0F;
         }
 

@@ -8,7 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 public final class UtilPlayer {
 
     public static boolean isLocalPlayer(EntityPlayer player) {
-        EntityPlayerSP localPlayer = Minecraft.getMinecraft().thePlayer;
+        EntityPlayerSP localPlayer = Minecraft.getMinecraft().player;
         return player.getUniqueID().equals(localPlayer.getUniqueID());
     }
     
