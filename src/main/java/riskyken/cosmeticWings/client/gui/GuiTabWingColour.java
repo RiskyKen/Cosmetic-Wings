@@ -40,9 +40,9 @@ public class GuiTabWingColour extends GuiTabPage implements IHSBSliderCallback {
         String saturationLabel = GuiHelper.getLocalizedControlName("wings", "label.saturation");
         String brightnessLabel = GuiHelper.getLocalizedControlName("wings", "label.brightness");
         
-        this.fontRendererObj.drawString(hueLabel, this.x + 5, this.y + 21, 4210752);
-        this.fontRendererObj.drawString(saturationLabel, this.x + 5, this.y + 41, 4210752);
-        this.fontRendererObj.drawString(brightnessLabel, this.x + 5, this.y + 61, 4210752);
+        this.fontRenderer.drawString(hueLabel, this.x + 5, this.y + 21, 4210752);
+        this.fontRenderer.drawString(saturationLabel, this.x + 5, this.y + 41, 4210752);
+        this.fontRenderer.drawString(brightnessLabel, this.x + 5, this.y + 61, 4210752);
     }
     
     @Override

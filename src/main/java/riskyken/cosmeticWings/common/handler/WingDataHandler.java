@@ -51,8 +51,8 @@ public final class WingDataHandler {
     }
     
     @SubscribeEvent
-    public void onAttachCapabilities(AttachCapabilitiesEvent.Entity event) {
-        if (event.getEntity() instanceof EntityPlayer & getEffectiveSide() == Side.SERVER) {
+    public void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event) {
+        if (event.getObject() instanceof EntityPlayer & getEffectiveSide() == Side.SERVER) {
             event.addCapability(key, new WingProvider());
         }
     }

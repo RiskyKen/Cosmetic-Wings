@@ -58,7 +58,7 @@ public class GuiTabWingSelect extends GuiTabPage implements IDropDownListCallbac
     public void drawScreen(int mouseX, int mouseY, float tickTime) {
         super.drawScreen(mouseX, mouseY, tickTime);
         String listLabel = GuiHelper.getLocalizedControlName("wings", "label.list");
-        this.fontRendererObj.drawString(listLabel, this.x + 2, this.y + 18, 4210752);
+        this.fontRenderer.drawString(listLabel, this.x + 2, this.y + 18, 4210752);
     }
 
     @Override

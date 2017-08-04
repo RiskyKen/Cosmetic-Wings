@@ -6,8 +6,8 @@ import java.util.Queue;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
@@ -106,10 +106,10 @@ public class EntityFeatherFx extends Particle {
             particleAlpha = 1 + -((float) (particleAge - particleMaxAge + 50) / 50);
         }
     }
-
+    
     @Override
-    public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks,
-            float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+    public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX,
+            float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
         this.partialTicks = partialTicks;
         featherRenderQueue.add(this);
     }

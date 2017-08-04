@@ -33,27 +33,27 @@ public class GuiDropDownList extends GuiButtonExt {
         this.isDroppedDown = false;
         this.dropButtonHeight = this.height;
         this.dropButtonWidth = 14;
-        this.dropButtonY = this.yPosition;
-        this.dropButtonX = this.xPosition + this.width - this.dropButtonWidth;
+        this.dropButtonY = this.y;
+        this.dropButtonX = this.x + this.width - this.dropButtonWidth;
     }
-
+    
     @Override
-    public void drawButton(Minecraft mc, int mouseX, int mouseY) {
+    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partial) {
         if (this.visible) {
-            this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
+            this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
             int k = this.getHoverState(this.hovered);
-            GuiUtils.drawContinuousTexturedBox(BUTTON_TEXTURES, this.xPosition, this.yPosition, 0, 46, this.width, this.height, 200, 20, 2, 3, 2, 2, this.zLevel);
+            GuiUtils.drawContinuousTexturedBox(BUTTON_TEXTURES, this.x, this.y, 0, 46, this.width, this.height, 200, 20, 2, 3, 2, 2, this.zLevel);
             
             drawDropDownButton(mc, mouseX, mouseY);
             
             this.hoverIndex = -1;
             if (this.isDroppedDown) {
                 int listSize = listItems.size();
-                GuiUtils.drawContinuousTexturedBox(BUTTON_TEXTURES, this.xPosition, this.yPosition + this.height + 1, 0, 46, this.width, 10 * listSize + 4, 200, 20, 2, 3, 2, 2, this.zLevel);
+                GuiUtils.drawContinuousTexturedBox(BUTTON_TEXTURES, this.x, this.y + this.height + 1, 0, 46, this.width, 10 * listSize + 4, 200, 20, 2, 3, 2, 2, this.zLevel);
                 for (int i = 0; i < listSize; i++) {
                     DropDownListItem listItem = listItems.get(i);
-                    int textX = this.xPosition + 4;
-                    int textY = this.yPosition + this.height + 4 + (i * 10);
+                    int textX = this.x + 4;
+                    int textY = this.y + this.height + 4 + (i * 10);
                     int textWidth = this.width - 8;
                     int textHeight = 8;
                     int textColour = 16777215;
@@ -68,11 +68,11 @@ public class GuiDropDownList extends GuiButtonExt {
                             }
                         }
                     }
-                    mc.fontRendererObj.drawString(listItem.displayText, textX, textY, textColour);
+                    mc.fontRenderer.drawString(listItem.displayText, textX, textY, textColour);
                 } 
             }
             
-            mc.fontRendererObj.drawString(this.displayString, this.xPosition + 3, this.yPosition + 3, 16777215);
+            mc.fontRenderer.drawString(this.displayString, this.x + 3, this.y + 3, 16777215);
         }
     }
     
@@ -88,8 +88,8 @@ public class GuiDropDownList extends GuiButtonExt {
         if (isDroppedDown) {
             dropDownArrow = "^";
         }
-        int arrowWidth = mc.fontRendererObj.getStringWidth(dropDownArrow);
-        mc.fontRendererObj.drawString(dropDownArrow, this.dropButtonX + (this.dropButtonWidth / 2) - (arrowWidth / 2), this.dropButtonY + 3, 16777215);
+        int arrowWidth = mc.fontRenderer.getStringWidth(dropDownArrow);
+        mc.fontRenderer.drawString(dropDownArrow, this.dropButtonX + (this.dropButtonWidth / 2) - (arrowWidth / 2), this.dropButtonY + 3, 16777215);
     }
     
     @Override

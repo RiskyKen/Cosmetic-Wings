@@ -17,7 +17,7 @@ public class GuiTabPage extends GuiScreen {
     
     public GuiTabPage(Gui parent, int x, int y) {
         mc = Minecraft.getMinecraft();
-        fontRendererObj = mc.fontRendererObj;
+        fontRenderer = mc.fontRenderer;
         this.parent = parent;
         this.x = x;
         this.y = y;

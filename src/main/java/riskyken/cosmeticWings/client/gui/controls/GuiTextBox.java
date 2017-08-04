@@ -27,17 +27,17 @@ public class GuiTextBox extends GuiButtonExt {
     }
     
     @Override
-    public void drawButton(Minecraft mc, int mouseX, int mouseY) {
+    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partial) {
         if (!this.visible) {
             return;
         }
-        GuiUtils.drawContinuousTexturedBox(BUTTON_TEXTURES, this.xPosition, this.yPosition, 0, 46, this.width, this.height, 200, 20, 2, 3, 2, 2, this.zLevel);
+        GuiUtils.drawContinuousTexturedBox(BUTTON_TEXTURES, this.x, this.y, 0, 46, this.width, this.height, 200, 20, 2, 3, 2, 2, this.zLevel);
         
         int textColour = 16777215;
         int pad = 2;
         for (int i = 0; i < displayLines.size(); i++) {
-            mc.fontRendererObj.drawString(displayLines.get(i),
-                    this.xPosition + pad, this.yPosition + pad + mc.fontRendererObj.FONT_HEIGHT * i, textColour);
+            mc.fontRenderer.drawString(displayLines.get(i),
+                    this.x + pad, this.y + pad + mc.fontRenderer.FONT_HEIGHT * i, textColour);
         }
     }
 }

@@ -124,7 +124,7 @@ public class GuiWings extends GuiScreen implements ISlider, IHSBSliderCallback, 
         }
         
         super.drawScreen(mouseX, mouseY, tickTime);
-        GuiHelper.renderLocalizedGuiName(this.fontRendererObj, this.guiLeft, this.guiTop, this.guiWidth, "wings");
+        GuiHelper.renderLocalizedGuiName(this.fontRenderer, this.guiLeft, this.guiTop, this.guiWidth, "wings");
         
         for (int i = 0; i < tabs.size(); i++) {
             if (i == activeTab) {

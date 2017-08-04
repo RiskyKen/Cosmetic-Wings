@@ -35,7 +35,7 @@ public class MessageClientUpdateWingsData implements IMessage, IMessageHandler<M
 
     @Override
     public IMessage onMessage(MessageClientUpdateWingsData message, MessageContext ctx) {
-        EntityPlayerMP player = ctx.getServerHandler().playerEntity;
+        EntityPlayerMP player = ctx.getServerHandler().player;
         WingDataHandler.gotWingDataFromPlayer(player, message.wingData);
         return null;
     }

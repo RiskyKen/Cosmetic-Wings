@@ -5,8 +5,8 @@ import java.util.Queue;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -140,8 +140,8 @@ public class EntityButterflyFx extends Particle {
     }
 
     @Override
-    public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks,
-            float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+    public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX,
+            float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
         this.partialTicks = partialTicks;
         this.f1 = rotationX;
         this.f2 = rotationZ;

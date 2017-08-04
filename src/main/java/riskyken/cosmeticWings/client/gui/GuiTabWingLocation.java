@@ -41,10 +41,10 @@ public class GuiTabWingLocation extends GuiTabPage implements ISlider {
         String centreLabel = GuiHelper.getLocalizedControlName("wings", "label.centre");
         String heightLabel = GuiHelper.getLocalizedControlName("wings", "label.height");
         
-        this.fontRendererObj.drawString(spawnRateLabel, this.x + 5, this.y + 21, 4210752);
-        this.fontRendererObj.drawString(scaleLabel, this.x + 5, this.y + 41, 4210752);
-        this.fontRendererObj.drawString(centreLabel, this.x + 5, this.y + 61, 4210752);
-        this.fontRendererObj.drawString(heightLabel, this.x + 5, this.y + 81, 4210752);
+        this.fontRenderer.drawString(spawnRateLabel, this.x + 5, this.y + 21, 4210752);
+        this.fontRenderer.drawString(scaleLabel, this.x + 5, this.y + 41, 4210752);
+        this.fontRenderer.drawString(centreLabel, this.x + 5, this.y + 61, 4210752);
+        this.fontRenderer.drawString(heightLabel, this.x + 5, this.y + 81, 4210752);
     }
     
     @Override

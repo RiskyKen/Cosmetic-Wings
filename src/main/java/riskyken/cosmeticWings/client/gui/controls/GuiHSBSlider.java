@@ -6,8 +6,8 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiSlider;
@@ -35,11 +35,11 @@ public class GuiHSBSlider extends GuiSlider {
     }
     
     @Override
-    public void drawButton(Minecraft mc, int mouseX, int mouseY) {
+    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partial) {
         if (this.visible) {
-            this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
+            this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
             int k = this.getHoverState(this.hovered);
-            GuiUtils.drawContinuousTexturedBox(BUTTON_TEXTURES, this.xPosition, this.yPosition, 0, 46, this.width, this.height, 200, 20, 2, 3, 2, 2, this.zLevel);
+            GuiUtils.drawContinuousTexturedBox(BUTTON_TEXTURES, this.x, this.y, 0, 46, this.width, this.height, 200, 20, 2, 3, 2, 2, this.zLevel);
             mc.renderEngine.bindTexture(sliderTexture);
             
             if (type == HSBSliderType.SATURATION) {
@@ -48,7 +48,7 @@ public class GuiHSBSlider extends GuiSlider {
                 float green = (float) hueColour.getGreen() / 255;
                 float blue = (float) hueColour.getBlue() / 255;
                 GL11.glColor4f(red, green, blue, 1.0F);
-                drawTexturedModalRectScaled(xPosition + 1, yPosition + 1, 0, 176, 256, 20, this.width - 2, this.height - 2);
+                drawTexturedModalRectScaled(x + 1, y + 1, 0, 176, 256, 20, this.width - 2, this.height - 2);
             }
             
             int srcY = 236;
@@ -66,10 +66,10 @@ public class GuiHSBSlider extends GuiSlider {
                 float green = (float) hueColour.getGreen() / 255;
                 float blue = (float) hueColour.getBlue() / 255;
                 GL11.glColor4f(red, green, blue, 1.0F);
-                drawTexturedModalRectScaled(xPosition + 1, yPosition + 1, 0, srcY, 231, 20, this.width - 2, this.height - 2);
+                drawTexturedModalRectScaled(x + 1, y + 1, 0, srcY, 231, 20, this.width - 2, this.height - 2);
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             } else {
-                drawTexturedModalRectScaled(xPosition + 1, yPosition + 1, 0, srcY, 256, 20, this.width - 2, this.height - 2);
+                drawTexturedModalRectScaled(x + 1, y + 1, 0, srcY, 256, 20, this.width - 2, this.height - 2);
             }
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             
@@ -81,7 +81,7 @@ public class GuiHSBSlider extends GuiSlider {
     protected void mouseDragged(Minecraft mc, int par2, int par3) {
         if (this.visible) {
             if (this.dragging) {
-                this.sliderValue = (par2 - (this.xPosition + 4)) / (float)(this.width - 8);
+                this.sliderValue = (par2 - (this.x + 4)) / (float)(this.width - 8);
                 updateSlider();
                 if (callback != null) {
                     callback.valueUpdated(this, this.sliderValue);
@@ -95,10 +95,10 @@ public class GuiHSBSlider extends GuiSlider {
             double scaleHeight = (double)mc.displayHeight / screenRes.getScaledHeight_double();
             
             GL11.glEnable(GL11.GL_SCISSOR_TEST);
-            GL11.glScissor((int) ((this.xPosition + 1) * scaleWidth),  (mc.displayHeight) - (int)((this.yPosition + height - 1) * scaleHeight), (int) ((width - 2) * scaleWidth), (int) ((height - 2) * scaleHeight));
+            GL11.glScissor((int) ((this.x + 1) * scaleWidth),  (mc.displayHeight) - (int)((this.y + height - 1) * scaleHeight), (int) ((width - 2) * scaleWidth), (int) ((height - 2) * scaleHeight));
             
-            this.drawTexturedModalRect(this.xPosition + (int)(this.sliderValue * (float)(this.width - 3) - 2), this.yPosition, 0, 0, 7, 4);
-            this.drawTexturedModalRect(this.xPosition + (int)(this.sliderValue * (float)(this.width - 3) - 2), this.yPosition + this.height - 4, 7, 0, 7, 4);
+            this.drawTexturedModalRect(this.x + (int)(this.sliderValue * (float)(this.width - 3) - 2), this.y, 0, 0, 7, 4);
+            this.drawTexturedModalRect(this.x + (int)(this.sliderValue * (float)(this.width - 3) - 2), this.y + this.height - 4, 7, 0, 7, 4);
             GL11.glDisable(GL11.GL_SCISSOR_TEST);
         }
     }
@@ -133,7 +133,7 @@ public class GuiHSBSlider extends GuiSlider {
         float f = 0.00390625F;
         float f1 = 0.00390625F;
         Tessellator tess = Tessellator.getInstance();
-        VertexBuffer buff = tess.getBuffer();
+        BufferBuilder buff = tess.getBuffer();
         buff.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         
         buff.pos((double)(x + 0), (double)(y + tarHeight), (double)this.zLevel);
