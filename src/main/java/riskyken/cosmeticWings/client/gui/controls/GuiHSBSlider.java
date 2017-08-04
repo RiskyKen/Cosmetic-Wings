@@ -2,15 +2,14 @@ package riskyken.cosmeticWings.client.gui.controls;
 
 import java.awt.Color;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
 import net.minecraftforge.fml.client.config.GuiSlider;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,7 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiHSBSlider extends GuiSlider {
 
-    private static final ResourceLocation sliderTexture = new ResourceLocation(riskyken.cosmeticWings.common.lib.LibModInfo.ID.toLowerCase(), "textures/gui/controls/sliderHue.png");
+    private static final ResourceLocation sliderTexture = new ResourceLocation(riskyken.cosmeticWings.common.lib.LibModInfo.ID.toLowerCase(), "textures/gui/controls/slider-hue.png");
     
     private HSBSliderType type;
     private IHSBSliderCallback callback = null;
