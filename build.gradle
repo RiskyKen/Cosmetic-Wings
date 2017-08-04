@@ -1,10 +1,7 @@
 buildscript {
     repositories {
         jcenter()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
+        maven { url = "http://files.minecraftforge.net/maven" }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
@@ -21,14 +18,19 @@ if (System.env.BUILD_NUMBER != null) {
 group= "riskyken.cosmeticWings"
 archivesBaseName = "Cosmetic-Wings"
 
+sourceCompatibility = targetCompatibility = "1.6"
+compileJava {
+    sourceCompatibility = targetCompatibility = "1.6"
+}
+
 minecraft {
-    version = "1.9.4-12.17.0.1968"
-    runDir = "eclipse"
+	version = "1.10.2-12.18.3.2422"
+    runDir = "run"
     
     replaceIn "common/lib/LibModInfo.java"
     replace "@VERSION@", project.version
     
-    mappings = "snapshot_20160518"
+    mappings = "snapshot_20161111"
 }
 
 processResources {

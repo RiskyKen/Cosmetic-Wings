@@ -1,10 +1,12 @@
 {
-    "homepage": "http://minecraft.curseforge.com/projects/cosmetic-wings/files",
+    "homepage": "https://minecraft.curseforge.com/projects/cosmetic-wings/files",
     "promos": {
         "1.7.10-latest": "0.4.2.17",
 		"1.7.10-recommended": "0.4.2.17",
         "1.9.4-latest": "0.5.1",
-		"1.9.4-recommended": "0.5.1"
+		"1.9.4-recommended": "0.5.1",
+		"1.10.2-latest": "0.5.2",
+		"1.10.2-recommended": "0.5.2"
     },
     "1.7.10": {
         "0.4.2.17": "Initial release."
@@ -12,5 +14,8 @@
     "1.9.4": {
         "0.5.0": "Updated for Minecraft 1.9.4",
         "0.5.1": "Added Forge Update Checker\nFixed wing settings being reset on player death."
+    },
+	"1.10.2: {
+        "0.5.2": "Updated for Minecraft 1.10.2"
     }
 }
